@@ -22,10 +22,14 @@ void DrawAnimation::Update()
 		if (Keyboard::Get()->Down(VK_SPACE))
 		{
 			++clip;
-			clip %= 4;
-			kachujin->PlayClip(20, clip, 1.0f, 1.0f);
+			clip %= 16;
+			kachujin->PlayClip(0, clip, 1.0f, 1.0f);
 		}
-			
+
+		if (Keyboard::Get()->Down(VK_SHIFT))
+		{			
+			kachujin->PlayClip(0, 3, 1.0f, 1.0f);
+		}
 
 		kachujin->Update();
 	}
@@ -46,9 +50,20 @@ void DrawAnimation::Kachujin()
 	kachujin->ReadMaterial(L"Kachujin/Mesh");
 	kachujin->ReadMesh(L"Kachujin/Mesh");
 	kachujin->ReadClip(L"Kachujin/Idle");
+	kachujin->ReadClip(L"Kachujin/Standing_Idle");
 	kachujin->ReadClip(L"Kachujin/Running");
 	kachujin->ReadClip(L"Kachujin/Jump");
 	kachujin->ReadClip(L"Kachujin/Hip_Hop_Dancing");
+	kachujin->ReadClip(L"Kachujin/Attacking");
+	kachujin->ReadClip(L"Kachujin/Standing_Aim_Recoil");
+	kachujin->ReadClip(L"Kachujin/Standing_Hit_React");
+	kachujin->ReadClip(L"Kachujin/Standing_Hit_React_Right");
+	kachujin->ReadClip(L"Kachujin/Standing_Death");
+	kachujin->ReadClip(L"Kachujin/Standing_Death_Left");
+	kachujin->ReadClip(L"Kachujin/Big_Jump");
+	kachujin->ReadClip(L"Kachujin/Standing_Dodge_Backward");
+	kachujin->ReadClip(L"Kachujin/Sword_Attack");
+	kachujin->ReadClip(L"Kachujin/Sword_Jump_Attack");
 
 	weapon = new Model();
 	weapon->ReadMaterial(L"Weapon/Sword");

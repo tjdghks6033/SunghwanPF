@@ -56,6 +56,11 @@ void Convert::Kachujin()
 	SafeDelete(conv);
 
 	conv = new Converter();
+	conv->ReadFile(L"Kachujin/Standing_Idle.fbx");
+	conv->ExportAnimClip(0, L"Kachujin/Standing_Idle");
+	SafeDelete(conv);
+
+	conv = new Converter();
 	conv->ReadFile(L"Kachujin/Running.fbx");
 	conv->ExportAnimClip(0, L"Kachujin/Running");
 	SafeDelete(conv);
@@ -69,8 +74,60 @@ void Convert::Kachujin()
 	conv->ReadFile(L"Kachujin/Hip_Hop_Dancing.fbx");
 	conv->ExportAnimClip(0, L"Kachujin/Hip_Hop_Dancing");
 	SafeDelete(conv);
-}
 
+	conv = new Converter();
+	conv->ReadFile(L"Kachujin/Attacking.fbx");
+	conv->ExportAnimClip(0, L"Kachujin/Attacking");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Kachujin/Taking Item.fbx");
+	conv->ExportAnimClip(0, L"Kachujin/Taking Item");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Kachujin/Standing_Aim_Recoil.fbx");
+	conv->ExportAnimClip(0, L"Kachujin/Standing_Aim_Recoil");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Kachujin/Standing_Hit_React.fbx");
+	conv->ExportAnimClip(0, L"Kachujin/Standing_Hit_React");
+	SafeDelete(conv);
+	conv = new Converter();
+	conv->ReadFile(L"Kachujin/Standing_Hit_React_Right.fbx");
+	conv->ExportAnimClip(0, L"Kachujin/Standing_Hit_React_Right");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Kachujin/Standing_Death.fbx");
+	conv->ExportAnimClip(0, L"Kachujin/Standing_Death");
+	SafeDelete(conv);
+	conv = new Converter();
+	conv->ReadFile(L"Kachujin/Standing_Death_Left.fbx");
+	conv->ExportAnimClip(0, L"Kachujin/Standing_Death_Left");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Kachujin/Big_Jump.fbx");
+	conv->ExportAnimClip(0, L"Kachujin/Big_Jump");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Kachujin/Standing_Dodge_Backward.fbx");
+	conv->ExportAnimClip(0, L"Kachujin/Standing_Dodge_Backward");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Kachujin/Sword_Attack.fbx");
+	conv->ExportAnimClip(0, L"Kachujin/Sword_Attack");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Kachujin/Sword_Jump_Attack.fbx");
+	conv->ExportAnimClip(0, L"Kachujin/Sword_Jump_Attack");
+	SafeDelete(conv);
+}
 void Convert::Megan()
 {
 	Converter* conv = new Converter();
