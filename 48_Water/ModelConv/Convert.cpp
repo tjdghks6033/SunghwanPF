@@ -7,7 +7,7 @@ void Convert::Initialize()
 	//Airplane();
 	//Tower();
 	//Tank();
-	//Kachujin();
+	Kachujin();
 	//Megan();
 	//Weapon();
 }

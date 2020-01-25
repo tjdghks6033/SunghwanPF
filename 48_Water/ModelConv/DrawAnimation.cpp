@@ -62,11 +62,15 @@ void DrawAnimation::Kachujin()
 	kachujin->GetModel()->Attach(shader, weapon, 35, &attachTransform);
 	kachujin->Pass(2);
 
-	for (float x = -50; x <= 50; x += 2.5f)
+	Transform* transform = kachujin->AddTransform();
+	transform->Position(0, 0, -5);
+	transform->Scale(0.01f, 0.01f, 0.01f);
+
+	/*for (float x = -50; x <= 50; x += 2.5f)
 	{
 		Transform* transform = kachujin->AddTransform();
 		transform->Position(x, 0, -5);
 		transform->Scale(0.01f, 0.01f, 0.01f);
-	}
+	}*/
 	kachujin->UpdateTransforms();
 }

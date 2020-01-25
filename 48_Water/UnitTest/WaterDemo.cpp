@@ -25,7 +25,7 @@ void WaterDemo::Initialize()
 	
 
 	Mesh();
-	Airplane();
+	//Airplane();
 	Kachujin();
 
 	AddPointLights();
@@ -39,12 +39,12 @@ void WaterDemo::Destroy()
 
 void WaterDemo::Update()
 {
-	sphere->Update();
-	cylinder->Update();
-	cube->Update();
+	//sphere->Update();
+	//cylinder->Update();
+	//cube->Update();
 	grid->Update();
 
-	airplane->Update();
+	//airplane->Update();
 	kachujin->Update();
 
 	sky->Update();
@@ -62,18 +62,18 @@ void WaterDemo::PreRender()
 
 		Pass(0, 1, 2);
 
-		wall->Render();
-		sphere->Render();
-		brick->Render();
-		cylinder->Render();
+		//wall->Render();
+		//sphere->Render();
+		//brick->Render();
+		//cylinder->Render();
 
-		stone->Render();
-		cube->Render();
+		//stone->Render();
+		//cube->Render();
 
 		floor->Render();
 		grid->Render();
 
-		airplane->Render();
+		//airplane->Render();
 		kachujin->Render();
 	}
 
@@ -87,18 +87,18 @@ void WaterDemo::PreRender()
 
 		Pass(13, 14, 15);
 
-		wall->Render();
-		sphere->Render();
-		brick->Render();
-		cylinder->Render();
+		//wall->Render();
+		//sphere->Render();
+		//brick->Render();
+		//cylinder->Render();
 
-		stone->Render();
-		cube->Render();
+		//stone->Render();
+		//cube->Render();
 
 		floor->Render();
 		grid->Render();
 
-		airplane->Render();
+		//airplane->Render();
 		kachujin->Render();
 	}
 
@@ -111,18 +111,18 @@ void WaterDemo::PreRender()
 
 		Pass(7, 8, 9);
 
-		wall->Render();
-		sphere->Render();
-		brick->Render();
-		cylinder->Render();
+		//wall->Render();
+		//sphere->Render();
+		//brick->Render();
+		//cylinder->Render();
 
-		stone->Render();
-		cube->Render();
+		//stone->Render();
+		//cube->Render();
 
 		floor->Render();
 		grid->Render();
 
-		airplane->Render();
+		//airplane->Render();
 		kachujin->Render();
 	}
 }
@@ -134,18 +134,18 @@ void WaterDemo::Render()
 
 	Pass(7, 8, 9);
 
-	wall->Render();
-	sphere->Render();
-	brick->Render();
-	cylinder->Render();
+	//wall->Render();
+	//sphere->Render();
+	//brick->Render();
+	//cylinder->Render();
 
-	stone->Render();
-	cube->Render();
+	//stone->Render();
+	//cube->Render();
 
 	floor->Render();
 	grid->Render();
 
-	airplane->Render();
+	//airplane->Render();
 	kachujin->Render();
 	
 	water->Pass(16);
@@ -169,7 +169,7 @@ void WaterDemo::Mesh()
 		floor->Specular(1, 1, 1, 20);
 		floor->Emissive(0.15f, 0.15f, 0.15f, 0.3f);
 
-		stone = new Material(shader);
+		/*stone = new Material(shader);
 		stone->DiffuseMap("Stones.png");
 		stone->SpecularMap("Stones_Specular.png");
 		stone->NormalMap("Stones_Normal.png");
@@ -189,54 +189,55 @@ void WaterDemo::Mesh()
 		wall->SpecularMap("Wall_Specular.png");
 		wall->NormalMap("Wall_Normal.png");
 		wall->Specular(1, 1, 1, 20);
-		wall->Emissive(0.15f, 0.15f, 0.15f, 0.3f);
+		wall->Emissive(0.15f, 0.15f, 0.15f, 0.3f);*/
 	}
 
 	//Create Mesh
 	{
 		Transform* transform = NULL;
 
-		cube = new MeshRender(shader, new MeshCube());
+		/*cube = new MeshRender(shader, new MeshCube());
 		transform = cube->AddTransform();
 		transform->Position(0, 5, 0);
 		transform->Scale(20, 10, 20);
+		*/
 
 		grid = new MeshRender(shader, new MeshGrid(15, 15));
 		transform = grid->AddTransform();
 		transform->Position(0, 0, 0);
 		transform->Scale(20, 1, 20);
 
-		cylinder = new MeshRender(shader, new MeshCylinder(0.5f, 3.0f, 20, 20));
-		sphere = new MeshRender(shader, new MeshSphere(0.5f, 20, 20));
-		for (UINT i = 0; i < 5; i++)
-		{
-			transform = cylinder->AddTransform();
-			transform->Position(-30, 6, -15.0f + (float)i * 15.0f);
-			transform->Scale(5, 5, 5);
+		//cylinder = new MeshRender(shader, new MeshCylinder(0.5f, 3.0f, 20, 20));
+		//sphere = new MeshRender(shader, new MeshSphere(0.5f, 20, 20));
+		//for (UINT i = 0; i < 5; i++)
+		//{
+		//	transform = cylinder->AddTransform();
+		//	transform->Position(-30, 6, -15.0f + (float)i * 15.0f);
+		//	transform->Scale(5, 5, 5);
 
-			transform = cylinder->AddTransform();
-			transform->Position(30, 6, -15.0f + (float)i * 15.0f);
-			transform->Scale(5, 5, 5);
+		//	transform = cylinder->AddTransform();
+		//	transform->Position(30, 6, -15.0f + (float)i * 15.0f);
+		//	transform->Scale(5, 5, 5);
 
 
-			transform = sphere->AddTransform();
-			transform->Position(-30, 15.5f, -15.0f + (float)i * 15.0f);
-			transform->Scale(5, 5, 5);
+		//	transform = sphere->AddTransform();
+		//	transform->Position(-30, 15.5f, -15.0f + (float)i * 15.0f);
+		//	transform->Scale(5, 5, 5);
 
-			transform = sphere->AddTransform();
-			transform->Position(30, 15.5f, -15.0f + (float)i * 15.0f);
-			transform->Scale(5, 5, 5);
-		}
+		//	transform = sphere->AddTransform();
+		//	transform->Position(30, 15.5f, -15.0f + (float)i * 15.0f);
+		//	transform->Scale(5, 5, 5);
+		//}
 	}
 
-	sphere->UpdateTransforms();
-	cylinder->UpdateTransforms();
-	cube->UpdateTransforms();
+	//sphere->UpdateTransforms();
+	//cylinder->UpdateTransforms();
+	//cube->UpdateTransforms();
 	grid->UpdateTransforms();
 
-	meshes.push_back(sphere);
-	meshes.push_back(cylinder);
-	meshes.push_back(cube);
+	//meshes.push_back(sphere);
+	//meshes.push_back(cylinder);
+	//meshes.push_back(cube);
 	meshes.push_back(grid);
 }
 
