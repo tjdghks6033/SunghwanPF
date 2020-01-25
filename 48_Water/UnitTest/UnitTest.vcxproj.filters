@@ -1,0 +1,313 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="WorldDemo.cpp">
+      <Filter>Vertex</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexDemo.cpp">
+      <Filter>Vertex</Filter>
+    </ClCompile>
+    <ClCompile Include="RectDemo.cpp">
+      <Filter>Vertex</Filter>
+    </ClCompile>
+    <ClCompile Include="IndexDemo.cpp">
+      <Filter>Vertex</Filter>
+    </ClCompile>
+    <ClCompile Include="GridDemo.cpp">
+      <Filter>Vertex</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainDemo.cpp">
+      <Filter>Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshDemo.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureDemo.cpp">
+      <Filter>Vertex</Filter>
+    </ClCompile>
+    <ClCompile Include="GetHeightDemo.cpp">
+      <Filter>Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="VerticalPickDemo.cpp">
+      <Filter>Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="ProjectionDemo.cpp">
+      <Filter>Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="RaycastDemo.cpp">
+      <Filter>Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="FrameworkDemo.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="CubeSkyDemo.cpp">
+      <Filter>Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainBrushDemo.cpp">
+      <Filter>Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainLineDemo.cpp">
+      <Filter>Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainSplattingDemo.cpp">
+      <Filter>Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="ColliderDemo.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="CpuBillboardDemo.cpp">
+      <Filter>Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="WeatherDemo.cpp">
+      <Filter>Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="GeometryBillboardDemo.cpp">
+      <Filter>Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="InstancingDemo.cpp">
+      <Filter>Instancing</Filter>
+    </ClCompile>
+    <ClCompile Include="InstanceFrameworkDemo.cpp">
+      <Filter>Instancing</Filter>
+    </ClCompile>
+    <ClCompile Include="ThreadDemo.cpp">
+      <Filter>Threading</Filter>
+    </ClCompile>
+    <ClCompile Include="ByteAddressDemo.cpp">
+      <Filter>Threading</Filter>
+    </ClCompile>
+    <ClCompile Include="InstanceColliderDemo.cpp">
+      <Filter>Instancing</Filter>
+    </ClCompile>
+    <ClCompile Include="SpecularDemo.cpp">
+      <Filter>Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="NormalMapDemo.cpp">
+      <Filter>Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="LightingDemo.cpp">
+      <Filter>Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="RtvDemo.cpp">
+      <Filter>RenderTarget</Filter>
+    </ClCompile>
+    <ClCompile Include="MrtDemo.cpp">
+      <Filter>RenderTarget</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewportDemo.cpp">
+      <Filter>RenderTarget</Filter>
+    </ClCompile>
+    <ClCompile Include="ProjectorDemo.cpp">
+      <Filter>Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowDemo.cpp">
+      <Filter>Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="DynamicCubeMapDemo.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="DefferedDemo.cpp">
+      <Filter>Deffered</Filter>
+    </ClCompile>
+    <ClCompile Include="TessTriangleDemo.cpp">
+      <Filter>Tessellation</Filter>
+    </ClCompile>
+    <ClCompile Include="TessQuadDemo.cpp">
+      <Filter>Tessellation</Filter>
+    </ClCompile>
+    <ClCompile Include="TessDistanceDemo.cpp">
+      <Filter>Tessellation</Filter>
+    </ClCompile>
+    <ClCompile Include="DefferedPointLightsDemo.cpp">
+      <Filter>Deffered</Filter>
+    </ClCompile>
+    <ClCompile Include="DefferedPointLightsArrayDemo.cpp">
+      <Filter>Deffered</Filter>
+    </ClCompile>
+    <ClCompile Include="DefferedSpotLightDemo.cpp">
+      <Filter>Deffered</Filter>
+    </ClCompile>
+    <ClCompile Include="DefferedShadowDemo.cpp">
+      <Filter>Deffered</Filter>
+    </ClCompile>
+    <ClCompile Include="ScatteringDemo.cpp">
+      <Filter>Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="WaterDemo.cpp">
+      <Filter>Environment</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Main.h" />
+    <ClInclude Include="WorldDemo.h">
+      <Filter>Vertex</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexDemo.h">
+      <Filter>Vertex</Filter>
+    </ClInclude>
+    <ClInclude Include="RectDemo.h">
+      <Filter>Vertex</Filter>
+    </ClInclude>
+    <ClInclude Include="IndexDemo.h">
+      <Filter>Vertex</Filter>
+    </ClInclude>
+    <ClInclude Include="GridDemo.h">
+      <Filter>Vertex</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainDemo.h">
+      <Filter>Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshDemo.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureDemo.h">
+      <Filter>Vertex</Filter>
+    </ClInclude>
+    <ClInclude Include="GetHeightDemo.h">
+      <Filter>Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="VerticalPickDemo.h">
+      <Filter>Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectionDemo.h">
+      <Filter>Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="RaycastDemo.h">
+      <Filter>Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="FrameworkDemo.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeSkyDemo.h">
+      <Filter>Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainBrushDemo.h">
+      <Filter>Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainLineDemo.h">
+      <Filter>Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainSplattingDemo.h">
+      <Filter>Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="ColliderDemo.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="CpuBillboardDemo.h">
+      <Filter>Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="WeatherDemo.h">
+      <Filter>Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="GeometryBillboardDemo.h">
+      <Filter>Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="InstancingDemo.h">
+      <Filter>Instancing</Filter>
+    </ClInclude>
+    <ClInclude Include="InstanceFrameworkDemo.h">
+      <Filter>Instancing</Filter>
+    </ClInclude>
+    <ClInclude Include="ThreadDemo.h">
+      <Filter>Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="ByteAddressDemo.h">
+      <Filter>Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="InstanceColliderDemo.h">
+      <Filter>Instancing</Filter>
+    </ClInclude>
+    <ClInclude Include="SpecularDemo.h">
+      <Filter>Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="NormalMapDemo.h">
+      <Filter>Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="LightingDemo.h">
+      <Filter>Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="RtvDemo.h">
+      <Filter>RenderTarget</Filter>
+    </ClInclude>
+    <ClInclude Include="MrtDemo.h">
+      <Filter>RenderTarget</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewportDemo.h">
+      <Filter>RenderTarget</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectorDemo.h">
+      <Filter>Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowDemo.h">
+      <Filter>Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="DynamicCubeMapDemo.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="DefferedDemo.h">
+      <Filter>Deffered</Filter>
+    </ClInclude>
+    <ClInclude Include="TessTriangleDemo.h">
+      <Filter>Tessellation</Filter>
+    </ClInclude>
+    <ClInclude Include="TessQuadDemo.h">
+      <Filter>Tessellation</Filter>
+    </ClInclude>
+    <ClInclude Include="TessDistanceDemo.h">
+      <Filter>Tessellation</Filter>
+    </ClInclude>
+    <ClInclude Include="DefferedPointLightsDemo.h">
+      <Filter>Deffered</Filter>
+    </ClInclude>
+    <ClInclude Include="DefferedPointLightsArrayDemo.h">
+      <Filter>Deffered</Filter>
+    </ClInclude>
+    <ClInclude Include="DefferedSpotLightDemo.h">
+      <Filter>Deffered</Filter>
+    </ClInclude>
+    <ClInclude Include="DefferedShadowDemo.h">
+      <Filter>Deffered</Filter>
+    </ClInclude>
+    <ClInclude Include="ScatteringDemo.h">
+      <Filter>Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="WaterDemo.h">
+      <Filter>Environment</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Vertex">
+      <UniqueIdentifier>{f07efeaf-f702-4efc-ab4d-38c0e990244f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Mesh">
+      <UniqueIdentifier>{1a49dba4-25c7-4cc2-b9e0-26b3cde7974f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Environment">
+      <UniqueIdentifier>{eef32c5c-62f0-4888-8c9a-d163b9c2c437}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects">
+      <UniqueIdentifier>{ceb06788-4df6-4a5c-bce0-2c0a5f3d0956}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Instancing">
+      <UniqueIdentifier>{4d15590c-8513-4227-b0ca-3079f87ceef7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Threading">
+      <UniqueIdentifier>{1cf61558-1a85-4695-99bd-fe9dc98cf917}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lighting">
+      <UniqueIdentifier>{2ff71cc5-30a8-4784-a5e1-2743b625571e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RenderTarget">
+      <UniqueIdentifier>{b006f9fd-f8c8-4877-b2cc-828e42ef091d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Deffered">
+      <UniqueIdentifier>{f0709a2b-b9e1-4906-b2bb-12a75e680c25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tessellation">
+      <UniqueIdentifier>{44fdd82a-7b97-43dc-8445-966857d8a6c6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
