@@ -30,6 +30,11 @@ cbuffer CB_Reflection
     matrix Reflection;
 };
 
+cbuffer CB_Trail
+{
+	matrix Trail;
+};
+
 Texture2D DiffuseMap;
 Texture2D SpecularMap;
 Texture2D NormalMap;
@@ -201,6 +206,14 @@ struct VertexTextureNormal
     float4 Position : POSITION0;
     float2 Uv : UV0;
     float3 Normal : NORMAL0;
+};
+
+struct VertexTextureNormalAlpha
+{
+	float4 Position : POSITION0;
+	float4 Color : COLOR;
+	float2 Uv : UV0;
+	float3 Normal : NORMAL0;
 };
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -2,6 +2,7 @@
 #include "00_Deffered.fx"
 #include "00_Model.fx"
 #include "00_Sky.fx"
+#include "00_Terrain.fx"
 
 ///////////////////////////////////////////////////////////////////////////////
 // PreRender
@@ -115,6 +116,26 @@ float4 PS_Water(VertexOutput_Water input) : SV_Target
     return float4(color.rgb, WaterAlpha);
 }
 
+VertexTexture VS_Trail(VertexTexture input)
+{
+	VertexTexture output;
+	
+	output.Position = WorldPosition(input.Position);
+	output.Position = ViewProjection(output.Position);
+	
+	output.Uv = input.Uv;
+	
+	return output;
+}
+
+float4 PS_Trail(VertexTexture input) : SV_Target
+{
+	float4 color2 = (1, 0, 0, 1);
+	
+	return color2;
+}
+
+
 technique11 T0
 {
     //Deffered - Depth SpotLights Shadow
@@ -145,4 +166,7 @@ technique11 T0
 
     //Water
     P_BS_VP(P16, AlphaBlend, VS_Water, PS_Water)
+
+	//Trail
+	P_BS_VP(P17, AlphaBlend, VS_Trail, PS_Trail)
 }
