@@ -68,9 +68,6 @@
     <ClInclude Include="Viewer\Freedom.h">
       <Filter>Viewer</Filter>
     </ClInclude>
-    <ClInclude Include="Environment\Terrain.h">
-      <Filter>Environment</Filter>
-    </ClInclude>
     <ClInclude Include="Meshes\Mesh.h">
       <Filter>Meshes</Filter>
     </ClInclude>
@@ -179,6 +176,15 @@
     <ClInclude Include="Environment\Water.h">
       <Filter>Environment\Water</Filter>
     </ClInclude>
+    <ClInclude Include="Environment\Terrain.h">
+      <Filter>Environment\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="Environment\TerrainLod.h">
+      <Filter>Environment\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Frustum.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework.cpp" />
@@ -241,9 +247,6 @@
     </ClCompile>
     <ClCompile Include="Viewer\Freedom.cpp">
       <Filter>Viewer</Filter>
-    </ClCompile>
-    <ClCompile Include="Environment\Terrain.cpp">
-      <Filter>Environment</Filter>
     </ClCompile>
     <ClCompile Include="Meshes\Mesh.cpp">
       <Filter>Meshes</Filter>
@@ -353,6 +356,15 @@
     <ClCompile Include="Environment\Water.cpp">
       <Filter>Environment\Water</Filter>
     </ClCompile>
+    <ClCompile Include="Environment\Terrain.cpp">
+      <Filter>Environment\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="Environment\TerrainLod.cpp">
+      <Filter>Environment\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\Frustum.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Renders">
@@ -387,6 +399,9 @@
     </Filter>
     <Filter Include="Environment\Weather">
       <UniqueIdentifier>{71ad4415-871f-4375-87c3-480d0857d800}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Environment\Terrain">
+      <UniqueIdentifier>{0c520bc2-0037-43e0-b7b9-7d898657c5c7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

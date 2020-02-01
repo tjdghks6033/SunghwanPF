@@ -103,6 +103,7 @@ typedef D3DXPLANE Plane;
 #include "Objects/Projector.h"
 #include "Objects/Shadow.h"
 #include "Objects/GBuffer.h"
+#include "Objects/Frustum.h"
 
 #include "Model/Model.h"
 #include "Model/ModelMesh.h"
@@ -116,3 +117,4 @@ typedef D3DXPLANE Plane;
 #include "Environment/Snow.h"
 #include "Environment/Sky.h"
 #include "Environment/Water.h"
+#include "Environment/TerrainLod.h"

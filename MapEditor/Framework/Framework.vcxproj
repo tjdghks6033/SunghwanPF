@@ -173,6 +173,7 @@ copy /Y "$(SolutionDir)Debug\Framework.pdb" "$(SolutionDir)ModelConv\"</Command>
     <ClInclude Include="Environment\Rain.h" />
     <ClInclude Include="Environment\Snow.h" />
     <ClInclude Include="Environment\Terrain.h" />
+    <ClInclude Include="Environment\TerrainLod.h" />
     <ClInclude Include="Environment\Water.h" />
     <ClInclude Include="Framework.h" />
     <ClInclude Include="Meshes\Mesh.h" />
@@ -188,6 +189,7 @@ copy /Y "$(SolutionDir)Debug\Framework.pdb" "$(SolutionDir)ModelConv\"</Command>
     <ClInclude Include="Model\ModelMesh.h" />
     <ClInclude Include="Model\ModelRender.h" />
     <ClInclude Include="Objects\Collider.h" />
+    <ClInclude Include="Objects\Frustum.h" />
     <ClInclude Include="Objects\GBuffer.h" />
     <ClInclude Include="Objects\Projector.h" />
     <ClInclude Include="Objects\Shadow.h" />
@@ -235,6 +237,7 @@ copy /Y "$(SolutionDir)Debug\Framework.pdb" "$(SolutionDir)ModelConv\"</Command>
     <ClCompile Include="Environment\Rain.cpp" />
     <ClCompile Include="Environment\Snow.cpp" />
     <ClCompile Include="Environment\Terrain.cpp" />
+    <ClCompile Include="Environment\TerrainLod.cpp" />
     <ClCompile Include="Environment\Water.cpp" />
     <ClCompile Include="Framework.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -255,6 +258,7 @@ copy /Y "$(SolutionDir)Debug\Framework.pdb" "$(SolutionDir)ModelConv\"</Command>
     <ClCompile Include="Model\ModelMesh.cpp" />
     <ClCompile Include="Model\ModelRender.cpp" />
     <ClCompile Include="Objects\Collider.cpp" />
+    <ClCompile Include="Objects\Frustum.cpp" />
     <ClCompile Include="Objects\GBuffer.cpp" />
     <ClCompile Include="Objects\Projector.cpp" />
     <ClCompile Include="Objects\Shadow.cpp" />

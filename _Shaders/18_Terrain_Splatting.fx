@@ -36,4 +36,7 @@ technique11 T0
 {
     P_VP(P0, VS_Terrain, PS_Terrain)
     P_RS_VP(P1, RS, VS_Terrain, PS_Terrain)
+
+	P_VTP(P2, VS_TerrainLod, HS_TerrainLod, DS_TerrainLod, PS_TerrainLod)
+	P_RS_VTP(P3, FillMode_WireFrame, VS_TerrainLod, HS_TerrainLod, DS_TerrainLod, PS_TerrainLod)
 }

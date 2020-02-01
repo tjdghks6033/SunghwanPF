@@ -32,6 +32,24 @@ void WaterDemo::Initialize()
 	terrain->LayerMap3(L"Terrain/Cliff (Sandstone).jpg", L"Terrain/Sand (with pebbles).jpg");
 	//terrain->Pass(2);
 
+	//TerrainLod
+	{
+		TerrainLod::InitializeDesc desc =
+		{
+			sTerrain,
+			L"Terrain/Gray512.png",
+			1.0f,
+			16,
+			5
+		};
+
+		terrainLod = new TerrainLod(desc);
+		terrainLod->BaseMap(L"Terrain/Dirt.png");
+		terrainLod->LayerMap(L"Terrain/Grass (Lawn).jpg", L"Terrain/Gray512.png");
+		terrainLod->NormalMap(L"Terrain/Dirt_Normal.png");
+		terrainLod->Pass(2);
+	}
+
 	Mesh();
 	Airplane();
 	Kachujin();
@@ -42,12 +60,30 @@ void WaterDemo::Initialize()
 
 void WaterDemo::Destroy()
 {
-	
+	SafeDelete(shader);
+	SafeDelete(shadow);
+	SafeDelete(terrain);
+	SafeDelete(terrainLod);
+	SafeDelete(sTerrain);
 }
 
 void WaterDemo::Update()
 {
-	terrain->Update();
+	ImGui::Checkbox("Terrain", &is_terrain);
+	
+
+	if(!is_terrain)
+		terrain->Update();
+	else if (is_terrain)
+	{
+		ImGui::Checkbox("WireFrame", &is_wireframe);
+		terrainLod->Update();
+		if (!is_wireframe)
+			terrainLod->Pass(2);
+		else if (is_wireframe)
+			terrainLod->Pass(3);
+	}
+
 	sphere->Update();
 	cylinder->Update();
 	cube->Update();
@@ -141,7 +177,10 @@ void WaterDemo::Render()
 	sky->Pass(4, 5, 6);
 	sky->Render();
 
-	terrain->Render();
+	if (!is_terrain)
+		terrain->Render();
+	else if (is_terrain)
+		terrainLod->Render();
 
 	Pass(7, 8, 9);
 

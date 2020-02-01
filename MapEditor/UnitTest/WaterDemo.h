@@ -31,6 +31,11 @@ private:
 	Terrain* terrain;
 	Shader* sTerrain;
 
+	TerrainLod* terrainLod;
+
+	bool is_terrain = false;
+	bool is_wireframe = false;
+
 	Sky* sky;
 	Snow* snow;
 	Water* water;
