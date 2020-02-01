@@ -63,7 +63,7 @@ private:
 		UINT FogType;
 	} fogDesc;
 
-	struct TrailDesc
+	struct TrailDesc2
 	{
 		Matrix Transform;
 	} trailDesc;

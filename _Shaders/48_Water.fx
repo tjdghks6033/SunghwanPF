@@ -12,7 +12,6 @@ float4 PS(MeshOutput input) : SV_Target
     return PS_Shadow(input, PS_AllLight(input));
 }
 
-
 ///////////////////////////////////////////////////////////////////////////////
 //Water
 ///////////////////////////////////////////////////////////////////////////////
@@ -130,7 +129,7 @@ VertexTexture VS_Trail(VertexTexture input)
 
 float4 PS_Trail(VertexTexture input) : SV_Target
 {
-	float4 color2 = (1, 0, 0, 1);
+	float4 color2 = TrailMap.Sample(TrailSampler, input.Uv);
 	
 	return color2;
 }

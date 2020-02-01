@@ -32,6 +32,7 @@ Context::Context()
 	perspective = new Perspective(desc.Width, desc.Height);
 	viewport = new Viewport(desc.Width, desc.Height);
 	camera = new Freedom();
+	
 }
 
 Context::~Context()
@@ -127,19 +128,20 @@ SpotLight & Context::GetSpotLight(UINT index)
 	return spotLights[index];
 }
 
-UINT Context::Trails(OUT Trail * trailor)
+UINT Context::Trails(OUT TrailDesc * trailsval)
 {
-	memcpy(trailor, trails, sizeof(Trail) * trailCount);
+	memcpy(trailsval, trails, sizeof(TrailDesc) * trailCount);
 
 	return trailCount;
 }
-void Context::AddTrail(Trail & trail)
+
+void Context::AddTrail(TrailDesc & trail)
 {
 	trails[trailCount] = trail;
 	trailCount++;
 }
 
-Trail & Context::TrailMatrix(UINT index)
+Matrix & Context::GetTrail(UINT index)
 {
-	return trails[index];
+	return trails[index].trailmatrix;
 }

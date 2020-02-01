@@ -19,7 +19,7 @@ void WaterDemo::Initialize()
 
 	snow = new Snow(Vector3(300, 100, 500), 10000, L"Environment/Snow.png");
 	
-	water = new Water(shader, 150);
+	water = new Water(shader, 127.5);
 	water->GetTransform()->Position(128.0f + 0, 5, 128.0f + 0);
 	//water->GetTransform()->Position(0, 0.1f, 0);
 	

@@ -53,6 +53,9 @@ cbuffer CB_DynamicCube
 Texture2D ShadowMap;
 SamplerComparisonState ShadowSampler;
 
+Texture2D TrailMap;
+SamplerState TrailSampler;
+
 ///////////////////////////////////////////////////////////////////////////////
 
 static const float2 NDC[4] = { float2(-1, +1), float2(+1, +1), float2(-1, -1), float2(+1, -1) };

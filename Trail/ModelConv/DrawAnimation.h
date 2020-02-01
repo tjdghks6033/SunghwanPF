@@ -17,7 +17,7 @@ private:
 
 private:
 	Shader* shader;
-
+	Trail* trailor;
 	Model* weapon;
 	ModelAnimator* kachujin = NULL;
 };

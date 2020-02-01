@@ -4,6 +4,11 @@
 Trail::Trail(Matrix * transform, UINT count)
 	: world(transform), count(count)
 {
+	
+	renderTarget = new RenderTarget(D3D::Get()->Width(), D3D::Get()->Height());
+	depthStencil = new DepthStencil(D3D::Get()->Width(), D3D::Get()->Height());
+	viewport = new Viewport((float)D3D::Get()->Width(), (float)D3D::Get()->Height());
+
 	for (UINT i = 0; i < MAX_MODEL_TRAIL; i++)
 		D3DXMatrixIdentity(&worlds[i]);
 
@@ -55,6 +60,23 @@ Trail::Trail(Matrix * transform, UINT count)
 
 	buffer = new ConstantBuffer(&desc, sizeof(Desc));
 	sBuffer = shader->AsConstantBuffer("CB_Trail");
+	sTrailMap = shader->AsSRV("TrailMap");
+
+	//Create Sampler
+	{
+		D3D11_SAMPLER_DESC desc;
+		ZeroMemory(&desc, sizeof(D3D11_SAMPLER_DESC));
+		desc.Filter = D3D11_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR;
+		desc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+		desc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+		desc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+		desc.ComparisonFunc = D3D11_COMPARISON_LESS_EQUAL;
+		desc.MaxAnisotropy = 1;
+		desc.MaxLOD = FLT_MAX;
+
+		Check(D3D::GetDevice()->CreateSamplerState(&desc, &samplerState));
+		sSamplerState = shader->AsSampler("TrailSampler");
+	}
 
 	GenerateTrail();
 
@@ -62,6 +84,13 @@ Trail::Trail(Matrix * transform, UINT count)
 
 Trail::~Trail()
 {
+	SafeDelete(buffer);
+
+	SafeDelete(renderTarget);
+	SafeDelete(depthStencil);
+	SafeDelete(viewport);
+
+	SafeRelease(samplerState);
 }
 
 void Trail::Update()
@@ -77,14 +106,19 @@ void Trail::Render()
 	D3D::GetDC()->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
 	D3D::GetDC()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-
 	shader->DrawIndexed(0, pass, 6 * count);
 }
 
 void Trail::GenerateTrail()
 {
+	renderTarget->Set(depthStencil);
+	viewport->RSSetViewport();
+
 	buffer->Apply();
 	sBuffer->SetConstantBuffer(buffer->Buffer());
+
+	sTrailMap->SetResource(depthStencil->SRV());
+	sSamplerState->SetSampler(0, samplerState);
 }
 
 void Trail::UpdateTrailBuffer()

@@ -12,6 +12,7 @@ public:
 	UINT& Pass() { return pass; }
 	void Pass(UINT val) { pass = val; }
 
+	Matrix& GetMatrix() { return worlds[0]; }
 
 private:
 	void GenerateTrail();
@@ -46,8 +47,16 @@ private:
 
 	VertexBuffer* instanceBuffer;
 
+
+	RenderTarget* renderTarget;
+	DepthStencil* depthStencil;
+	Viewport* viewport;
+
 	ConstantBuffer* buffer;
 	ID3DX11EffectConstantBuffer* sBuffer;
 	//ID3DX11EffectShaderResourceVariable* sTrailMap;
+	ID3DX11EffectShaderResourceVariable* sTrailMap;
 
+	ID3D11SamplerState* samplerState;
+	ID3DX11EffectSamplerVariable* sSamplerState;
 };

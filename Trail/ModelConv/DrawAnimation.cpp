@@ -32,7 +32,7 @@ void DrawAnimation::Update()
 		}
 
 		kachujin->Update();
-		trail->Update();
+		trailor->Update();
 	}
 }
 
@@ -42,7 +42,7 @@ void DrawAnimation::Render()
 	{
 		kachujin->Pass(2);
 		kachujin->Render();
-		trail->Render();
+		trailor->Render();
 	}
 }
 
@@ -85,11 +85,14 @@ void DrawAnimation::Kachujin()
 
 	D3DXMATRIX weapon_transform = kachujin->GetModel()->BoneByIndex(35)->Transform();
 
-	Trail trail(&weapon_transform, 64);
+	TrailDesc trail;
+	trail = { weapon_transform };
 	Context::Get()->AddTrail(trail);
-	trail->Pass(17);
 	
+	trailor = new Trail(&Context::Get()->GetTrail(0), 64);
+	trailor->Pass(17);
 	
+
 	/*for (float x = -50; x <= 50; x += 2.5f)
 	{
 		Transform* transform = kachujin->AddTransform();

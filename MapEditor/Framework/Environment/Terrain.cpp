@@ -86,7 +86,7 @@ void Terrain::Update()
 			{
 				for (UINT x = 0; x < width - 1; x++)
 				{
-					float temp = GetHeight(Vector3(x, 0, z));
+					float temp = GetHeight(Vector3((float)x, 0, (float)z));
 					writer->Float(temp);
 
 					float r = vertices[width * z + x].Color.r;
@@ -448,9 +448,9 @@ void Terrain::DownHeight(Vector3 & position, UINT type, UINT range)
 		if (rect.right >= (LONG)width) rect.right = (LONG)width;
 		if (rect.bottom < 0) rect.bottom = 0;
 
-		for (LONG z = rect.bottom; z <= rect.top; z++)
+		for (float z = (float)rect.bottom; z <= (float)rect.top; z++)
 		{
-			for (LONG x = rect.left; x <= rect.right; x++)
+			for (float x = (float)rect.left; x <= (float)rect.right; x++)
 			{
 				UINT index = width * (UINT)z + (UINT)x;
 
@@ -474,9 +474,9 @@ void Terrain::DownHeight(Vector3 & position, UINT type, UINT range)
 		if (rect.right >= (LONG)width) rect.right = (LONG)width;
 		if (rect.bottom < 0) rect.bottom = 0;
 
-		for (LONG z = rect.bottom; z <= rect.top; z++)
+		for (float z = (float)rect.bottom; z <= (float)rect.top; z++)
 		{
-			for (LONG x = rect.left; x <= rect.right; x++)
+			for (float x = (float)rect.left; x <= (float)rect.right; x++)
 			{
 				if ((position.x - x) *(position.x - x) + (position.z - z) * (position.z - z) <= range * range)
 				{
@@ -512,13 +512,13 @@ void Terrain::FlatHeight(Vector3 & position, UINT type, UINT range)
 		if (rect.right >= (LONG)width) rect.right = (LONG)width;
 		if (rect.bottom < 0) rect.bottom = 0;
 
-		for (LONG z = rect.bottom; z <= rect.top; z++)
+		for (float z = (float)rect.bottom; z <= (float)rect.top; z++)
 		{
-			for (LONG x = rect.left; x <= rect.right; x++)
+			for (float x = (float)rect.left; x <= (float)rect.right; x++)
 			{
 				UINT index = width * (UINT)z + (UINT)x;
 
-				vertices[index].Position.y = 0.0f * Time::Delta();
+				vertices[index].Position.y = 0.3f * Time::Delta();
 			}
 		}
 		CreateNormalData();
@@ -538,14 +538,14 @@ void Terrain::FlatHeight(Vector3 & position, UINT type, UINT range)
 		if (rect.right >= (LONG)width) rect.right = (LONG)width;
 		if (rect.bottom < 0) rect.bottom = 0;
 
-		for (LONG z = rect.bottom; z < rect.top; z++)
+		for (float z = (float)rect.bottom; z < (float)rect.top; z++)
 		{
-			for (LONG x = rect.left; x < rect.right; x++)
+			for (float x = (float)rect.left; x < (float)rect.right; x++)
 			{
 				if ((position.x - x) *(position.x - x) + (position.z - z) * (position.z - z) <= range * range)
 				{
 					UINT index = width * (UINT)z + (UINT)x;
-					vertices[index].Position.y = 0.0f * Time::Delta();
+					vertices[index].Position.y = 0.3f * Time::Delta();
 				}
 			}
 		}
@@ -576,9 +576,9 @@ void Terrain::Smoothing(Vector3 & position, UINT type, UINT range)
 		if (rect.right >= (LONG)width) rect.right = (LONG)width;
 		if (rect.bottom < 0) rect.bottom = 0;
 
-		for (LONG z = rect.bottom; z <= rect.top; z++)
+		for (float z = (float)rect.bottom; z <= (float)rect.top; z++)
 		{
-			for (LONG x = rect.left; x <= rect.right; x++)
+			for (float x = (float)rect.left; x <= (float)rect.right; x++)
 			{
 				UINT index = width * (UINT)z + (UINT)x; //중점
 				UINT indexlt = width * ((UINT)z + 1) + (UINT)x - 1; //lt
@@ -622,9 +622,9 @@ void Terrain::Smoothing(Vector3 & position, UINT type, UINT range)
 		if (rect.right >= (LONG)width) rect.right = (LONG)width;
 		if (rect.bottom < 0) rect.bottom = 0;
 
-		for (LONG z = rect.bottom; z < rect.top; z++)
+		for (float z = (float)rect.bottom; z < (float)rect.top; z++)
 		{
-			for (LONG x = rect.left; x < rect.right; x++)
+			for (float x = (float)rect.left; x < (float)rect.right; x++)
 			{
 				if ((position.x - x) *(position.x - x) + (position.z - z) * (position.z - z) <= range * range)
 				{
@@ -686,9 +686,9 @@ void Terrain::Slope(Vector3 & position, UINT type, UINT range)
 		position.y = 20.0f;
 		float dy = (position.y - prevlocation.y) / 100.0f;
 
-		for (LONG z = prevlocation.z; z <= rect.top; z++)
+		for (float z = prevlocation.z; z <= (float)rect.top; z++)
 		{
-			for (LONG x = prevlocation.x; x <= rect.right; x++)
+			for (float x = prevlocation.x; x <= (float)rect.right; x++)
 			{
 				UINT index = width * (UINT)z + (UINT)x;
 
@@ -718,9 +718,9 @@ void Terrain::Slope(Vector3 & position, UINT type, UINT range)
 		position.y = 20.0f;
 		float dy = (position.y - prevlocation.y) / 100.0f;
 
-		for (LONG z = prevlocation.z; z <= rect.top; z++)
+		for (float z = prevlocation.z; z <= rect.top; z++)
 		{
-			for (LONG x = prevlocation.x; x <= rect.right; x++)
+			for (float x = prevlocation.x; x <= rect.right; x++)
 			{
 				if ((position.x - x) *(position.x - x) + (position.z - z) * (position.z - z) <= range * range)
 				{
@@ -744,7 +744,7 @@ void Terrain::Slope(Vector3 & position, UINT type, UINT range)
 
 void Terrain::Noise(Vector3 & position, UINT type, UINT range)
 {
-	mt19937 engine((float)time(NULL));                    // MT19937 난수 엔진
+	mt19937 engine((unsigned int)time(NULL));                    // MT19937 난수 엔진
 	uniform_real_distribution<float> distribution(0.0f, noise_var);       // 생성 범위
 	auto generator = bind(distribution, engine);
 
@@ -761,9 +761,9 @@ void Terrain::Noise(Vector3 & position, UINT type, UINT range)
 		if (rect.right >= (LONG)width) rect.right = (LONG)width;
 		if (rect.bottom < 0) rect.bottom = 0;
 
-		for (LONG z = rect.bottom; z <= rect.top; z++)
+		for (float z = (float)rect.bottom; z <= (float)rect.top; z++)
 		{
-			for (LONG x = rect.left; x <= rect.right; x++)
+			for (float x = (float)rect.left; x <= (float)rect.right; x++)
 			{
 				UINT index = width * (UINT)z + (UINT)x;
 
@@ -791,9 +791,9 @@ void Terrain::Noise(Vector3 & position, UINT type, UINT range)
 		if (rect.right >= (LONG)width) rect.right = (LONG)width;
 		if (rect.bottom < 0) rect.bottom = 0;
 
-		for (LONG z = rect.bottom; z < rect.top; z++)
+		for (float z = (float)rect.bottom; z < (float)rect.top; z++)
 		{
-			for (LONG x = rect.left; x < rect.right; x++)
+			for (float x = (float)rect.left; x < (float)rect.right; x++)
 			{
 				if ((position.x - x) *(position.x - x) + (position.z - z) * (position.z - z) <= range * range)
 				{
@@ -829,9 +829,9 @@ void Terrain::Paint(Vector3 & position, UINT type, UINT range)
 		if (rect.right >= (LONG)width) rect.right = (LONG)width;
 		if (rect.bottom < 0) rect.bottom = 0;
 
-		for (LONG z = rect.bottom; z <= rect.top; z++)
+		for (float z = (float)rect.bottom; z <= (float)rect.top; z++)
 		{
-			for (LONG x = rect.left; x <= rect.right; x++)
+			for (float x = (float)rect.left; x <= (float)rect.right; x++)
 			{
 				UINT index = width * (UINT)z + (UINT)x;
 
@@ -866,9 +866,9 @@ void Terrain::Paint(Vector3 & position, UINT type, UINT range)
 		if (rect.right >= (LONG)width) rect.right = (LONG)width;
 		if (rect.bottom < 0) rect.bottom = 0;
 
-		for (LONG z = rect.bottom; z <= rect.top; z++)
+		for (float z = (float)rect.bottom; z <= (float)rect.top; z++)
 		{
-			for (LONG x = rect.left; x <= rect.right; x++)
+			for (float x = (float)rect.left; x <= (float)rect.right; x++)
 			{
 				if ((position.x - x) *(position.x - x) + (position.z - z) * (position.z - z) <= range * range)
 				{
@@ -918,7 +918,7 @@ void Terrain::CreateVertexData()
 			UINT pixel = width * (height - 1 - z) + x;
 
 			vertices[index].Position.x = (float)x;
-			vertices[index].Position.y = (heights[pixel].r * 256.0f) / 10.0f;
+			vertices[index].Position.y = (heights[pixel].r * 255.0f) / 10.0f;
 			vertices[index].Position.z = (float)z;
 
 			vertices[index].Uv.x = (float)x / (float)width;
