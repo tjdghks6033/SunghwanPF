@@ -23,7 +23,7 @@ void WaterDemo::Initialize()
 	water->GetTransform()->Position(128.0f + 0, 5, 128.0f + 0);
 	//water->GetTransform()->Position(0, 0.1f, 0);
 	
-	sTerrain = new Shader(L"18_Terrain_Splatting.fx");
+	sTerrain = new Shader(L"18_Terrain_Splatting.fxo");
 
 	terrain = new Terrain(sTerrain, L"Terrain/Gray256.png");
 	terrain->BaseMap(L"Terrain/Dirt3.png");
@@ -73,6 +73,7 @@ void WaterDemo::Update()
 	ImGui::Checkbox("Terrain", &is_terrain);
 	ImGui::Checkbox("Mesh", &is_mesh);
 	ImGui::Checkbox("Model", &is_model);
+	ImGui::Checkbox("Light", &is_light);
 	
 
 	if(!is_terrain)
@@ -121,6 +122,8 @@ void WaterDemo::Update()
 	{
 
 	}
+
+
 }
 
 void WaterDemo::PreRender()
@@ -160,8 +163,6 @@ void WaterDemo::PreRender()
 		{
 
 		}
-
-
 	}
 
 	
@@ -296,14 +297,14 @@ void WaterDemo::Render()
 	string str = to_string(picked.x) + ", " + to_string(picked.y) + ", " + to_string(picked.z);
 	Gui::Get()->RenderText(Vector2(10, 60), Color(1, 0, 0, 1), "Picked : " + str);
 
-	if (Keyboard::Get()->Press(VK_LBUTTON))
+	/*if (Keyboard::Get()->Press(VK_LBUTTON))
 	{
-		terrain->RaiseHeight(picked, 1, 10);
-	}
+		terrainLod->RaiseHeight(picked, 1, 10);
+	}*/
+
 
 	water->Pass(16);
-	water->Render();
-	
+	water->Render();	
 }
 
 void WaterDemo::PostRender()

@@ -589,6 +589,7 @@ void Terrain::Smoothing(Vector3 & position, UINT type, UINT range)
 				UINT indexlb = width * ((UINT)z - 1) + (UINT)x - 1;	//lb
 				UINT indexcb = width * ((UINT)z - 1) + (UINT)x;	//cb
 				UINT indexrb = width * ((UINT)z - 1) + (UINT)x + 1;	//rb
+				
 
 				float cc = vertices[index].Position.y;
 				float lt = vertices[indexlt].Position.y;
@@ -638,7 +639,9 @@ void Terrain::Smoothing(Vector3 & position, UINT type, UINT range)
 					UINT indexcb = width * ((UINT)z - 1) + (UINT)x;	//cb
 					UINT indexrb = width * ((UINT)z - 1) + (UINT)x + 1;	//rb
 
-					float cc = vertices[index].Position.y;
+					
+
+					float cc = vertices[index].Position.y  ;
 					float lt = vertices[indexlt].Position.y;
 					float tc = vertices[indextc].Position.y;
 					float rt = vertices[indexrt].Position.y;

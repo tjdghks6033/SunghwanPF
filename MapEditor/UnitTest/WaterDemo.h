@@ -38,6 +38,7 @@ private:
 	bool is_mesh = false;
 	bool is_model = false;
 	bool is_weather = true;
+	bool is_light = false;
 
 	Sky* sky;
 	Snow* snow;

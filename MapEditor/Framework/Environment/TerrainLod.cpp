@@ -33,6 +33,7 @@ TerrainLod::TerrainLod(InitializeDesc & initDesc)
 	CalcBoundY();
 	CreateVertexData();
 	CreateIndexData();
+	//CreateNormalData();
 
 	vertexBuffer = new VertexBuffer(vertices, vertexCount, sizeof(VertexTerrain));
 	indexBuffer = new IndexBuffer(indices, indexCount);
@@ -294,15 +295,15 @@ void TerrainLod::RaiseHeight(Vector3 & position, UINT type, UINT range)
 		CreateNormalData();		
 	}
 
-	//D3D::GetDC()->UpdateSubresource
-	//(
-	//	vertexBuffer->Buffer(), 0, NULL, vertices, sizeof(TerrainVertex) * vertexCount, 0
-	//);
+	/*D3D::GetDC()->UpdateSubresource
+	(
+		vertexBuffer->Buffer(), 0, NULL, vertices, sizeof(VertexTerrain) * vertexCount, 0
+	);*/
 
 	D3D11_MAPPED_SUBRESOURCE subResource;
 	D3D::GetDC()->Map(vertexBuffer->Buffer(), 0, D3D11_MAP_WRITE_DISCARD, 0, &subResource);
 	{
-		memcpy(subResource.pData, vertices, sizeof(VertexTerrain) * vertexCount);
+		memcpy(subResource.pData, vertices, sizeof(VertexTerrain) * faceCount);
 	}
 	D3D::GetDC()->Unmap(vertexBuffer->Buffer(), 0);
 }
@@ -414,36 +415,4 @@ void TerrainLod::CreateIndexData()
 
 void TerrainLod::CreateNormalData()
 {
-	for (UINT i = 0; i < indexCount / 3; i++)
-	{
-		UINT index0 = indices[i * 3 + 0];
-		UINT index1 = indices[i * 3 + 1];
-		UINT index2 = indices[i * 3 + 2];
-
-		VertexTerrain v0 = vertices[index0];
-		VertexTerrain v1 = vertices[index1];
-		VertexTerrain v2 = vertices[index2];
-
-		Vector3 d1 = v1.Position - v0.Position;
-		Vector3 d2 = v2.Position - v0.Position;
-
-		Vector3 normal;
-		D3DXVec3Cross(&normal, &d1, &d2);
-
-		vertices[index0].BoundsY.x = normal.x;
-		vertices[index0].BoundsY.y = normal.y;
-
-
-		vertices[index1].BoundsY.x = normal.x;
-		vertices[index1].BoundsY.y = normal.y;
-
-
-		vertices[index2].BoundsY.x = normal.x;
-		vertices[index2].BoundsY.y = normal.y;
-	}
-
-	
-
-	for (UINT i = 0; i < vertexCount; i++)
-		D3DXVec2Normalize(&vertices[i].BoundsY, &vertices[i].BoundsY);
 }

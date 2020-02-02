@@ -190,7 +190,6 @@ struct VertexInput_TerrainLod
 	float4 Position : Position;
 	float2 Uv : Uv;
 	float2 BoundY : BoundY; //최대최소높이
-	float3 Normal : Normal;
 };
 
 struct VertexOutput_TerrainLod
@@ -287,6 +286,8 @@ ConstantHullOutput_TerrainLod CHS_TerrainLod(InputPatch<VertexOutput_TerrainLod,
 	float3 c = (input[0].Position.xyz + input[1].Position.xyz + input[2].Position.xyz + input[3].Position.xyz) * 0.25f;
 	output.Inside[0] = TessellationFactor(c);
 	output.Inside[1] = TessellationFactor(c);
+	
+	
 
 	return output;
 }
