@@ -24,6 +24,13 @@ public:
 	void LayerMap(wstring layer, wstring alpha);
 	void NormalMap(wstring file);
 
+	float GetHeight(Vector3& position);
+	float GetHeightPick(Vector3& position);
+	Vector3 GetPickedPosition();
+	
+	void RaiseHeight(Vector3 & position, UINT type, UINT range);
+
+
 private:
 	bool InBounds(UINT x, UINT z);
 	void CalcPatchBounds(UINT x, UINT z);
@@ -31,6 +38,7 @@ private:
 
 	void CreateVertexData();
 	void CreateIndexData();
+	void CreateNormalData();
 
 private:
 	struct VertexTerrain
@@ -43,7 +51,7 @@ private:
 	struct BufferDesc
 	{
 		float MinDistance = 1.0f;
-		float MaxDistance = 500.0f;
+		float MaxDistance = 200.0f;
 		float MinTessellation = 1.0f;
 		float MaxTessellation = 64.0f;
 

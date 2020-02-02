@@ -68,8 +68,7 @@ float4 PS_Water(VertexOutput_Water input) : SV_Target
     float4 normalMap = NormalMap.Sample(LinearSampler, input.Uv) * 2.0f - 1.0f;
     float4 normalMap2 = NormalMap.Sample(LinearSampler, input.Uv2) * 2.0f - 1.0f;
     
-    float3 normal = normalMap.rgb + normalMap2.rgb;
-    
+    float3 normal = normalMap.rgb + normalMap2.rgb;    
     
     float2 reflection;
     reflection.x = input.ReflectionPosition.x / input.ReflectionPosition.w * 0.5f + 0.5f;

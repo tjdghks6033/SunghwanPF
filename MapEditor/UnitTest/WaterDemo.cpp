@@ -69,7 +69,10 @@ void WaterDemo::Destroy()
 
 void WaterDemo::Update()
 {
+	ImGui::Checkbox("Weather", &is_weather);
 	ImGui::Checkbox("Terrain", &is_terrain);
+	ImGui::Checkbox("Mesh", &is_mesh);
+	ImGui::Checkbox("Model", &is_model);
 	
 
 	if(!is_terrain)
@@ -84,17 +87,40 @@ void WaterDemo::Update()
 			terrainLod->Pass(3);
 	}
 
-	sphere->Update();
-	cylinder->Update();
-	cube->Update();
-	grid->Update();
+	if (is_mesh)
+	{
+		sphere->Update();
+		cylinder->Update();
+		cube->Update();
+		grid->Update();
+	}
+	else if (!is_mesh)
+	{
 
-	airplane->Update();
-	kachujin->Update();
+	}
+
+	if (is_model)
+	{
+		airplane->Update();
+		kachujin->Update();
+	}
+	else if (!is_model)
+	{
+
+	}
+	
 
 	sky->Update();
 	water->Update();
-	snow->Update();
+
+	if (is_weather)
+	{
+		snow->Update();
+	}
+	else if (!is_weather)
+	{
+
+	}
 }
 
 void WaterDemo::PreRender()
@@ -107,19 +133,35 @@ void WaterDemo::PreRender()
 
 		Pass(0, 1, 2);
 
-		wall->Render();
-		sphere->Render();
-		brick->Render();
-		cylinder->Render();
+		if (is_mesh)
+		{
+			wall->Render();
+			sphere->Render();
+			brick->Render();
+			cylinder->Render();
 
-		stone->Render();
-		cube->Render();
+			stone->Render();
+			cube->Render();
 
-		floor->Render();
-		grid->Render();
+			floor->Render();
+			grid->Render();
+		}
+		else if (!is_mesh)
+		{
 
-		airplane->Render();
-		kachujin->Render();
+		}
+
+		if (is_model)
+		{
+			airplane->Render();
+			kachujin->Render();
+		}
+		else if (!is_model)
+		{
+
+		}
+
+
 	}
 
 	
@@ -131,20 +173,34 @@ void WaterDemo::PreRender()
 		sky->Render();
 
 		Pass(13, 14, 15);
+		if (is_mesh)
+		{
+			wall->Render();
+			sphere->Render();
+			brick->Render();
+			cylinder->Render();
 
-		wall->Render();
-		sphere->Render();
-		brick->Render();
-		cylinder->Render();
+			stone->Render();
+			cube->Render();
 
-		stone->Render();
-		cube->Render();
+			floor->Render();
+			grid->Render();
+		}
+		else if (!is_mesh)
+		{
 
-		floor->Render();
-		grid->Render();
+		}
 
-		airplane->Render();
-		kachujin->Render();
+		if (is_model)
+		{
+			airplane->Render();
+			kachujin->Render();
+		}
+		else if (!is_model)
+		{
+
+		}
+
 	}
 
 	//Refraction
@@ -155,20 +211,34 @@ void WaterDemo::PreRender()
 		sky->Render();
 
 		Pass(7, 8, 9);
+		
+		if (is_mesh)
+		{
+			wall->Render();
+			sphere->Render();
+			brick->Render();
+			cylinder->Render();
 
-		wall->Render();
-		sphere->Render();
-		brick->Render();
-		cylinder->Render();
+			stone->Render();
+			cube->Render();
 
-		stone->Render();
-		cube->Render();
+			floor->Render();
+			grid->Render();
+		}
+		else if (!is_mesh)
+		{
 
-		floor->Render();
-		grid->Render();
+		}
 
-		airplane->Render();
-		kachujin->Render();
+		if (is_model)
+		{
+			airplane->Render();
+			kachujin->Render();
+		}
+		else if (!is_model)
+		{
+
+		}
 	}
 }
 
@@ -184,23 +254,56 @@ void WaterDemo::Render()
 
 	Pass(7, 8, 9);
 
-	wall->Render();
-	sphere->Render();
-	brick->Render();
-	cylinder->Render();
+	if (is_mesh)
+	{
+		wall->Render();
+		sphere->Render();
+		brick->Render();
+		cylinder->Render();
 
-	stone->Render();
-	cube->Render();
+		stone->Render();
+		cube->Render();
 
-	floor->Render();
-	grid->Render();
+		floor->Render();
+		grid->Render();
+	}
+	else if (!is_mesh)
+	{
 
-	airplane->Render();
-	kachujin->Render();
-	
+	}
+
+	if (is_model)
+	{
+		airplane->Render();
+		kachujin->Render();
+	}
+	else if (!is_model)
+	{
+
+	}
+
+	if (is_weather)
+	{
+		snow->Render();
+	}
+	else if (!is_weather)
+	{
+
+	}	
+
+	//Height Text
+	Vector3 picked = terrainLod->GetPickedPosition();
+	string str = to_string(picked.x) + ", " + to_string(picked.y) + ", " + to_string(picked.z);
+	Gui::Get()->RenderText(Vector2(10, 60), Color(1, 0, 0, 1), "Picked : " + str);
+
+	if (Keyboard::Get()->Press(VK_LBUTTON))
+	{
+		terrain->RaiseHeight(picked, 1, 10);
+	}
+
 	water->Pass(16);
 	water->Render();
-	snow->Render();
+	
 }
 
 void WaterDemo::PostRender()

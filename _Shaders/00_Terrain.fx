@@ -190,6 +190,7 @@ struct VertexInput_TerrainLod
 	float4 Position : Position;
 	float2 Uv : Uv;
 	float2 BoundY : BoundY; //최대최소높이
+	float3 Normal : Normal;
 };
 
 struct VertexOutput_TerrainLod

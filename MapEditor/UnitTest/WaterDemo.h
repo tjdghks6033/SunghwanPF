@@ -33,8 +33,11 @@ private:
 
 	TerrainLod* terrainLod;
 
-	bool is_terrain = false;
+	bool is_terrain = true;
 	bool is_wireframe = false;
+	bool is_mesh = false;
+	bool is_model = false;
+	bool is_weather = true;
 
 	Sky* sky;
 	Snow* snow;
