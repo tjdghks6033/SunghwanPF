@@ -19,9 +19,6 @@ PerFrame::PerFrame(Shader * shader)
 	fogBuffer = new ConstantBuffer(&fogDesc, sizeof(FogDesc));
 	sFogBuffer = shader->AsConstantBuffer("CB_Fog");
 
-	trailBuffer = new ConstantBuffer(&trailDesc, sizeof(TrailDesc2));
-	sTrailBuffer = shader->AsConstantBuffer("CB_Trail");
-
 	ZeroMemory(bufferDesc.Culling, sizeof(Plane) * 4);
 	ZeroMemory(bufferDesc.Clipping, sizeof(Plane));
 }
@@ -33,7 +30,6 @@ PerFrame::~PerFrame()
 	SafeDelete(pointLightBuffer);
 	SafeDelete(spotLightBuffer);
 	SafeDelete(fogBuffer);
-	SafeDelete(trailBuffer);
 }
 
 void PerFrame::Update()
@@ -53,7 +49,6 @@ void PerFrame::Update()
 	fogDesc.FogDensity = Context::Get()->FogDensity();
 	fogDesc.FogType = Context::Get()->FogType();
 	
-	trailDesc.Transform = Context::Get()->GetTrail(0);
 }
 
 void PerFrame::Render()
@@ -81,6 +76,4 @@ void PerFrame::Render()
 	fogBuffer->Apply();
 	sFogBuffer->SetConstantBuffer(fogBuffer->Buffer());
 
-	trailBuffer->Apply();
-	sTrailBuffer->SetConstantBuffer(trailBuffer->Buffer());
 }

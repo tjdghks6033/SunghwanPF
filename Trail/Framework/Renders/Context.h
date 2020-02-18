@@ -37,11 +37,6 @@ struct SpotLight
 };
 #pragma endregion
 
-struct TrailDesc
-{
-	Matrix trailmatrix;
-};
-
 class Context
 {
 public:
@@ -83,11 +78,6 @@ public:
 	Vector2& FogDistance() { return fogDistance; }
 	float& FogDensity() { return fogDensity; }
 	UINT& FogType() { return fogType; }
-
-	UINT Trails(OUT TrailDesc* trailsval);
-	void AddTrail(TrailDesc& trail);
-	Matrix& GetTrail(UINT index);
-
 private:
 	static Context* instance;
 
@@ -113,7 +103,4 @@ private:
 	Vector2 fogDistance = Vector2(1, 105);
 	float fogDensity = 0.5f;
 	UINT fogType = 2;
-
-	UINT trailCount = 0;
-	TrailDesc trails[MAX_MODEL_TRAIL];
 };

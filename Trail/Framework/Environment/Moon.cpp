@@ -125,5 +125,6 @@ D3DXMATRIX Moon::GetGlowTransform(float theta)
 		, direction.z * glowDistance
 	);
 
+
 	return S * R * T * D;
 }

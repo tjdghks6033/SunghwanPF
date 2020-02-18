@@ -69,12 +69,29 @@ void WaterDemo::Destroy()
 
 void WaterDemo::Update()
 {
-	ImGui::Checkbox("Weather", &is_weather);
+	/*ImGui::Checkbox("Weather", &is_weather);
 	ImGui::Checkbox("Terrain", &is_terrain);
 	ImGui::Checkbox("Mesh", &is_mesh);
 	ImGui::Checkbox("Model", &is_model);
-	ImGui::Checkbox("Light", &is_light);
-	
+	ImGui::Checkbox("Light", &is_light);*/
+
+	ImGui::Begin("Test", nullptr, ImGuiWindowFlags_MenuBar);
+	{
+		if (ImGui::BeginMenuBar())
+		{
+			if (ImGui::BeginMenu("Component"))
+			{
+				ImGui::MenuItem("Weather", NULL, &is_weather);
+				ImGui::MenuItem("Terrain", NULL, &is_terrain);
+				ImGui::MenuItem("Mesh", NULL, &is_mesh);
+				ImGui::MenuItem("Model", NULL, &is_model);
+				ImGui::MenuItem("Light", NULL, &is_light);
+				ImGui::EndMenu();
+			}
+			ImGui::EndMenuBar();
+		}
+	}
+	ImGui::End();
 
 	if(!is_terrain)
 		terrain->Update();
@@ -301,6 +318,8 @@ void WaterDemo::Render()
 	{
 		terrainLod->RaiseHeight(picked, 1, 10);
 	}*/
+
+
 
 
 	water->Pass(16);

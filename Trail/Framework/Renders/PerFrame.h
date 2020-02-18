@@ -63,10 +63,6 @@ private:
 		UINT FogType;
 	} fogDesc;
 
-	struct TrailDesc2
-	{
-		Matrix Transform;
-	} trailDesc;
 
 private:
 	Shader* shader;
@@ -85,7 +81,4 @@ private:
 
 	ConstantBuffer* fogBuffer;
 	ID3DX11EffectConstantBuffer* sFogBuffer;
-
-	ConstantBuffer* trailBuffer;
-	ID3DX11EffectConstantBuffer* sTrailBuffer;
 };

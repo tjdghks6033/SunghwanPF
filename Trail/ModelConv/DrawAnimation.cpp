@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "DrawAnimation.h"
 #include "Viewer/Freedom.h"
+#include "Model/Trail.h"
 
 void DrawAnimation::Initialize()
 {
@@ -30,9 +31,16 @@ void DrawAnimation::Update()
 		{			
 			kachujin->PlayClip(0, 3, 1.0f, 1.0f);
 		}
-
 		kachujin->Update();
-		trailor->Update();
+		Matrix mmm = kachujin->GetAttachTransform(0);
+
+		Matrix sword_mat = kachujin->GetModel()->BoneByIndex(71)->Transform();
+
+		
+		trailor->SetMatrix(sword_mat);
+		
+
+		trailor->Update(mmm);
 	}
 }
 
@@ -66,6 +74,7 @@ void DrawAnimation::Kachujin()
 	kachujin->ReadClip(L"Kachujin/Standing_Dodge_Backward");
 	kachujin->ReadClip(L"Kachujin/Sword_Attack");
 	kachujin->ReadClip(L"Kachujin/Sword_Jump_Attack");
+	kachujin->ReadClip(L"Kachujin/Dying");
 
 	weapon = new Model();
 	weapon->ReadMaterial(L"Weapon/Sword");
@@ -83,15 +92,14 @@ void DrawAnimation::Kachujin()
 	transform->Position(0, 0, -5);
 	transform->Scale(0.01f, 0.01f, 0.01f);
 
-	D3DXMATRIX weapon_transform = kachujin->GetModel()->BoneByIndex(35)->Transform();
+	Matrix mm = kachujin->GetAttachTransform(0);
 
-	TrailDesc trail;
-	trail = { weapon_transform };
-	Context::Get()->AddTrail(trail);
-	
-	trailor = new Trail(&Context::Get()->GetTrail(0), 64);
+
+	Trail::InitializeDesc desc = { mm };
+	trailor = new Trail(desc, 64);
 	trailor->Pass(17);
 	
+
 
 	/*for (float x = -50; x <= 50; x += 2.5f)
 	{
@@ -99,5 +107,6 @@ void DrawAnimation::Kachujin()
 		transform->Position(x, 0, -5);
 		transform->Scale(0.01f, 0.01f, 0.01f);
 	}*/
+
 	kachujin->UpdateTransforms();
 }

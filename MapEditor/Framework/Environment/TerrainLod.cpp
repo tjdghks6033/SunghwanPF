@@ -35,7 +35,7 @@ TerrainLod::TerrainLod(InitializeDesc & initDesc)
 	CreateIndexData();
 	//CreateNormalData();
 
-	vertexBuffer = new VertexBuffer(vertices, vertexCount, sizeof(VertexTerrain));
+	vertexBuffer = new VertexBuffer(vertices, vertexCount, sizeof(VertexTerrain), 0, true);
 	indexBuffer = new IndexBuffer(indices, indexCount);
 
 	bufferDesc.TexelCellSpaceU = 1.0f / ((float)heightMap->GetWidth() - 1.0f);
@@ -303,7 +303,7 @@ void TerrainLod::RaiseHeight(Vector3 & position, UINT type, UINT range)
 	D3D11_MAPPED_SUBRESOURCE subResource;
 	D3D::GetDC()->Map(vertexBuffer->Buffer(), 0, D3D11_MAP_WRITE_DISCARD, 0, &subResource);
 	{
-		memcpy(subResource.pData, vertices, sizeof(VertexTerrain) * faceCount);
+		memcpy(subResource.pData, vertices, sizeof(VertexTerrain) * vertexCount);
 	}
 	D3D::GetDC()->Unmap(vertexBuffer->Buffer(), 0);
 }

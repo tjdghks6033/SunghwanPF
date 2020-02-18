@@ -59,7 +59,7 @@ void Convert::Kachujin()
 	conv->ReadFile(L"Kachujin/Standing_Idle.fbx");
 	conv->ExportAnimClip(0, L"Kachujin/Standing_Idle");
 	SafeDelete(conv);
-
+	 
 	conv = new Converter();
 	conv->ReadFile(L"Kachujin/Running.fbx");
 	conv->ExportAnimClip(0, L"Kachujin/Running");
@@ -126,6 +126,11 @@ void Convert::Kachujin()
 	conv = new Converter();
 	conv->ReadFile(L"Kachujin/Sword_Jump_Attack.fbx");
 	conv->ExportAnimClip(0, L"Kachujin/Sword_Jump_Attack");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Kachujin/Dying.fbx");
+	conv->ExportAnimClip(0, L"Kachujin/Dying");
 	SafeDelete(conv);
 }
 void Convert::Megan()

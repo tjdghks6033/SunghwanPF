@@ -127,21 +127,3 @@ SpotLight & Context::GetSpotLight(UINT index)
 {
 	return spotLights[index];
 }
-
-UINT Context::Trails(OUT TrailDesc * trailsval)
-{
-	memcpy(trailsval, trails, sizeof(TrailDesc) * trailCount);
-
-	return trailCount;
-}
-
-void Context::AddTrail(TrailDesc & trail)
-{
-	trails[trailCount] = trail;
-	trailCount++;
-}
-
-Matrix & Context::GetTrail(UINT index)
-{
-	return trails[index].trailmatrix;
-}

@@ -121,14 +121,14 @@ VertexTexture VS_Trail(VertexTexture input)
 	output.Position = WorldPosition(input.Position);
 	output.Position = ViewProjection(output.Position);
 	
-	output.Uv = input.Uv;
+	output.Uv = input.Uv ;
 	
 	return output;
 }
 
 float4 PS_Trail(VertexTexture input) : SV_Target
 {
-	float4 color2 = TrailMap.Sample(TrailSampler, input.Uv);
+	float4 color2 = TrailMap.Sample(PointSampler, input.Uv);
 	
 	return color2;
 }
@@ -166,5 +166,5 @@ technique11 T0
     P_BS_VP(P16, AlphaBlend, VS_Water, PS_Water)
 
 	//Trail
-	P_BS_VP(P17, AlphaBlend, VS_Trail, PS_Trail)
+	P_BS_VP(P17, AlphaBlend_AlphaToCoverage, VS_Trail, PS_Trail)
 }
