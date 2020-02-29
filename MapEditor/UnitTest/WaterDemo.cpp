@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "WaterDemo.h"
+#include "Environment/Billboard.h"
 
 void WaterDemo::Initialize()
 {
@@ -17,7 +18,8 @@ void WaterDemo::Initialize()
 	sky->RealTime(false, Math::PI - 1e-6f);
 	//sky->RealTime(true, Math::PI - 1e-6f, 0.25f);v
 
-	snow = new Snow(Vector3(300, 100, 500), 10000, L"Environment/Snow.png");
+	rain = new Rain(Vector3(300, 100, 500), 10000, L"Environment/Rain.png");
+	snow = new Snow(Vector3(300, 300, 300), 10000, L"Environment/Snow.png");
 	
 	water = new Water(shader, 127.5);
 	water->GetTransform()->Position(128.0f + 0, 5, 128.0f + 0);
@@ -50,12 +52,31 @@ void WaterDemo::Initialize()
 		terrainLod->Pass(2);
 	}
 
+	bbShader = new Shader(L"25_Billboard.fxo");
+	bb = new Billboard(bbShader);
+	bb2 = new Billboard(bbShader);
+	bb3 = new Billboard(bbShader);
+	bb4 = new Billboard(bbShader);
+	bb5 = new Billboard(bbShader);
+	bb6 = new Billboard(bbShader);
+	bb7 = new Billboard(bbShader);
+	bb8 = new Billboard(bbShader);
+
+	bb->AddTexture(L"Terrain/BillboardTexture1.png");
+	bb2->AddTexture(L"Terrain/BillboardTexture2.png");
+	bb3->AddTexture(L"Terrain/BillboardTexture3.png");
+	bb4->AddTexture(L"Terrain/Tree.png");
+	bb5->AddTexture(L"Terrain/Tree2.png");
+	bb6->AddTexture(L"Terrain/Tree3.png");
+	bb7->AddTexture(L"Terrain/Tree4.png");
+	bb8->AddTexture(L"Terrain/Tree5.png");
+
 	Mesh();
 	Airplane();
 	Kachujin();
 
-	AddPointLights();
-	AddSpotLights();
+	//AddPointLights();
+	//AddSpotLights();
 }
 
 void WaterDemo::Destroy()
@@ -69,78 +90,119 @@ void WaterDemo::Destroy()
 
 void WaterDemo::Update()
 {
-	/*ImGui::Checkbox("Weather", &is_weather);
-	ImGui::Checkbox("Terrain", &is_terrain);
-	ImGui::Checkbox("Mesh", &is_mesh);
-	ImGui::Checkbox("Model", &is_model);
-	ImGui::Checkbox("Light", &is_light);*/
-
-	ImGui::Begin("Test", nullptr, ImGuiWindowFlags_MenuBar);
+	ImGui::Begin("Terrain", nullptr);
 	{
-		if (ImGui::BeginMenuBar())
+		ImGui::SliderInt("Terrain", (int *)&terrain_num, 0, 1);
+		ImGui::Separator();
+		if (terrain_num == 0)
 		{
-			if (ImGui::BeginMenu("Component"))
-			{
-				ImGui::MenuItem("Weather", NULL, &is_weather);
-				ImGui::MenuItem("Terrain", NULL, &is_terrain);
-				ImGui::MenuItem("Mesh", NULL, &is_mesh);
-				ImGui::MenuItem("Model", NULL, &is_model);
-				ImGui::MenuItem("Light", NULL, &is_light);
-				ImGui::EndMenu();
-			}
-			ImGui::EndMenuBar();
+			ImGui::Checkbox("Billboard", &is_billboard);
+			ImGui::Separator();
+			terrain->Update();
+			if (!is_billboard) {}
+			else if (is_billboard)
+				BillboardLayer();
+
+		}
+		else if (terrain_num == 1)
+		{
+			ImGui::Checkbox("WireFrame", &is_wireframe);
+			terrainLod->Update();
+			if (!is_wireframe)
+				terrainLod->Pass(2);
+			else if (is_wireframe)
+				terrainLod->Pass(3);
 		}
 	}
 	ImGui::End();
 
-	if(!is_terrain)
-		terrain->Update();
-	else if (is_terrain)
+	ImGui::Begin("Mesh", nullptr);
 	{
-		ImGui::Checkbox("WireFrame", &is_wireframe);
-		terrainLod->Update();
-		if (!is_wireframe)
-			terrainLod->Pass(2);
-		else if (is_wireframe)
-			terrainLod->Pass(3);
-	}
+		ImGui::Checkbox("Mesh", &is_mesh);
+		if (is_mesh)
+		{
+			sphere->Update();
+			cylinder->Update();
+			cube->Update();
+			grid->Update();
+		}
+		else if (!is_mesh)
+		{
 
-	if (is_mesh)
-	{
-		sphere->Update();
-		cylinder->Update();
-		cube->Update();
-		grid->Update();
+		}
 	}
-	else if (!is_mesh)
-	{
-
-	}
-
-	if (is_model)
-	{
-		airplane->Update();
-		kachujin->Update();
-	}
-	else if (!is_model)
-	{
-
-	}
+	ImGui::End();
 	
-
-	sky->Update();
-	water->Update();
-
-	if (is_weather)
+	ImGui::Begin("Model", nullptr);
 	{
-		snow->Update();
+		ImGui::Checkbox("Model", &is_model);
+		if (is_model)
+		{
+			airplane->Update();
+			kachujin->Update();
+		}
+		else if (!is_model)
+		{
+
+		}
 	}
-	else if (!is_weather)
+	ImGui::End();
+	
+	ImGui::Begin("Sky", nullptr);
 	{
-
+		sky->Update();
+		water->Update();
 	}
+	ImGui::End();
+		
 
+	ImGui::Begin("Weather", nullptr);
+	{
+		ImGui::Checkbox("Weather", &is_weather);
+		if (is_weather)
+		{
+			UINT selected = (UINT)weather;
 
+			ImGui::Separator();
+			ImGui::InputInt("Weather", (int *)&selected);
+			selected %= 3;
+			weather = (Weather)selected;
+
+			switch (weather)
+			{
+			case Weather::Rain: rain->Update(); break;
+			case Weather::Snow: snow->Update(); break;
+			}
+		}
+		else if (!is_weather)
+		{
+
+		}
+	}
+	ImGui::End();
+	
+	ImGui::Begin("Light", nullptr);
+	{
+		ImGui::Checkbox("Light", &is_light);
+		if (is_light)
+		{
+			
+		}
+		else if (!is_light)
+		{
+
+		}
+	}
+	ImGui::End();
+	
+	bb->Update();
+	bb2->Update();
+	bb3->Update();
+	bb4->Update();
+	bb5->Update();
+	bb6->Update();
+	bb7->Update();
+	bb8->Update();
 }
 
 void WaterDemo::PreRender()
@@ -265,9 +327,9 @@ void WaterDemo::Render()
 	sky->Pass(4, 5, 6);
 	sky->Render();
 
-	if (!is_terrain)
+	if (terrain_num == 0)
 		terrain->Render();
-	else if (is_terrain)
+	else if (terrain_num == 1)
 		terrainLod->Render();
 
 	Pass(7, 8, 9);
@@ -302,7 +364,11 @@ void WaterDemo::Render()
 
 	if (is_weather)
 	{
-		snow->Render();
+		switch (weather)
+		{
+		case Weather::Rain: rain->Render(); break;
+		case Weather::Snow: snow->Render(); break;
+		}
 	}
 	else if (!is_weather)
 	{
@@ -314,13 +380,17 @@ void WaterDemo::Render()
 	string str = to_string(picked.x) + ", " + to_string(picked.y) + ", " + to_string(picked.z);
 	Gui::Get()->RenderText(Vector2(10, 60), Color(1, 0, 0, 1), "Picked : " + str);
 
-	/*if (Keyboard::Get()->Press(VK_LBUTTON))
-	{
-		terrainLod->RaiseHeight(picked, 1, 10);
-	}*/
-
-
-
+	
+	bb->Render();
+	bb2->Render();
+	bb3->Render();
+	bb4->Render();
+	bb5->Render();
+	bb6->Render();
+	bb7->Render();
+	bb8->Render();
+	
+	
 
 	water->Pass(16);
 	water->Render();	
@@ -485,6 +555,58 @@ void WaterDemo::Kachujin()
 		colliders[i].Transform = new Transform();
 		colliders[i].Collider = new Collider(colliders[i].Transform, colliders[i].Init);
 	}
+}
+
+void WaterDemo::BillboardLayer()
+{
+	ImGui::SliderInt("Tree Layer", &treenum, 0, 7);
+
+	if (Mouse::Get()->Press(0))
+	{
+		auto picked = terrain->GetPickedPosition();
+		for (UINT i = 0; i < 10; i++)
+		{
+			Vector2 scale = Math::RandomVec2(5.0f, 10.0f);
+			float positionx = Math::Random(picked.x - 10.0f, picked.x + 10.0f);
+			float positionz = Math::Random(picked.z - 10.0f, picked.z + 10.0f);
+			float positiony = terrain->GetHeight(Vector3(positionx, 0.0f, positionz)) + scale.y * 0.5f;
+			float random = Math::Random(-1.0f, 1.0f);
+
+			if (treenum == 0)
+			{
+				bb->Add(Vector3(positionx, positiony, positionz), scale, random);
+			}
+			else if (treenum == 1)
+			{
+				bb2->Add(Vector3(positionx, positiony, positionz), scale, random);
+			}
+			else if (treenum == 2)
+			{
+				bb3->Add(Vector3(positionx, positiony, positionz), scale, random);
+			}
+			else if (treenum == 3)
+			{
+				bb4->Add(Vector3(positionx, positiony, positionz), scale, random);
+			}
+			else if (treenum == 4)
+			{
+				bb5->Add(Vector3(positionx, positiony, positionz), scale, random);
+			}
+			else if (treenum == 5)
+			{
+				bb6->Add(Vector3(positionx, positiony, positionz), scale, random);
+			}
+			else if (treenum == 6)
+			{
+				bb7->Add(Vector3(positionx, positiony, positionz), scale, random);
+			}
+			else if (treenum == 7)
+			{
+				bb8->Add(Vector3(positionx, positiony, positionz), scale, random);
+			}
+		}
+	}
+
 }
 
 void WaterDemo::Pass(UINT mesh, UINT model, UINT anim)

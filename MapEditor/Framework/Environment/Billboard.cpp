@@ -14,11 +14,12 @@ Billboard::~Billboard()
 	SafeDelete(textures);
 }
 
-void Billboard::Add(Vector3 & position, Vector2 & scale)
+void Billboard::Add(Vector3 & position, Vector2 & scale, float & random)
 {
 	VertexScale vertex;
 	vertex.Position = position;
 	vertex.Scale = scale;
+	vertex.Random = random;
 
 	vertices.push_back(vertex);
 }

@@ -49,92 +49,96 @@ void Terrain::Update()
 {
 	Super::Update();
 
-	ImGui::InputInt("Type", (int *)&brushDesc.Type);
-	brushDesc.Type %= 3;
+	ImGui::Checkbox("Map Editor", &is_mapeditor);
 
-	ImGui::InputInt("Range", (int *)&brushDesc.Range);
-	brushDesc.Range %= 20;
-
-	ImGui::Checkbox("Raise Height", &is_raise);
-
-	ImGui::Checkbox("Flattening", &is_flattening);
-
-	ImGui::Checkbox("Smoothing", &is_smoothing);
-
-	ImGui::Checkbox("Slope", &is_slope);
-
-	ImGui::Checkbox("Noise", &is_noise);
-
-	if (is_noise)
+	if (is_mapeditor)
 	{
-		ImGui::SliderFloat("Noise Height", &noise_var, 1.0f, 10.0f);
-		ImGui::SliderInt("Noise Frequency", &noise_freq, 1, 10);
-	}
+		ImGui::InputInt("Type", (int *)&brushDesc.Type);
+		brushDesc.Type %= 3;
 
-	ImGui::Checkbox("Paint", &is_paint);
+		ImGui::InputInt("Range", (int *)&brushDesc.Range);
+		brushDesc.Range %= 20;
 
-	ImGui::SliderInt("Layer Num", &layernum, 1, 3);
+		ImGui::Checkbox("Raise Height", &is_raise);
 
-	std::wstring file;
-	if (ImGui::Button("Save"))
-	{
-		Path::SaveFileDialog(file, Path::ImageFilter, L"../../Textures/", [=](std::wstring path) {
+		ImGui::Checkbox("Flattening", &is_flattening);
 
-			auto writer = new BinaryWriter();
-			writer->Open(path, 1);
-			for (UINT z = 0; z < height - 1; z++)
-			{
-				for (UINT x = 0; x < width - 1; x++)
+		ImGui::Checkbox("Smoothing", &is_smoothing);
+
+		ImGui::Checkbox("Slope", &is_slope);
+
+		ImGui::Checkbox("Noise", &is_noise);
+
+		if (is_noise)
+		{
+			ImGui::SliderFloat("Noise Height", &noise_var, 1.0f, 10.0f);
+			ImGui::SliderInt("Noise Frequency", &noise_freq, 1, 10);
+		}
+
+		ImGui::Checkbox("Paint", &is_paint);
+
+		ImGui::SliderInt("Layer Num", &layernum, 1, 3);
+
+		std::wstring file;
+		if (ImGui::Button("Save"))
+		{
+			Path::SaveFileDialog(file, Path::ImageFilter, L"../../Textures/", [=](std::wstring path) {
+
+				auto writer = new BinaryWriter();
+				writer->Open(path, 1);
+				for (UINT z = 0; z < height - 1; z++)
 				{
-					float temp = GetHeight(Vector3((float)x, 0, (float)z));
-					writer->Float(temp);
+					for (UINT x = 0; x < width - 1; x++)
+					{
+						float temp = GetHeight(Vector3((float)x, 0, (float)z));
+						writer->Float(temp);
 
-					float r = vertices[width * z + x].Color.r;
-					float g = vertices[width * z + x].Color.g;
-					float b = vertices[width * z + x].Color.b;
+						float r = vertices[width * z + x].Color.r;
+						float g = vertices[width * z + x].Color.g;
+						float b = vertices[width * z + x].Color.b;
 
-					writer->Float(r);
-					writer->Float(g);
-					writer->Float(b);
+						writer->Float(r);
+						writer->Float(g);
+						writer->Float(b);
+					}
 				}
-			}
-			writer->Close();
-		});
-	}
-	ImGui::SameLine();
-	if (ImGui::Button("Load"))
-	{
-		Path::OpenFileDialog(file, Path::ImageFilter, L"../../Textures/", [=](std::wstring path) {
-			auto reader = new BinaryReader();
+				writer->Close();
+			});
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Load"))
+		{
+			Path::OpenFileDialog(file, Path::ImageFilter, L"../../Textures/", [=](std::wstring path) {
+				auto reader = new BinaryReader();
 
-			reader->Open(path);
-			for (UINT z = 0; z < height - 1; z++)
-			{
-				for (UINT x = 0; x < width - 1; x++)
+				reader->Open(path);
+				for (UINT z = 0; z < height - 1; z++)
 				{
-					float temp = reader->Float();
-					float r = reader->Float();
-					float g = reader->Float();
-					float b = reader->Float();
+					for (UINT x = 0; x < width - 1; x++)
+					{
+						float temp = reader->Float();
+						float r = reader->Float();
+						float g = reader->Float();
+						float b = reader->Float();
 
-					vertices[width * z + x].Position.y = temp;
-					vertices[width * z + x].Color = Color(r, g, b, 1);
+						vertices[width * z + x].Position.y = temp;
+						vertices[width * z + x].Color = Color(r, g, b, 1);
+
+					}
 
 				}
+				CreateNormalData();
+				D3D11_MAPPED_SUBRESOURCE subResource;
+				D3D::GetDC()->Map(vertexBuffer->Buffer(), 0, D3D11_MAP_WRITE_DISCARD, 0, &subResource);
+				{
+					memcpy(subResource.pData, vertices, sizeof(TerrainVertex) * vertexCount);
+				}
+				D3D::GetDC()->Unmap(vertexBuffer->Buffer(), 0);
 
-			}
-			CreateNormalData();
-			D3D11_MAPPED_SUBRESOURCE subResource;
-			D3D::GetDC()->Map(vertexBuffer->Buffer(), 0, D3D11_MAP_WRITE_DISCARD, 0, &subResource);
-			{
-				memcpy(subResource.pData, vertices, sizeof(TerrainVertex) * vertexCount);
-			}
-			D3D::GetDC()->Unmap(vertexBuffer->Buffer(), 0);
-
-			reader->Close();
-		});
+				reader->Close();
+			});
+		}
 	}
-
 
 	if (brushDesc.Type > 0)
 	{

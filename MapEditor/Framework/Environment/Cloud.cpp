@@ -46,10 +46,30 @@ void Cloud::Update()
 
 	Vector3 position(0, 0, 0);
 	//Context::Get()->GetCamera()->Position(&position);
+	
+	static float CloudTiles;
+	static float CloudCover = -0.1f;
+	static float CloudSharpness = 0.25f;
+	static float CloudSpeed = 0.01f;
 
-	transform->Scale(1000, 500, 1);
-	transform->Rotation(-Math::PI * 0.5f, 0, 0);
-	transform->Position(position.x + 95, position.y + 100.0f, position.z + 300.0f);
+
+	ImGui::SliderFloat("CloudTiles", &CloudTiles, 0, 100);
+	ImGui::SliderFloat("CloudCover", &CloudCover, -10, 10);
+	ImGui::SliderFloat("CloudSharpness", &CloudSharpness, 0, 3.14f);
+	ImGui::SliderFloat("CloudSpeed", &CloudSpeed, -1, 1);
+
+	shader->AsScalar("CloudTiles")->SetFloat(CloudTiles);
+	shader->AsScalar("CloudCover")->SetFloat(CloudCover);
+	shader->AsScalar("CloudSharpness")->SetFloat(CloudSharpness);
+	shader->AsScalar("CloudSpeed")->SetFloat(CloudSpeed);
+
+	ImGui::SliderFloat3("scale", scale, 0, 100);
+	ImGui::SliderFloat3("rotation", rotation, -3.14f, 3.14f);
+	ImGui::SliderFloat3("position2", position2, -100, 100);
+
+	transform->Scale(1000 + scale.x, 500 + scale.y, 1 + scale.z);
+	transform->Rotation(-Math::PI * 0.5f + rotation.x, 0 + rotation.y, 0 + rotation.z);
+	transform->Position(position.x + 95 + position2.x, position.y + 100.0f + position2.y, position.z + 300.0f + position2.z);
 }
 
 void Cloud::Render()

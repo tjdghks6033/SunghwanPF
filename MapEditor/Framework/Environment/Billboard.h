@@ -6,7 +6,7 @@ public:
 	Billboard(Shader* shader);
 	~Billboard();
 
-	void Add(Vector3& position, Vector2& scale);
+	void Add(Vector3& position, Vector2& scale, float & random);
 	void AddTexture(wstring file);
 
 
@@ -18,6 +18,7 @@ private:
 	{
 		Vector3 Position;
 		Vector2 Scale;
+		float Random;
 	};
 
 private:

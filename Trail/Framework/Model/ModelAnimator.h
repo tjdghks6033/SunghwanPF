@@ -26,10 +26,10 @@ public:
 
 	Matrix GetAttachTransform(UINT index);
 
+	void CreateComputeDesc();
 private:
 	void CreateTexture();
 	void CreateClipTransform(UINT index);
-	void CreateComputeDesc();
 
 private:
 	struct ClipTransform

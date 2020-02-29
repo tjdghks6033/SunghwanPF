@@ -20,4 +20,8 @@ private:
 	Trail* trailor[64];
 	Model* weapon;
 	ModelAnimator* kachujin = NULL;
+
+	Vector3 position2 = Vector3(0,0,0);
+	Vector3 scale2 = Vector3(0, 0, 0);
+	Vector3 rotation2 = Vector3(0, 0, 0);
 };

@@ -309,11 +309,12 @@ float4 PS_Moon(VertexOutput_Moon input) : SV_Target0
 
 cbuffer CB_Cloud
 {
-    float CloudTiles;
-    float CloudCover = -0.1f;
-    float CloudSharpness = 0.25f;
-    float CloudSpeed = 0.01f;
+    
 };
+float CloudTiles;
+float CloudCover = -0.1f;
+float CloudSharpness = 0.25f;
+float CloudSpeed = 0.01f;
 
 struct VertexOutput_Cloud
 {

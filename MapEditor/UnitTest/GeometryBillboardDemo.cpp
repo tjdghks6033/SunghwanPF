@@ -35,7 +35,7 @@ void GeometryBillboardDemo::Initialize()
 		Vector3 position = Math::RandomVec3(0.0f, 256.0f);
 		position.y = terrain->GetHeight(position) + scale.y * 0.5f;
 		
-		bb->Add(position, scale);
+		bb->Add(position, scale, position.z);
 	}
 }
 

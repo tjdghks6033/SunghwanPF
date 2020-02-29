@@ -9,7 +9,7 @@ public:
 	} desc;
 
 public:
-	Trail(InitializeDesc & initDesc, UINT count );
+	Trail(InitializeDesc & initDesc, UINT count, UINT dx);
 	~Trail();
 
 	void Update(Matrix mat);
@@ -20,20 +20,15 @@ public:
 
 	void UpdateTransform(Matrix mat);
 
-	void SetMatrix(Matrix mat) { this->sword_mat = mat; }
-	Matrix& GetMatrix() { return sword_mat; }
-
-private:
-	void GenerateTrail();
-
-	void UpdateTrailBuffer();
+	void SetMatrix(Matrix mat) { this->hand_mat = mat; }
+	Matrix& GetMatrix() { return hand_mat; }
 
 private:
 	Texture* texture;
 
-	Matrix sword_mat;
+	Matrix hand_mat;
 
-	VertexTexture* vertices;
+	UINT dx;
 
 	UINT pass = 0;
 	UINT count = 0;

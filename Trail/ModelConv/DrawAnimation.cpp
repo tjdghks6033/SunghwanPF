@@ -32,15 +32,40 @@ void DrawAnimation::Update()
 			kachujin->PlayClip(0, 3, 1.0f, 1.0f);
 		}
 		kachujin->Update();
+
 		Matrix mmm = kachujin->GetAttachTransform(0);
-
-		Matrix sword_mat = kachujin->GetModel()->BoneByIndex(71)->Transform();
-
+		trailor[0]->Update(mmm);
 		
-		trailor->SetMatrix(sword_mat);
-		
+		Vector3 position;
+		Vector3 scale;
+		Vector3 rotation;
 
-		trailor->Update(mmm);
+		trailor[0]->GetTransform()->Position(&position);
+		trailor[0]->GetTransform()->Scale(&scale);
+		trailor[0]->GetTransform()->Rotation(&rotation);
+
+		ImGui::SliderFloat3("position", position2, -10.0f, 10.0f);
+		ImGui::SliderFloat3("scale", scale2, -10.0f, 1.0f);
+		ImGui::SliderFloat3("rotation", rotation2, -10.0f, 10.0f);
+		
+		trailor[0]->GetTransform()->World(mmm);
+		
+		trailor[0]->GetTransform()->Position(position + position2);
+		trailor[0]->GetTransform()->Scale(scale + scale2);
+		trailor[0]->GetTransform()->Rotation(rotation + rotation2);		
+
+
+
+
+		trailor[0]->SetMatrix(mmm);
+
+		for (int i = 1; i < 64; i++)
+		{
+			Matrix mmmm = trailor[i - 1]->GetMatrix();
+			mmmm._41 -= 0.01f;
+			trailor[i]->Update(mmmm);
+			trailor[i]->SetMatrix(mmmm);
+		}
 	}
 }
 
@@ -50,7 +75,10 @@ void DrawAnimation::Render()
 	{
 		kachujin->Pass(2);
 		kachujin->Render();
-		trailor->Render();
+		for (int i = 0; i < 64; i++)
+		{
+			trailor[i]->Render();
+		}
 	}
 }
 
@@ -86,20 +114,25 @@ void DrawAnimation::Kachujin()
 	attachTransform.Scale(1.0f, 1.0f, 1.0f);
 
 	kachujin->GetModel()->Attach(shader, weapon, 35, &attachTransform);
+	kachujin->Render();
+	kachujin->CreateComputeDesc();
 	kachujin->Pass(2);
 
 	Transform* transform = kachujin->AddTransform();
-	transform->Position(0, 0, -5);
+	transform->Position(0, 0, 0);
 	transform->Scale(0.01f, 0.01f, 0.01f);
 
 	Matrix mm = kachujin->GetAttachTransform(0);
 
 
 	Trail::InitializeDesc desc = { mm };
-	trailor = new Trail(desc, 64);
-	trailor->Pass(17);
-	
 
+	for (int i = 0; i < 64; i++)
+	{
+		desc.trail._41 -= 0.1f;
+		trailor[i] = new Trail(desc, 1, i);
+		trailor[i]->Pass(17);
+	}
 
 	/*for (float x = -50; x <= 50; x += 2.5f)
 	{

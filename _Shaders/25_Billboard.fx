@@ -5,6 +5,7 @@ struct VertexInput
 {
     float4 Position : Position;
     float2 Scale : Scale;
+	float Random : Random;
 
     uint VertexID : SV_VertexID;
 };
@@ -13,6 +14,7 @@ struct VertexOutput
 {
     float4 Position : Position;
     float2 Scale : Scale;
+	float Random : Random;
 
     uint VertexID : VertexID;
 };
@@ -27,6 +29,7 @@ VertexOutput VS(VertexInput input)
 
     output.Position = WorldPosition(input.Position);
     output.Scale = input.Scale;
+	output.Random = input.Random;
     
     output.VertexID = input.VertexID;
 
@@ -71,7 +74,11 @@ void GS(point VertexOutput input[1], inout TriangleStream<GeometryOutput> stream
     for (int i = 0; i < 4; i++)
     {
         output.Position = ViewProjection(position[i]);
-        output.Uv = uv[i];
+		//if(i == 1 || i == 3)
+		//    output.Uv = uv[i] + input[0].Random;
+		//else
+		//	
+		output.Uv = uv[i];
         output.VertexID = input[0].VertexID;
 
         stream.Append(output);
@@ -88,5 +95,5 @@ float4 PS(GeometryOutput input) : SV_Target
 
 technique11 T0
 {
-    P_VGP(P0, VS, GS, PS)
+    P_BS_VGP(P0, AlphaBlend_AlphaToCoverage, VS, GS, PS)
 }
