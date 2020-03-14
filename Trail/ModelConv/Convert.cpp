@@ -7,9 +7,13 @@ void Convert::Initialize()
 	//Airplane();
 	//Tower();
 	//Tank();
-	Kachujin();
 	//Megan();
 	//Weapon();
+	//Kachujin();
+	//Amy();
+	CastleGuard();
+	Dreyar();
+	//Ganfaul();
 }
 
 void Convert::Airplane()
@@ -149,6 +153,122 @@ void Convert::Megan()
 	conv = new Converter();
 	conv->ReadFile(L"Megan/Dancing.fbx");
 	conv->ExportAnimClip(0, L"Megan/Dancing");
+	SafeDelete(conv);
+}
+
+void Convert::Amy()
+{
+	Converter* conv = new Converter();
+	conv->ReadFile(L"Amy/Amy.fbx");
+	conv->ExportMaterial(L"Amy/Mesh", false);
+	conv->ExportMesh(L"Amy/Mesh");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Amy/Idle.fbx");
+	conv->ExportAnimClip(0, L"Amy/Idle");
+	SafeDelete(conv);
+}
+
+void Convert::CastleGuard()
+{
+	Converter* conv = new Converter();
+	conv->ReadFile(L"CastleGuard/CastleGuard.fbx");
+	conv->ExportMaterial(L"CastleGuard/Mesh", false);
+	conv->ExportMesh(L"CastleGuard/Mesh");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Kachujin/Idle.fbx");
+	conv->ExportAnimClip(0, L"CastleGuard/Idle");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"CastleGuard/Running.fbx");
+	conv->ExportAnimClip(0, L"CastleGuard/Running");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"CastleGuard/Attacking.fbx");
+	conv->ExportAnimClip(0, L"CastleGuard/Attacking");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"CastleGuard/StandingReactLeft.fbx");
+	conv->ExportAnimClip(0, L"CastleGuard/StandingReactLeft");
+	SafeDelete(conv);
+}
+
+void Convert::Dreyar()
+{
+	Converter* conv = new Converter();
+	conv->ReadFile(L"Dreyar/Dreyar.fbx");
+	conv->ExportMaterial(L"Dreyar/Mesh", false);
+	conv->ExportMesh(L"Dreyar/Mesh");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Dreyar/Idle.fbx");
+	conv->ExportAnimClip(0, L"Dreyar/Idle");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Dreyar/Running.fbx");
+	conv->ExportAnimClip(0, L"Dreyar/Running");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Dreyar/Attacking.fbx");
+	conv->ExportAnimClip(0, L"Dreyar/Attacking");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Dreyar/WarmingUp.fbx");
+	conv->ExportAnimClip(0, L"Dreyar/WarmingUp");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Dreyar/BoxingJab.fbx");
+	conv->ExportAnimClip(0, L"Dreyar/BoxingJab");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Dreyar/BoxingBodyJab.fbx");
+	conv->ExportAnimClip(0, L"Dreyar/BoxingBodyJab");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Dreyar/BoxingOneTwo.fbx");
+	conv->ExportAnimClip(0, L"Dreyar/BoxingOneTwo");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Dreyar/StandingReactLeft.fbx");
+	conv->ExportAnimClip(0, L"Dreyar/StandingReactLeft");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Dreyar/StandingReactLargeLeft.fbx");
+	conv->ExportAnimClip(0, L"Dreyar/StandingReactLargeLeft");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Dreyar/UnarmedEquipOverShoulder.fbx");
+	conv->ExportAnimClip(0, L"Dreyar/UnarmedEquipOverShoulder");
+	SafeDelete(conv);
+}
+
+void Convert::Ganfaul()
+{
+	Converter* conv = new Converter();
+	conv->ReadFile(L"Ganfaul/Ganfaul.fbx");
+	conv->ExportMaterial(L"Ganfaul/Mesh", false);
+	conv->ExportMesh(L"Ganfaul/Mesh");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Ganfaul/Idle.fbx");
+	conv->ExportAnimClip(0, L"Ganfaul/Idle");
 	SafeDelete(conv);
 }
 

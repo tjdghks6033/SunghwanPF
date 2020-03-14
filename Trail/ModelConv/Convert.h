@@ -16,7 +16,12 @@ private:
 	void Airplane();
 	void Tower();
 	void Tank();
+	void Weapon();
+
 	void Kachujin();
 	void Megan();
-	void Weapon();
+	void Amy();
+	void CastleGuard();
+	void Dreyar();
+	void Ganfaul();
 };

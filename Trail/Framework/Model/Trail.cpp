@@ -84,16 +84,17 @@ void Trail::UpdateTransform(Matrix mat)
 	Vector3 scaledecom;
 	Math::MatrixDecompose(mat, scaledecom, rotatdecom, transdecom);
 
-	transform->World(mat);
-	transform->Position(transdecom.x + 0.4f, transdecom.y, transdecom.z - 0.3f);
-	transform->Scale(Vector3(0.01f, 0.5f, 0.5f));
-	transform->Rotation(rotatdecom.x + 3.14f, rotatdecom.y - 1.57f, rotatdecom.z - 2.526f);
+	//transform->World(mat);
+	//transform->Position(transdecom.x + 0.4f, transdecom.y, transdecom.z - 0.3f);
+	//transform->Scale(Vector3(0.01f, 0.5f, 0.5f));
+	//transform->Rotation(rotatdecom.x + 3.14f, rotatdecom.y - 1.57f, rotatdecom.z - 2.526f);
 
-/*
+
 	transform->Position(Vector3(transdecom.x , transdecom.y, transdecom.z));
 	transform->Scale(Vector3(0.5f, 0.5f, 0.5f));
-	transform->Rotation(Vector3(rotatdecom.x, rotatdecom.y, rotatdecom.z));*/
-/*
+	transform->Rotation(Vector3(rotatdecom.x, rotatdecom.y, rotatdecom.z));
+		
+	/*
 	transform->Position(&transdecom);
 	transform->Scale(&scaledecom);
 	transform->Rotation(&rotatdecom);

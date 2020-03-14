@@ -45,6 +45,8 @@ struct GeometryOutput
     uint VertexID : VertexID;
 };
 
+float uvrandom;
+
 [maxvertexcount(4)]
 void GS(point VertexOutput input[1], inout TriangleStream<GeometryOutput> stream)
 {
@@ -74,11 +76,10 @@ void GS(point VertexOutput input[1], inout TriangleStream<GeometryOutput> stream
     for (int i = 0; i < 4; i++)
     {
         output.Position = ViewProjection(position[i]);
-		//if(i == 1 || i == 3)
-		//    output.Uv = uv[i] + input[0].Random;
-		//else
-		//	
-		output.Uv = uv[i];
+		if(i == 1 || i == 3)
+			output.Uv = uv[i] + uvrandom;
+		else
+			output.Uv = uv[i];
         output.VertexID = input[0].VertexID;
 
         stream.Append(output);

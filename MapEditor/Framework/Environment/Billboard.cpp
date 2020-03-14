@@ -33,7 +33,20 @@ void Billboard::AddTexture(wstring file)
 
 void Billboard::Update()
 {
+	static float uvrandom;
 	Super::Update();
+	
+	if(is_right)
+		uvrandom += 0.001f * Time::Get()->Delta();
+	else if (!is_right)
+		uvrandom -= 0.001f * Time::Get()->Delta();
+
+	if (uvrandom > 0.02f)
+		is_right = false;
+	if (uvrandom < 0.0f)
+		is_right = true;
+
+	shader->AsScalar("uvrandom")->SetFloat(uvrandom);
 }
 
 void Billboard::Render()

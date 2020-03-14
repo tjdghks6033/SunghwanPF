@@ -183,6 +183,12 @@ void WaterDemo::Update()
 	
 	ImGui::Begin("Light", nullptr);
 	{
+		if (ImGui::Button("AddPointLight"))
+			AddPointLights();
+
+		if (ImGui::Button("AddSpotLight"))
+			AddSpotLights();
+
 		ImGui::Checkbox("Light", &is_light);
 		if (is_light)
 		{
@@ -242,6 +248,14 @@ void WaterDemo::PreRender()
 		{
 
 		}
+		bb->Render();
+		bb2->Render();
+		bb3->Render();
+		bb4->Render();
+		bb5->Render();
+		bb6->Render();
+		bb7->Render();
+		bb8->Render();
 	}
 
 	
@@ -280,7 +294,14 @@ void WaterDemo::PreRender()
 		{
 
 		}
-
+		bb->Render();
+		bb2->Render();
+		bb3->Render();
+		bb4->Render();
+		bb5->Render();
+		bb6->Render();
+		bb7->Render();
+		bb8->Render();
 	}
 
 	//Refraction
@@ -319,6 +340,14 @@ void WaterDemo::PreRender()
 		{
 
 		}
+		bb->Render();
+		bb2->Render();
+		bb3->Render();
+		bb4->Render();
+		bb5->Render();
+		bb6->Render();
+		bb7->Render();
+		bb8->Render();
 	}
 }
 
@@ -641,6 +670,7 @@ void WaterDemo::AddPointLights()
 			Context::Get()->AddPointLight(light);
 		}
 	}
+
 
 	light =
 	{

@@ -9,7 +9,7 @@
 
 void Main::Initialize()
 {
-	//Push(new Convert());
+	Push(new Convert());
 	//Push(new DrawMesh());
 	//Push(new DrawModel());
 	Push(new DrawAnimation());
@@ -72,7 +72,7 @@ int WINAPI WinMain(HINSTANCE instance, HINSTANCE prevInstance, LPSTR param, int 
 	desc.AppName = L"D3D Game";
 	desc.Instance = instance;
 	desc.bFullScreen = false;
-	desc.bVsync = false;
+	desc.bVsync = true;
 	desc.Handle = NULL;
 	desc.Width = 1280;
 	desc.Height = 720;

@@ -24,6 +24,8 @@ private:
 private:
 	vector<VertexScale> vertices;
 
+	bool is_right;
+
 	vector<wstring> textureFiles;
 	TextureArray* textures = NULL;
 	ID3DX11EffectShaderResourceVariable* sMaps;
