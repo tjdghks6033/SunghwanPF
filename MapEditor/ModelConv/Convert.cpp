@@ -76,7 +76,7 @@ void Convert::Dreyar()
 {
 	Converter* conv = new Converter();
 	conv->ReadFile(L"Dreyar/Dreyar.fbx");
-	conv->ExportMaterial(L"Dreyar/Mesh");
+	conv->ExportMaterial(L"Dreyar/Mesh", false);
 	conv->ExportMesh(L"Dreyar/Mesh");
 	SafeDelete(conv);
 

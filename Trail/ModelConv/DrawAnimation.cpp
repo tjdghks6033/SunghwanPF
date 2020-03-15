@@ -33,7 +33,7 @@ void DrawAnimation::Update()
 			clip %= 4;
 			castleGuard->PlayClip(0, clip, 1.0f, 1.0f);*/
 
-			clip %= 11;
+			clip %= 10;
 			dreyar->PlayClip(0, clip, 2.0f, 1.0f);
 		}
 

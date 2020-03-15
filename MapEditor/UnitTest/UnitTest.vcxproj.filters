@@ -138,6 +138,9 @@
     <ClCompile Include="WaterDemo.cpp">
       <Filter>Environment</Filter>
     </ClCompile>
+    <ClCompile Include="PortFolio.cpp">
+      <Filter>Portfolio</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -277,6 +280,9 @@
     <ClInclude Include="WaterDemo.h">
       <Filter>Environment</Filter>
     </ClInclude>
+    <ClInclude Include="PortFolio.h">
+      <Filter>Portfolio</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Vertex">
@@ -308,6 +314,9 @@
     </Filter>
     <Filter Include="Tessellation">
       <UniqueIdentifier>{44fdd82a-7b97-43dc-8445-966857d8a6c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Portfolio">
+      <UniqueIdentifier>{eac6651c-752e-473d-9146-779f30b1a1cb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

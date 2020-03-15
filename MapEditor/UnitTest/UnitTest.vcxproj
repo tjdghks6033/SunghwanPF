@@ -178,6 +178,7 @@
     <ClInclude Include="MeshDemo.h" />
     <ClInclude Include="MrtDemo.h" />
     <ClInclude Include="NormalMapDemo.h" />
+    <ClInclude Include="PortFolio.h" />
     <ClInclude Include="ProjectionDemo.h" />
     <ClInclude Include="ProjectorDemo.h" />
     <ClInclude Include="RaycastDemo.h" />
@@ -231,6 +232,7 @@
     <ClCompile Include="MeshDemo.cpp" />
     <ClCompile Include="MrtDemo.cpp" />
     <ClCompile Include="NormalMapDemo.cpp" />
+    <ClCompile Include="PortFolio.cpp" />
     <ClCompile Include="ProjectionDemo.cpp" />
     <ClCompile Include="ProjectorDemo.cpp" />
     <ClCompile Include="RaycastDemo.cpp" />

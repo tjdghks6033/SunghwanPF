@@ -2,6 +2,7 @@
 #include "Main.h"
 #include "Systems/Window.h"
 
+#include "PortFolio.h"
 #include "WaterDemo.h"
 #include "ScatteringDemo.h"
 #include "DefferedShadowDemo.h"
@@ -49,8 +50,9 @@
 #include "VertexDemo.h"
 
 void Main::Initialize()
-{
-	Push(new WaterDemo());
+{	
+	Push(new PortFolio());
+	//Push(new WaterDemo());
 	//Push(new ScatteringDemo());
 	//Push(new DefferedShadowDemo());
 	//Push(new DefferedSpotLightDemo());

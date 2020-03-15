@@ -1,7 +1,7 @@
 #include "stdafx.h"
-#include "WaterDemo.h"
+#include "PortFolio.h"
 
-void WaterDemo::Initialize()
+void PortFolio::Initialize()
 {
 	Context::Get()->GetCamera()->RotationDegree(29, 2, 0);
 	Context::Get()->GetCamera()->Position(124, 49, 10);
@@ -38,7 +38,7 @@ void WaterDemo::Initialize()
 		FFTOcean::InitializeInfo desc =
 		{
 			sOcean,
-			L"Terrain/Gray512.png",
+			L"Terrain/Gray256.png",
 			1.0f,
 			16,
 		};
@@ -108,7 +108,7 @@ void WaterDemo::Initialize()
 	//AddSpotLights();
 }
 
-void WaterDemo::Destroy()
+void PortFolio::Destroy()
 {
 	SafeDelete(shader);
 	SafeDelete(shadow);
@@ -117,7 +117,7 @@ void WaterDemo::Destroy()
 	SafeDelete(sTerrain);
 }
 
-void WaterDemo::Update()
+void PortFolio::Update()
 {
 	
 
@@ -254,7 +254,7 @@ void WaterDemo::Update()
 	bb8->Update();
 }
 
-void WaterDemo::PreRender()
+void PortFolio::PreRender()
 {
 	sky->PreRender();
 
@@ -394,7 +394,7 @@ void WaterDemo::PreRender()
 	}
 }
 
-void WaterDemo::Render()
+void PortFolio::Render()
 {
 	if (is_ocean)
 	{
@@ -477,7 +477,7 @@ void WaterDemo::Render()
 	bb8->Render();	
 }
 
-void WaterDemo::PostRender()
+void PortFolio::PostRender()
 {
 	//sky->PostRender();
 	
@@ -485,7 +485,7 @@ void WaterDemo::PostRender()
 		ocean->RenderFFT();
 }
 
-void WaterDemo::Mesh()
+void PortFolio::Mesh()
 {
 	//Create Material
 	{
@@ -567,7 +567,7 @@ void WaterDemo::Mesh()
 	meshes.push_back(grid);
 }
 
-void WaterDemo::Airplane()
+void PortFolio::Airplane()
 {
 	airplane = new ModelRender(shader);
 	airplane->ReadMaterial(L"B787/Airplane");
@@ -581,7 +581,7 @@ void WaterDemo::Airplane()
 	models.push_back(airplane);
 }
 
-void WaterDemo::Kachujin()
+void PortFolio::Kachujin()
 {
 	weapon = new Model();
 	weapon->ReadMaterial(L"Weapon/Sword");
@@ -641,7 +641,7 @@ void WaterDemo::Kachujin()
 	}
 }
 
-void WaterDemo::BillboardLayer()
+void PortFolio::BillboardLayer()
 {
 	ImGui::SliderInt("Tree Layer", &treenum, 0, 7);
 
@@ -693,7 +693,7 @@ void WaterDemo::BillboardLayer()
 
 }
 
-void WaterDemo::Pass(UINT mesh, UINT model, UINT anim)
+void PortFolio::Pass(UINT mesh, UINT model, UINT anim)
 {
 	for (MeshRender* temp : meshes)
 		temp->Pass(mesh);
@@ -705,7 +705,7 @@ void WaterDemo::Pass(UINT mesh, UINT model, UINT anim)
 		temp->Pass(anim);
 }
 
-void WaterDemo::AddPointLights()
+void PortFolio::AddPointLights()
 {
 	PointLight light;
 
@@ -748,7 +748,7 @@ void WaterDemo::AddPointLights()
 	Context::Get()->AddPointLight(light);
 }
 
-void WaterDemo::AddSpotLights()
+void PortFolio::AddSpotLights()
 {
 	SpotLight light;
 	light =

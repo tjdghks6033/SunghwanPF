@@ -39,11 +39,11 @@ void DrawAnimation::Update()
 	{
 		if (Keyboard::Get()->Down(VK_SPACE))
 		{
-			clip %= 11;
+			clip %= 10;
 			dreyar->PlayClip(0, clip, 2.0f, 1.0f);			
 		}	
 		dreyar->Update();
-	}	
+	}
 }
 
 void DrawAnimation::Render()
@@ -96,17 +96,17 @@ void DrawAnimation::Dreyar()
 {
 	dreyar = new ModelAnimator(shader);
 	dreyar->ReadMaterial(L"Dreyar/Mesh");
-	dreyar->ReadMesh(L"Dreyar/Mesh");
-	dreyar->ReadClip(L"Dreyar/Idle");
-	dreyar->ReadClip(L"Dreyar/Running");
-	dreyar->ReadClip(L"Dreyar/Attacking");
-	dreyar->ReadClip(L"Dreyar/WarmingUp");
-	dreyar->ReadClip(L"Dreyar/BoxingJab");
-	dreyar->ReadClip(L"Dreyar/BoxingBodyJab");
-	dreyar->ReadClip(L"Dreyar/BoxingOneTwo");
-	dreyar->ReadClip(L"Dreyar/StandingReactLeft");
-	dreyar->ReadClip(L"Dreyar/StandingReactLargeLeft");
-	dreyar->ReadClip(L"Dreyar/UnarmedEquipOverShoulder");
+	dreyar->ReadMesh(L"Dreyar/Mesh");						
+	dreyar->ReadClip(L"Dreyar/Idle");						//0
+	dreyar->ReadClip(L"Dreyar/Running");					//1
+	dreyar->ReadClip(L"Dreyar/Attacking");					//2
+	dreyar->ReadClip(L"Dreyar/WarmingUp");					//3
+	dreyar->ReadClip(L"Dreyar/BoxingJab");					//4
+	dreyar->ReadClip(L"Dreyar/BoxingBodyJab");				//5
+	dreyar->ReadClip(L"Dreyar/BoxingOneTwo");				//6
+	dreyar->ReadClip(L"Dreyar/StandingReactLeft");			//7
+	dreyar->ReadClip(L"Dreyar/StandingReactLargeLeft");		//8
+	dreyar->ReadClip(L"Dreyar/UnarmedEquipOverShoulder");	//9
 
 	Transform attachTransform;
 	attachTransform.Position(-140, 0, -140);
