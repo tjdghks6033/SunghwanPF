@@ -16,7 +16,10 @@ private:
 	void Airplane();
 	void Tower();
 	void Tank();
-	void Kachujin();
-	void Megan();
 	void Weapon();
+	
+	void Megan();
+	void Kachujin();
+	void Dreyar();
+
 };

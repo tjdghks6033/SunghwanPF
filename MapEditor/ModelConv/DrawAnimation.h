@@ -14,10 +14,12 @@ class DrawAnimation : public IExecute
 
 private:
 	void Kachujin();
+	void Dreyar();
 
 private:
 	Shader* shader;
 
 	Model* weapon;
 	ModelAnimator* kachujin = NULL;
+	ModelAnimator* dreyar = NULL;
 };

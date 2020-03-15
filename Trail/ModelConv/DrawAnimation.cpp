@@ -139,7 +139,6 @@ void DrawAnimation::Kachujin()
 	weapon->ReadMaterial(L"Weapon/Sword");
 	weapon->ReadMesh(L"Weapon/Sword");
 
-
 	Transform attachTransform;
 	attachTransform.Position(-10, 0, -10);
 	attachTransform.Scale(1.0f, 1.0f, 1.0f);

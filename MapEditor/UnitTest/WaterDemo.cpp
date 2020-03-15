@@ -55,7 +55,7 @@ void WaterDemo::Initialize()
 		terrain->LayerMap(L"Terrain/Grass (Hill).jpg", L"Terrain/Gray256.png");
 		terrain->LayerMap2(L"Terrain/Path (Rocky).jpg", L"Terrain/Grass (Rocky).jpg");
 		terrain->LayerMap3(L"Terrain/Cliff (Sandstone).jpg", L"Terrain/Sand (with pebbles).jpg");
-		//terrain->Pass(2); 
+		//terrain->Pass(2);
 	}
 
 	//TerrainLod

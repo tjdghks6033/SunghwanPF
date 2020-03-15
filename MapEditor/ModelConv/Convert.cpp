@@ -10,6 +10,7 @@ void Convert::Initialize()
 	//Kachujin();
 	//Megan();
 	//Weapon();
+	Dreyar();
 }
 
 void Convert::Airplane()
@@ -68,6 +69,65 @@ void Convert::Kachujin()
 	conv = new Converter();
 	conv->ReadFile(L"Kachujin/Hip_Hop_Dancing.fbx");
 	conv->ExportAnimClip(0, L"Kachujin/Hip_Hop_Dancing");
+	SafeDelete(conv);
+}
+
+void Convert::Dreyar()
+{
+	Converter* conv = new Converter();
+	conv->ReadFile(L"Dreyar/Dreyar.fbx");
+	conv->ExportMaterial(L"Dreyar/Mesh");
+	conv->ExportMesh(L"Dreyar/Mesh");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Dreyar/Idle.fbx");
+	conv->ExportAnimClip(0, L"Dreyar/Idle");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Dreyar/Running.fbx");
+	conv->ExportAnimClip(0, L"Dreyar/Running");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Dreyar/Attacking.fbx");
+	conv->ExportAnimClip(0, L"Dreyar/Attacking");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Dreyar/WarmingUp.fbx");
+	conv->ExportAnimClip(0, L"Dreyar/WarmingUp");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Dreyar/BoxingJab.fbx");
+	conv->ExportAnimClip(0, L"Dreyar/BoxingJab");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Dreyar/BoxingBodyJab.fbx");
+	conv->ExportAnimClip(0, L"Dreyar/BoxingBodyJab");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Dreyar/BoxingOneTwo.fbx");
+	conv->ExportAnimClip(0, L"Dreyar/BoxingOneTwo");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Dreyar/StandingReactLeft.fbx");
+	conv->ExportAnimClip(0, L"Dreyar/StandingReactLeft");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Dreyar/StandingReactLargeLeft.fbx");
+	conv->ExportAnimClip(0, L"Dreyar/StandingReactLargeLeft");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Dreyar/UnarmedEquipOverShoulder.fbx");
+	conv->ExportAnimClip(0, L"Dreyar/UnarmedEquipOverShoulder");
 	SafeDelete(conv);
 }
 

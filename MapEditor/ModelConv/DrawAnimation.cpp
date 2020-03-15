@@ -11,6 +11,7 @@ void DrawAnimation::Initialize()
 	shader = new Shader(L"27_Animation.fx");
 
 	Kachujin();
+	Dreyar();
 }
 
 void DrawAnimation::Update()
@@ -22,13 +23,27 @@ void DrawAnimation::Update()
 		if (Keyboard::Get()->Down(VK_SPACE))
 		{
 			++clip;
-			clip %= 4;
-			kachujin->PlayClip(20, clip, 1.0f, 1.0f);
+
+			//kachujin
+			//clip %= 4;
+			//kachujin->PlayClip(20, clip, 1.0f, 1.0f);
+
+			clip %= 11;
+			dreyar->PlayClip(0, clip, 2.0f, 1.0f);
 		}
-			
 
 		kachujin->Update();
 	}
+
+	if (dreyar != NULL)
+	{
+		if (Keyboard::Get()->Down(VK_SPACE))
+		{
+			clip %= 11;
+			dreyar->PlayClip(0, clip, 2.0f, 1.0f);			
+		}	
+		dreyar->Update();
+	}	
 }
 
 void DrawAnimation::Render()
@@ -37,6 +52,11 @@ void DrawAnimation::Render()
 	{
 		kachujin->Pass(2);
 		kachujin->Render();
+	}
+	if (dreyar != NULL)
+	{
+		dreyar->Pass(2);
+		dreyar->Render();
 	}
 }
 
@@ -62,11 +82,43 @@ void DrawAnimation::Kachujin()
 	kachujin->GetModel()->Attach(shader, weapon, 35, &attachTransform);
 	kachujin->Pass(2);
 
-	for (float x = -50; x <= 50; x += 2.5f)
+	
 	{
 		Transform* transform = kachujin->AddTransform();
-		transform->Position(x, 0, -5);
+		transform->Position(0, 0, -5);
 		transform->Scale(0.01f, 0.01f, 0.01f);
 	}
 	kachujin->UpdateTransforms();
+}
+
+
+void DrawAnimation::Dreyar()
+{
+	dreyar = new ModelAnimator(shader);
+	dreyar->ReadMaterial(L"Dreyar/Mesh");
+	dreyar->ReadMesh(L"Dreyar/Mesh");
+	dreyar->ReadClip(L"Dreyar/Idle");
+	dreyar->ReadClip(L"Dreyar/Running");
+	dreyar->ReadClip(L"Dreyar/Attacking");
+	dreyar->ReadClip(L"Dreyar/WarmingUp");
+	dreyar->ReadClip(L"Dreyar/BoxingJab");
+	dreyar->ReadClip(L"Dreyar/BoxingBodyJab");
+	dreyar->ReadClip(L"Dreyar/BoxingOneTwo");
+	dreyar->ReadClip(L"Dreyar/StandingReactLeft");
+	dreyar->ReadClip(L"Dreyar/StandingReactLargeLeft");
+	dreyar->ReadClip(L"Dreyar/UnarmedEquipOverShoulder");
+
+	Transform attachTransform;
+	attachTransform.Position(-140, 0, -140);
+	attachTransform.Scale(10.0f, 10.0f, 10.0f);
+
+	dreyar->GetModel()->Attach(shader, weapon, 36, &attachTransform);
+
+	dreyar->Pass(2);
+
+	Transform* transform = dreyar->AddTransform();
+	transform->Position(6, 0, 0);
+	transform->Scale(0.001f, 0.001f, 0.001f);
+
+	dreyar->UpdateTransforms();
 }
