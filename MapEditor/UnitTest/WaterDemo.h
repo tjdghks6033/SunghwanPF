@@ -32,6 +32,8 @@ private:
 
 	Terrain* terrain;
 	Shader* sTerrain;
+	Shader* sTerrainLod;
+	Shader* sOcean;
 
 	TerrainLod* terrainLod;
 
@@ -42,6 +44,8 @@ private:
 	bool is_model = false;
 	bool is_weather = true;
 	bool is_light = false;
+	bool is_water = false;
+	bool is_ocean = false;
 
 	Shader* bbShader;
 	class Billboard* bb;
@@ -59,6 +63,7 @@ private:
 	Snow* snow;
 	Rain* rain;
 	Water* water;
+	FFTOcean* ocean;
 
 	enum class Weather
 	{

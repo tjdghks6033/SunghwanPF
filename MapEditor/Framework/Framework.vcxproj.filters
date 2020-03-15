@@ -185,6 +185,21 @@
     <ClInclude Include="Objects\Frustum.h">
       <Filter>Objects</Filter>
     </ClInclude>
+    <ClInclude Include="Environment\FFT.h">
+      <Filter>Environment\Water</Filter>
+    </ClInclude>
+    <ClInclude Include="Environment\FFTOcean.h">
+      <Filter>Environment\Water</Filter>
+    </ClInclude>
+    <ClInclude Include="Environment\FFTOceanSimulator.h">
+      <Filter>Environment\Water</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle\ParticleData.h">
+      <Filter>Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle\ParticleSystem.h">
+      <Filter>Particle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework.cpp" />
@@ -365,6 +380,18 @@
     <ClCompile Include="Objects\Frustum.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
+    <ClCompile Include="Environment\FFT.cpp">
+      <Filter>Environment\Water</Filter>
+    </ClCompile>
+    <ClCompile Include="Environment\FFTOcean.cpp">
+      <Filter>Environment\Water</Filter>
+    </ClCompile>
+    <ClCompile Include="Environment\FFTOceanSimulator.cpp">
+      <Filter>Environment\Water</Filter>
+    </ClCompile>
+    <ClCompile Include="Particle\ParticleSystem.cpp">
+      <Filter>Particle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Renders">
@@ -402,6 +429,9 @@
     </Filter>
     <Filter Include="Environment\Terrain">
       <UniqueIdentifier>{0c520bc2-0037-43e0-b7b9-7d898657c5c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Particle">
+      <UniqueIdentifier>{d0323920-a0a4-4dfc-87eb-634b9e26122c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

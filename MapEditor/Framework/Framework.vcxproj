@@ -165,6 +165,9 @@ copy /Y "$(SolutionDir)Debug\Framework.pdb" "$(SolutionDir)ModelConv\"</Command>
   <ItemGroup>
     <ClInclude Include="Environment\Cloud.h" />
     <ClInclude Include="Environment\Dome.h" />
+    <ClInclude Include="Environment\FFT.h" />
+    <ClInclude Include="Environment\FFTOcean.h" />
+    <ClInclude Include="Environment\FFTOceanSimulator.h" />
     <ClInclude Include="Environment\Moon.h" />
     <ClInclude Include="Environment\Scattering.h" />
     <ClInclude Include="Environment\Sky.h" />
@@ -193,6 +196,8 @@ copy /Y "$(SolutionDir)Debug\Framework.pdb" "$(SolutionDir)ModelConv\"</Command>
     <ClInclude Include="Objects\GBuffer.h" />
     <ClInclude Include="Objects\Projector.h" />
     <ClInclude Include="Objects\Shadow.h" />
+    <ClInclude Include="Particle\ParticleData.h" />
+    <ClInclude Include="Particle\ParticleSystem.h" />
     <ClInclude Include="Renders\Buffers.h" />
     <ClInclude Include="Renders\Context.h" />
     <ClInclude Include="Renders\DebugLine.h" />
@@ -229,6 +234,9 @@ copy /Y "$(SolutionDir)Debug\Framework.pdb" "$(SolutionDir)ModelConv\"</Command>
   <ItemGroup>
     <ClCompile Include="Environment\Cloud.cpp" />
     <ClCompile Include="Environment\Dome.cpp" />
+    <ClCompile Include="Environment\FFT.cpp" />
+    <ClCompile Include="Environment\FFTOcean.cpp" />
+    <ClCompile Include="Environment\FFTOceanSimulator.cpp" />
     <ClCompile Include="Environment\Moon.cpp" />
     <ClCompile Include="Environment\Scattering.cpp" />
     <ClCompile Include="Environment\Sky.cpp" />
@@ -262,6 +270,7 @@ copy /Y "$(SolutionDir)Debug\Framework.pdb" "$(SolutionDir)ModelConv\"</Command>
     <ClCompile Include="Objects\GBuffer.cpp" />
     <ClCompile Include="Objects\Projector.cpp" />
     <ClCompile Include="Objects\Shadow.cpp" />
+    <ClCompile Include="Particle\ParticleSystem.cpp" />
     <ClCompile Include="Renders\Buffers.cpp" />
     <ClCompile Include="Renders\Context.cpp" />
     <ClCompile Include="Renders\DebugLine.cpp" />

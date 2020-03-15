@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "WaterDemo.h"
-#include "Environment/Billboard.h"
 
 void WaterDemo::Initialize()
 {
@@ -13,32 +12,59 @@ void WaterDemo::Initialize()
 
 	shadow = new Shadow(shader, Vector3(0, 0, 0), 65);
 
-	sky = new Sky(shader);
-	sky->ScatteringPass(3);
-	sky->RealTime(false, Math::PI - 1e-6f);
-	//sky->RealTime(true, Math::PI - 1e-6f, 0.25f);v
+	//Sky
+	{
+		sky = new Sky(shader);
+		sky->ScatteringPass(3);
+		sky->RealTime(false, Math::PI - 1e-6f);
+		//sky->RealTime(true, Math::PI - 1e-6f, 0.25f);v
+	}
+	//Weather
+	{
+		rain = new Rain(Vector3(300, 100, 500), 10000, L"Environment/Rain.png");
+		snow = new Snow(Vector3(300, 300, 300), 10000, L"Environment/Snow.png");
+	}
 
-	rain = new Rain(Vector3(300, 100, 500), 10000, L"Environment/Rain.png");
-	snow = new Snow(Vector3(300, 300, 300), 10000, L"Environment/Snow.png");
-	
-	water = new Water(shader, 127.5);
-	water->GetTransform()->Position(128.0f + 0, 5, 128.0f + 0);
-	//water->GetTransform()->Position(0, 0.1f, 0);
-	
-	sTerrain = new Shader(L"18_Terrain_Splatting.fxo");
+	//Water
+	{	
+		water = new Water(shader, 127.5);
+		water->GetTransform()->Position(128.0f + 0, 5, 128.0f + 0);
+		//water->GetTransform()->Position(0, 0.1f, 0);
+	}
+	//Ocean
+	{
+		sOcean = new Shader(L"50_OceanRendering.fxo");
 
-	terrain = new Terrain(sTerrain, L"Terrain/Gray256.png");
-	terrain->BaseMap(L"Terrain/Dirt3.png");
-	terrain->LayerMap(L"Terrain/Grass (Hill).jpg", L"Terrain/Gray256.png");
-	terrain->LayerMap2(L"Terrain/Path (Rocky).jpg", L"Terrain/Grass (Rocky).jpg");
-	terrain->LayerMap3(L"Terrain/Cliff (Sandstone).jpg", L"Terrain/Sand (with pebbles).jpg");
-	//terrain->Pass(2);
+		FFTOcean::InitializeInfo desc =
+		{
+			sOcean,
+			L"Terrain/Gray512.png",
+			1.0f,
+			16,
+		};
+
+		ocean = new FFTOcean(desc);
+	}
+
+	//Terrain	
+	{
+		sTerrain = new Shader(L"18_Terrain_Splatting.fxo");
+
+		terrain = new Terrain(sTerrain, L"Terrain/Gray256.png");
+		terrain->BaseMap(L"Terrain/Dirt3.png");
+		terrain->LayerMap(L"Terrain/Grass (Hill).jpg", L"Terrain/Gray256.png");
+		terrain->LayerMap2(L"Terrain/Path (Rocky).jpg", L"Terrain/Grass (Rocky).jpg");
+		terrain->LayerMap3(L"Terrain/Cliff (Sandstone).jpg", L"Terrain/Sand (with pebbles).jpg");
+		//terrain->Pass(2); 
+	}
 
 	//TerrainLod
 	{
+		sTerrainLod = new Shader(L"49_TerrainLod.fxo");
+
 		TerrainLod::InitializeDesc desc =
 		{
-			sTerrain,
+			sTerrainLod,
 			L"Terrain/Gray512.png",
 			1.0f,
 			16,
@@ -49,27 +75,30 @@ void WaterDemo::Initialize()
 		terrainLod->BaseMap(L"Terrain/Dirt.png");
 		terrainLod->LayerMap(L"Terrain/Grass (Lawn).jpg", L"Terrain/Gray512.png");
 		terrainLod->NormalMap(L"Terrain/Dirt_Normal.png");
-		terrainLod->Pass(2);
+		terrainLod->Pass(0);
 	}
 
-	bbShader = new Shader(L"25_Billboard.fxo");
-	bb = new Billboard(bbShader);
-	bb2 = new Billboard(bbShader);
-	bb3 = new Billboard(bbShader);
-	bb4 = new Billboard(bbShader);
-	bb5 = new Billboard(bbShader);
-	bb6 = new Billboard(bbShader);
-	bb7 = new Billboard(bbShader);
-	bb8 = new Billboard(bbShader);
+	//Billboard
+	{
+		bbShader = new Shader(L"25_Billboard.fxo");
+		bb = new Billboard(bbShader);
+		bb2 = new Billboard(bbShader);
+		bb3 = new Billboard(bbShader);
+		bb4 = new Billboard(bbShader);
+		bb5 = new Billboard(bbShader);
+		bb6 = new Billboard(bbShader);
+		bb7 = new Billboard(bbShader);
+		bb8 = new Billboard(bbShader);
 
-	bb->AddTexture(L"Terrain/BillboardTexture1.png");
-	bb2->AddTexture(L"Terrain/BillboardTexture2.png");
-	bb3->AddTexture(L"Terrain/BillboardTexture3.png");
-	bb4->AddTexture(L"Terrain/Tree.png");
-	bb5->AddTexture(L"Terrain/Tree2.png");
-	bb6->AddTexture(L"Terrain/Tree3.png");
-	bb7->AddTexture(L"Terrain/Tree4.png");
-	bb8->AddTexture(L"Terrain/Tree5.png");
+		bb->AddTexture(L"Terrain/BillboardTexture1.png");
+		bb2->AddTexture(L"Terrain/BillboardTexture2.png");
+		bb3->AddTexture(L"Terrain/BillboardTexture3.png");
+		bb4->AddTexture(L"Terrain/Tree.png");
+		bb5->AddTexture(L"Terrain/Tree2.png");
+		bb6->AddTexture(L"Terrain/Tree3.png");
+		bb7->AddTexture(L"Terrain/Tree4.png");
+		bb8->AddTexture(L"Terrain/Tree5.png");
+	}
 
 	Mesh();
 	Airplane();
@@ -90,11 +119,13 @@ void WaterDemo::Destroy()
 
 void WaterDemo::Update()
 {
+	
+
 	ImGui::Begin("Terrain", nullptr);
 	{
-		ImGui::SliderInt("Terrain", (int *)&terrain_num, 0, 1);
+		ImGui::SliderInt("Terrain", (int *)&terrain_num, 0, 2);
 		ImGui::Separator();
-		if (terrain_num == 0)
+		if (terrain_num == 1)
 		{
 			ImGui::Checkbox("Billboard", &is_billboard);
 			ImGui::Separator();
@@ -104,14 +135,14 @@ void WaterDemo::Update()
 				BillboardLayer();
 
 		}
-		else if (terrain_num == 1)
+		else if (terrain_num == 2)
 		{
 			ImGui::Checkbox("WireFrame", &is_wireframe);
 			terrainLod->Update();
 			if (!is_wireframe)
-				terrainLod->Pass(2);
+				terrainLod->Pass(0);
 			else if (is_wireframe)
-				terrainLod->Pass(3);
+				terrainLod->Pass(1);
 		}
 	}
 	ImGui::End();
@@ -151,10 +182,22 @@ void WaterDemo::Update()
 	ImGui::Begin("Sky", nullptr);
 	{
 		sky->Update();
-		water->Update();
 	}
 	ImGui::End();
 		
+	ImGui::Begin("Water", nullptr);
+	{
+		ImGui::Checkbox("Water", &is_water);
+		water->Update();
+	}
+	ImGui::End();
+
+	ImGui::Begin("Ocean", nullptr);
+	{
+		ImGui::Checkbox("Ocean", &is_ocean);
+		ocean->Update(Time::Get()->Running());
+	}
+	ImGui::End();
 
 	ImGui::Begin("Weather", nullptr);
 	{
@@ -353,16 +396,30 @@ void WaterDemo::PreRender()
 
 void WaterDemo::Render()
 {
+	if (is_ocean)
+	{
+		ocean->Render(Time::Get()->Running());
+	}
+
 	sky->Pass(4, 5, 6);
 	sky->Render();
 
-	if (terrain_num == 0)
+	if (terrain_num == 1)
 		terrain->Render();
-	else if (terrain_num == 1)
+	else if (terrain_num == 2)
 		terrainLod->Render();
 
-	Pass(7, 8, 9);
+	
 
+	if (is_water)
+	{
+		water->Pass(16);
+		water->Render();
+	}
+
+	
+
+	Pass(7, 8, 9);
 	if (is_mesh)
 	{
 		wall->Render();
@@ -417,17 +474,15 @@ void WaterDemo::Render()
 	bb5->Render();
 	bb6->Render();
 	bb7->Render();
-	bb8->Render();
-	
-	
-
-	water->Pass(16);
-	water->Render();	
+	bb8->Render();	
 }
 
 void WaterDemo::PostRender()
 {
 	//sky->PostRender();
+	
+	if(is_ocean)
+		ocean->RenderFFT();
 }
 
 void WaterDemo::Mesh()

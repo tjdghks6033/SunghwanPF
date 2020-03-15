@@ -2,6 +2,10 @@
 #include "Math.h"
 
 const float Math::PI = 3.14159265f;
+const float Math::TwoPI = 6.28318548f;
+const float Math::PiOver2 = 1.57079637f;
+const float Math::PiOver4 = 0.7853982f;
+
 const float Math::EPSILON = 0.000001f;
 
 float Math::Modulo(float val1, float val2)
@@ -78,6 +82,11 @@ float Math::Clamp(float value, float min, float max)
 	value = value < min ? min : value;
 
 	return value;
+}
+
+float Math::Lerp(float v1, float v2, float t)
+{
+	return v1 + (v2 - v1) * t;
 }
 
 void Math::LerpMatrix(OUT D3DXMATRIX & out, const D3DXMATRIX & m1, const D3DXMATRIX & m2, float amount)
@@ -180,4 +189,39 @@ void Math::MatrixDecompose(const D3DXMATRIX & m, OUT Vector3 & S, OUT Vector3 & 
 	R.x = asin(-temp._32);
 	R.y = atan2(temp._31, temp._33);
 	R.z = atan2(temp._12, temp._22);
+}
+
+float Math::Gauss()
+{
+	float u1 = rand() / (float)RAND_MAX;
+	float u2 = rand() / (float)RAND_MAX;
+
+	if (u1 < 1e-6f)
+		u1 = 1e-6f;
+
+	return sqrtf(-2 * logf(u1)) * cosf(PI * u2 * 2.0f);
+}
+
+
+#define GRAV_ACCEL	981.0f	// The acceleration of gravity, cm/s^2
+
+// Phillips Spectrum
+// K: normalized wave vector, W: wind direction, v: wind velocity, a: amplitude constant
+float Math::Phillips(Vector2 k, Vector2 w, float v, float a, float direction)
+{
+	// largest possible wave from constant wind of velocity v
+	float l = v * v / GRAV_ACCEL;
+	// damp out waves with very small length wind << l
+	float wind = l / 1000;
+
+	float Ksqr = k.x * k.x + k.y * k.y;
+	float Kcos = k.x * w.x + k.y * w.y;
+	float phillips = a * expf(-1 / (l * l * Ksqr)) / (Ksqr * Ksqr * Ksqr) * (Kcos * Kcos);
+
+	// filter out waves moving opposite to wind
+	if (Kcos < 0)
+		phillips *= direction;
+
+	// damp out waves with very small length wind << l
+	return phillips * expf(-Ksqr * wind * wind);
 }

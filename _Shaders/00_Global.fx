@@ -229,15 +229,63 @@ SamplerState LinearSampler
     AddressV = Wrap;
 };
 
+//SamplerState PointSampler
+//{
+//    Filter = MIN_MAG_MIP_POINT;
+
+//    AddressU = Clamp;
+//    AddressV = Clamp;
+//};
+
 SamplerState PointSampler
 {
-    Filter = MIN_MAG_MIP_POINT;
+	Filter = MIN_MAG_MIP_POINT;
 
-    AddressU = Clamp;
-    AddressV = Clamp;
+	AddressU = Wrap;
+	AddressV = Wrap;
 };
 
+SamplerState HeightSampler
+{
+	Filter = MIN_MAG_MIP_POINT;
 
+	AddressU = Wrap;
+	AddressV = Wrap;
+};
+
+SamplerState CubeSampler
+{
+	Filter = MIN_MAG_MIP_LINEAR;
+
+	AddressU = Wrap;
+	AddressV = Wrap;
+};
+
+SamplerState GradientSampler
+{
+	Filter = Anisotropic;
+
+	AddressU = Wrap;
+	AddressV = Wrap;
+	MaxAnisotropy = 8;
+};
+
+SamplerState PerlinSampler
+{
+	Filter = Anisotropic;
+
+	AddressU = Wrap;
+	AddressV = Wrap;
+	MaxAnisotropy = 4;
+};
+
+SamplerState FresnelSampler
+{
+	Filter = MIN_MAG_MIP_LINEAR;
+
+	AddressU = Clamp;
+	AddressV = Clamp;
+};
 RasterizerState FillMode_WireFrame
 {
     FillMode = Wireframe;

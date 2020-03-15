@@ -3,6 +3,10 @@ class Math
 {
 public:
 	static const float PI;
+	static const float TwoPI;
+	static const float PiOver2;
+	static const float PiOver4;
+
 	static const float EPSILON;
 
 	static float Modulo(float val1, float val2);
@@ -21,10 +25,14 @@ public:
 
 	static float Clamp(float value, float min, float max);
 
+	static float Lerp(float v1, float v2, float t);
 	static void LerpMatrix(OUT D3DXMATRIX& out, const D3DXMATRIX& m1, const D3DXMATRIX& m2, float amount);
 
 	static D3DXQUATERNION LookAt(const D3DXVECTOR3& origin, const D3DXVECTOR3& target, const D3DXVECTOR3& up);
 	static float Gaussian(float val, UINT blurCount);
 
 	static void MatrixDecompose(const D3DXMATRIX& m, OUT Vector3& S, OUT Vector3& R, OUT Vector3& T);
+
+	static float Gauss();
+	static float Phillips(Vector2 k, Vector2 w, float v, float a, float direction);
 };
