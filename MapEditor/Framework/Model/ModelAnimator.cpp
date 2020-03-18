@@ -61,6 +61,7 @@ void ModelAnimator::Update()
 				desc.Curr.NextFrame = (desc.Curr.CurrFrame + 1) % clip->FrameCount();
 			}
 			desc.Curr.Time = desc.Curr.RunningTime / time;
+			runningtime = (UINT)(desc.Curr.CurrFrame / desc.Curr.Speed) % clip->FrameCount();
 		}
 
 		if (desc.Next.Clip > -1)
@@ -121,10 +122,60 @@ void ModelAnimator::Render()
 {
 	if (texture == NULL)
 	{
-		CreateTexture();
+		weapon_num = 0;
+		CreateTexture(0);
 		CreateComputeDesc();
 	}
-		
+
+	if (weapon_num == 0)
+	{
+		SetSrv(0);
+	}
+
+	frameBuffer->Apply();
+
+	instanceBuffer->Render();
+	sFrameBuffer->SetConstantBuffer(frameBuffer->Buffer());
+
+	for (ModelMesh* mesh : model->Meshes())
+		mesh->Render(transforms.size());
+}
+
+void ModelAnimator::Render2()
+{
+	if (sword_texture_spine == NULL)
+	{
+		weapon_num = 1;
+		CreateTexture(1);
+		//CreateComputeDesc();
+	}
+
+	if (weapon_num == 1)
+	{
+		SetSrv(1);
+	}
+	frameBuffer->Apply();
+
+	instanceBuffer->Render();
+	sFrameBuffer->SetConstantBuffer(frameBuffer->Buffer());
+
+	for (ModelMesh* mesh : model->Meshes())
+		mesh->Render(transforms.size());
+}
+
+void ModelAnimator::Render3()
+{
+	if (sword_texture == NULL)
+	{
+		weapon_num = 2;
+		CreateTexture(2);
+		//CreateComputeDesc();
+	}
+
+	if (weapon_num == 2)
+	{
+		SetSrv(2);
+	}
 	frameBuffer->Apply();
 
 	instanceBuffer->Render();
@@ -204,7 +255,7 @@ Matrix ModelAnimator::GetAttachTransform(UINT index)
 	return transform * result * world;
 }
 
-void ModelAnimator::CreateTexture()
+void ModelAnimator::CreateTexture(int temp)
 {
 	clipTransforms = new ClipTransform[model->ClipCount()];
 	for (UINT i = 0; i < model->ClipCount(); i++)
@@ -251,8 +302,18 @@ void ModelAnimator::CreateTexture()
 			subResource[c].SysMemPitch = MAX_MODEL_TRANSFORMS * sizeof(Matrix);
 			subResource[c].SysMemSlicePitch = pageSize;
 		}
-		Check(D3D::GetDevice()->CreateTexture2D(&desc, subResource, &texture));
-
+		if (temp == 0)
+		{
+			Check(D3D::GetDevice()->CreateTexture2D(&desc, subResource, &texture));
+		}
+		else if (temp == 1)
+		{
+			Check(D3D::GetDevice()->CreateTexture2D(&desc, subResource, &sword_texture_spine));
+		}
+		else if (temp == 2)
+		{
+			Check(D3D::GetDevice()->CreateTexture2D(&desc, subResource, &sword_texture));
+		}
 		SafeDeleteArray(subResource);
 		VirtualFree(p, 0, MEM_RELEASE);
 	}
@@ -260,8 +321,18 @@ void ModelAnimator::CreateTexture()
 	//CreateSRV
 	{
 		D3D11_TEXTURE2D_DESC desc;
-		texture->GetDesc(&desc);
-
+		if (weapon_num == 0)
+		{
+			texture->GetDesc(&desc);
+		}
+		else if (weapon_num == 1)
+		{
+			sword_texture_spine->GetDesc(&desc);
+		}
+		else if (weapon_num == 2)
+		{
+			sword_texture->GetDesc(&desc);
+		}
 		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
 		ZeroMemory(&srvDesc, sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC));
 		srvDesc.Format = desc.Format;
@@ -269,11 +340,38 @@ void ModelAnimator::CreateTexture()
 		srvDesc.Texture2DArray.MipLevels = 1;
 		srvDesc.Texture2DArray.ArraySize = model->ClipCount();
 
-		Check(D3D::GetDevice()->CreateShaderResourceView(texture, &srvDesc, &srv));
+		if (weapon_num == 0)
+		{
+			Check(D3D::GetDevice()->CreateShaderResourceView(texture, &srvDesc, &srv));
+		}
+		else if (weapon_num == 1)
+		{
+			Check(D3D::GetDevice()->CreateShaderResourceView(sword_texture_spine, &srvDesc, &sword_srv_spine));
+		}
+		else if (weapon_num == 2)
+		{
+			Check(D3D::GetDevice()->CreateShaderResourceView(sword_texture, &srvDesc, &sword_srv));
+		}
 	}
+}
 
-	for (ModelMesh* mesh : model->Meshes())
-		mesh->TransformsSRV(srv);
+void ModelAnimator::SetSrv(int weapon_num)
+{
+	if (weapon_num == 0)
+	{
+		for (ModelMesh* mesh : model->Meshes())
+			mesh->TransformsSRV(srv);
+	}
+	else if (weapon_num == 1)
+	{
+		for (ModelMesh* mesh : model->Meshes())
+			mesh->TransformsSRV(sword_srv_spine);
+	}
+	else if (weapon_num == 2)
+	{
+		for (ModelMesh* mesh : model->Meshes())
+			mesh->TransformsSRV(sword_srv);
+	}
 }
 
 void ModelAnimator::CreateClipTransform(UINT index)
@@ -307,7 +405,8 @@ void ModelAnimator::CreateClipTransform(UINT index)
 				Matrix S, R, T;
 				D3DXMatrixScaling(&S, data.Scale.x, data.Scale.y, data.Scale.z);
 				D3DXMatrixRotationQuaternion(&R, &data.Rotation);
-				D3DXMatrixTranslation(&T, data.Translation.x, data.Translation.y, data.Translation.z);
+				//D3DXMatrixTranslation(&T, data.Translation.x, data.Translation.y, data.Translation.z); //Animation move place
+				D3DXMatrixTranslation(&T, data.Translation.x, data.Translation.y, 1.0f); //Animation in place
 
 				animation = S * R * T;
 				

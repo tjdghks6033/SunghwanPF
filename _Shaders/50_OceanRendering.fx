@@ -332,7 +332,7 @@ technique11 T0
 {
     pass P0
     {
-		SetRasterizerState(CullMode_None);
+		//SetRasterizerState();
         SetVertexShader(CompileShader(vs_5_0, OceanSurfVS()));
         SetHullShader(CompileShader(hs_5_0, OceanSurfHS()));
         SetDomainShader(CompileShader(ds_5_0, OceanSurfDS()));

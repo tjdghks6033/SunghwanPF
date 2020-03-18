@@ -8,6 +8,8 @@ public:
 
 	void Update();
 	void Render();
+	void Render2();
+	void Render3();
 
 public:
 	void ReadMaterial(wstring file);
@@ -20,16 +22,25 @@ public:
 
 	void Pass(UINT pass);
 
+	int weapon_num = 0;
+
+	void SetWeaponNum(int weapon_num) { weapon_num %= 3; this->weapon_num = weapon_num; }
+	
+	void SetSrv(int weapon_num);
+
 	Transform* AddTransform();
 	Transform* GetTransform(UINT index) { return transforms[index]; }
 	void UpdateTransforms();
 
 	Matrix GetAttachTransform(UINT index);
 
-private:
-	void CreateTexture();
-	void CreateClipTransform(UINT index);
+	int GetTime() { return runningtime; }
+	void SetTime(int a) { this->runningtime = a; }
+
 	void CreateComputeDesc();
+private:
+	void CreateTexture(int temp);
+	void CreateClipTransform(UINT index);
 
 private:
 	struct ClipTransform
@@ -56,6 +67,13 @@ private:
 
 	ID3D11Texture2D* texture = NULL;
 	ID3D11ShaderResourceView* srv = NULL;
+
+	ID3D11Texture2D* sword_texture_spine = NULL;
+	ID3D11ShaderResourceView* sword_srv_spine = NULL;
+
+	ID3D11Texture2D* sword_texture = NULL;
+	ID3D11ShaderResourceView* sword_srv = NULL;
+
 
 private:
 	struct KeyframeDesc
@@ -118,6 +136,8 @@ private:
 	Matrix worlds[MAX_MODEL_INSTANCE];
 
 	VertexBuffer* instanceBuffer;
+
+	int runningtime = 0;
 
 private:
 	Shader* computeShader;

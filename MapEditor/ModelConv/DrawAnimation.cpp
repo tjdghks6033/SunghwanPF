@@ -16,32 +16,78 @@ void DrawAnimation::Initialize()
 
 void DrawAnimation::Update()
 {
-	static UINT clip = 0;
-
+	
 	if (kachujin != NULL)
 	{
-		if (Keyboard::Get()->Down(VK_SPACE))
+		if (Keyboard::Get()->Down(VK_SHIFT))
 		{
-			++clip;
+			++playerClip;
 
 			//kachujin
 			//clip %= 4;
 			//kachujin->PlayClip(20, clip, 1.0f, 1.0f);
 
-			clip %= 11;
-			dreyar->PlayClip(0, clip, 2.0f, 1.0f);
+			playerClip %= 4;
+			kachujin->PlayClip(0, playerClip, speed, taketime);
 		}
 
 		kachujin->Update();
 	}
-
 	if (dreyar != NULL)
 	{
 		if (Keyboard::Get()->Down(VK_SPACE))
 		{
-			clip %= 10;
-			dreyar->PlayClip(0, clip, 2.0f, 1.0f);			
-		}	
+			++playerClip;
+			playerClip %= 15;
+
+			if(playerClip != 9)
+				dreyar->PlayClip(0, playerClip, speed, taketime);
+		}
+
+		if (Keyboard::Get()->Down(VK_UP))
+		{
+			playerClip = 9;
+			dreyar->PlayClip(0, playerClip, speed, taketime);
+		}
+		
+		ImGui::SliderFloat("speed", &speed, 0, 2);
+		ImGui::SliderFloat("taketime", &taketime, 0, 1);
+
+		static int b = 22;
+		ImGui::SliderInt("b", &b, 0, 50);
+
+		if (playerClip == 9)
+		{
+			int a = dreyar->GetTime();
+			/*if (a > 25)
+				a = 0;*/
+			ImGui::SliderInt("a", &a, 0, 100);
+			if (a == b)
+			{
+				weapon_num++;
+				weapon_num %= 3;
+			}			
+		}
+
+		if (weapon_num == 1)
+		{
+			if (Keyboard::Get()->Down(VK_SHIFT))
+			{
+				playerClip = Math::Random(4, 6);
+
+				dreyar->PlayClip(0, playerClip, speed, taketime);
+
+			}
+		}
+		if (weapon_num == 2)
+		{
+			if (Keyboard::Get()->Down(VK_SHIFT))
+			{
+				playerClip = Math::Random(10, 12);
+
+				dreyar->PlayClip(0, playerClip, speed, taketime);
+			}
+		}
 		dreyar->Update();
 	}
 }
@@ -53,10 +99,69 @@ void DrawAnimation::Render()
 		kachujin->Pass(2);
 		kachujin->Render();
 	}
+	static bool is_unarmed = false;
+	static bool is_sword_spine = false;
+	static bool is_sword = false;
+
 	if (dreyar != NULL)
 	{
 		dreyar->Pass(2);
-		dreyar->Render();
+
+		if (weapon_num == 0)
+		{
+			if (is_sword)
+			{
+				dreyar->GetModel()->Dettach(weapon, 36);
+				
+				is_sword = false;
+			}
+			dreyar->SetWeaponNum(0);
+			dreyar->Render();
+
+			is_unarmed = true;
+		}
+		else if (weapon_num == 1)
+		{
+			if (is_unarmed)
+			{
+				Transform attachspineTransform;
+				attachspineTransform.Position(-90, 330, 200);
+				attachspineTransform.Rotation(-1.7f, 0, 1.7f);
+				attachspineTransform.Scale(10.0f, 10.0f, 10.0f);
+
+				dreyar->GetModel()->Attach(shader, weapon, 3, &attachspineTransform);
+
+				is_unarmed = false;
+				is_sword_spine = true;
+
+				playerClip = 3;
+				dreyar->PlayClip(0, playerClip, speed, taketime);
+			}
+			dreyar->SetWeaponNum(1);
+
+			dreyar->Render2();
+		}
+		else if (weapon_num == 2)
+		{
+			if (is_sword_spine)
+			{
+				dreyar->GetModel()->Dettach(weapon, 3);
+
+				Transform attachTransform;
+				attachTransform.Position(-60, -20, -200);
+				attachTransform.Scale(10.0f, 10.0f, 10.0f);
+
+				dreyar->GetModel()->Attach(shader, weapon, 36, &attachTransform);
+
+				is_sword_spine = false;
+				is_sword = true;
+
+				playerClip = 0;
+				dreyar->PlayClip(0, playerClip, speed, taketime);
+			}
+			dreyar->SetWeaponNum(2);
+			dreyar->Render3();
+		}
 	}
 }
 
@@ -107,12 +212,36 @@ void DrawAnimation::Dreyar()
 	dreyar->ReadClip(L"Dreyar/StandingReactLeft");			//7
 	dreyar->ReadClip(L"Dreyar/StandingReactLargeLeft");		//8
 	dreyar->ReadClip(L"Dreyar/UnarmedEquipOverShoulder");	//9
+	dreyar->ReadClip(L"Dreyar/AttackCombo_1");				//10
+	dreyar->ReadClip(L"Dreyar/AttackCombo_2");				//11
+	dreyar->ReadClip(L"Dreyar/AttackCombo_3");				//12
+	dreyar->ReadClip(L"Dreyar/MagicAttack_1");				//13
+	dreyar->ReadClip(L"Dreyar/MagicAttack_2");				//14
+	
+
+	dreyar->SetWeaponNum(0);
+	dreyar->Render();
+
+	Transform attachspineTransform;
+	attachspineTransform.Position(-90, 330, 200);
+	attachspineTransform.Rotation(-1.7f, 0, 1.7f);
+	attachspineTransform.Scale(10.0f, 10.0f, 10.0f);
+
+	dreyar->SetWeaponNum(1);
+	dreyar->GetModel()->Attach(shader, weapon, 3, &attachspineTransform);
+	dreyar->Render2();
 
 	Transform attachTransform;
-	attachTransform.Position(-140, 0, -140);
+	attachTransform.Position(-60, -20, -200);
 	attachTransform.Scale(10.0f, 10.0f, 10.0f);
 
+	dreyar->SetWeaponNum(2);
+	dreyar->GetModel()->Dettach(weapon, 3);
 	dreyar->GetModel()->Attach(shader, weapon, 36, &attachTransform);
+	dreyar->Render3();
+
+	dreyar->GetModel()->Dettach(weapon, 36);
+	dreyar->SetWeaponNum(0);
 
 	dreyar->Pass(2);
 

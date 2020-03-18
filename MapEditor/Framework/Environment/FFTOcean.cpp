@@ -204,7 +204,7 @@ void FFTOcean::Update(float time)
 	Pass(bWireFrame ? 1 : 0);
 	Vector3 pos,scale;
 	GetTransform()->Position(&pos);
-	ImGui::SliderFloat3("OceanPos", (float*)&pos, -512, 512);
+	ImGui::SliderFloat3("OceanPos", (float*)&pos, -20, 20);
 	GetTransform()->Position(pos);
 	GetTransform()->Scale(&scale);
 	ImGui::SliderFloat3("OceanScale", (float*)&scale, 1, 50);

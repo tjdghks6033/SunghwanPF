@@ -223,6 +223,59 @@ void Model::Attach(Shader * shader, Model * model, int parentBoneIndex, Transfor
 	}
 }
 
+void Model::Dettach(Model * model, int parentBoneIndex)
+{
+	//Copy Material
+	for (Material* material : model->Materials())
+	{
+		materials.pop_back();
+	}
+
+	vector<pair<int, int>> changes;
+
+	//Copy Bone
+	{
+		ModelBone *parentBone = BoneByIndex(parentBoneIndex);
+
+		for (ModelBone* bone : model->Bones())
+		{
+			ModelBone* newBone = new ModelBone();
+			newBone->name = bone->name;
+			newBone->transform = bone->transform;
+
+			if (bone->parent != NULL)
+			{
+				int parentIndex = bone->parentIndex;
+
+				for (pair<int, int>& temp : changes)
+				{
+					if (temp.first == parentIndex)
+					{
+						break;
+					}
+				}//for(temp)
+			}
+			else
+			{
+				newBone->parentIndex = parentBoneIndex;
+				newBone->parent = parentBone;
+				newBone->parent->childs.pop_back();
+			}
+
+			bones.pop_back();
+		}//for(bone)
+	}
+
+	//Copy Mesh
+	{
+		for (ModelMesh* mesh : model->Meshes())
+		{
+			ModelMesh* newMesh = new ModelMesh();
+
+			meshes.pop_back();
+		}
+	}
+}
 ///////////////////////////////////////////////////////////////////////////////
 
 void Model::ReadMaterial(wstring file)

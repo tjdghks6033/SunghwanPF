@@ -38,7 +38,7 @@ void PortFolio::Initialize()
 		FFTOcean::InitializeInfo desc =
 		{
 			sOcean,
-			L"Terrain/Gray256.png",
+			L"Terrain/Gray512.png",
 			1.0f,
 			16,
 		};

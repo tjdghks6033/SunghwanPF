@@ -28,10 +28,10 @@ void DrawAnimation::Update()
 		{
 			++clip;
 			/*clip %= 16;
-			kachujin->PlayClip(0, clip, 1.0f, 1.0f);
+			kachujin->PlayClip(0, clip, 1.0f, 1.0f);*/
 
 			clip %= 4;
-			castleGuard->PlayClip(0, clip, 1.0f, 1.0f);*/
+			castleGuard->PlayClip(0, clip, 1.0f, 0.3f);
 
 			clip %= 10;
 			dreyar->PlayClip(0, clip, 2.0f, 1.0f);

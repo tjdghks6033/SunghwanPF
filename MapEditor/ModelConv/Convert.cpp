@@ -129,6 +129,31 @@ void Convert::Dreyar()
 	conv->ReadFile(L"Dreyar/UnarmedEquipOverShoulder.fbx");
 	conv->ExportAnimClip(0, L"Dreyar/UnarmedEquipOverShoulder");
 	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Dreyar/AttackCombo_1.fbx");
+	conv->ExportAnimClip(0, L"Dreyar/AttackCombo_1");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Dreyar/AttackCombo_2.fbx");
+	conv->ExportAnimClip(0, L"Dreyar/AttackCombo_2");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Dreyar/AttackCombo_3.fbx");
+	conv->ExportAnimClip(0, L"Dreyar/AttackCombo_3");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Dreyar/MagicAttack_1.fbx");
+	conv->ExportAnimClip(0, L"Dreyar/MagicAttack_1");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Dreyar/MagicAttack_2.fbx");
+	conv->ExportAnimClip(0, L"Dreyar/MagicAttack_2");
+	SafeDelete(conv);
 }
 
 void Convert::Megan()

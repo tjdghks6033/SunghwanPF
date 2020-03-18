@@ -48,6 +48,7 @@ public:
 	void Emissive(float r, float g, float b, float a = 1.0f);
 
 	void Attach(Shader* shader, Model* model, int parentBoneIndex, Transform* transform = NULL);
+	void Dettach(Model * model, int parentBoneIndex);
 
 public:
 	void ReadMaterial(wstring file);

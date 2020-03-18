@@ -22,4 +22,9 @@ private:
 	Model* weapon;
 	ModelAnimator* kachujin = NULL;
 	ModelAnimator* dreyar = NULL;
+
+	int weapon_num = 0;
+	UINT playerClip = 0;
+	float speed = 2.0f;
+	float taketime = 0.2f;
 };
