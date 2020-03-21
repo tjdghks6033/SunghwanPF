@@ -61,7 +61,7 @@ float4 PS(MeshOutput input) : SV_Target0
     
     factor = saturate(factor + depth);
     //return float4(1, 1, 1, 1) * factor;
-    return float4(color.rgb * factor, 1);
+    return float4(color.rgb * depth, 1);
 }
 
 technique11 T0

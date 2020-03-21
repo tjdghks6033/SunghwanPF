@@ -25,6 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "00", "00", "{E26E4FDE-09A6-
 		..\_Shaders\00_Model.fx = ..\_Shaders\00_Model.fx
 		..\_Shaders\00_Sky.fx = ..\_Shaders\00_Sky.fx
 		..\_Shaders\00_Terrain.fx = ..\_Shaders\00_Terrain.fx
+		..\_Shaders\00_Water.fx = ..\_Shaders\00_Water.fx
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01-19", "01-19", "{6309539D-F788-45A0-ADCA-2C84A13B94FF}"

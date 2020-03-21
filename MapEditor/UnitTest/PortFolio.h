@@ -15,8 +15,10 @@ public:
 
 private:
 	void Mesh();
-	void Airplane();
-	void Kachujin();
+	void Weapon();
+	//void Kachujin();
+	void Dreyar();
+	void CastleGuard();
 
 	void BillboardLayer();
 
@@ -56,7 +58,6 @@ private:
 	class Billboard* bb6;
 	class Billboard* bb7;
 	class Billboard* bb8;
-
 	int treenum = 0;
 
 	Sky* sky;
@@ -70,21 +71,20 @@ private:
 		None = 0, Rain, Snow,
 	} weather;
 
-	Material* floor;
-	Material* stone;
-	Material* brick;
 	Material* wall;
-
 	MeshRender* sphere;
-	MeshRender* cylinder;
-	MeshRender* cube;
-	MeshRender* grid;
 
+	Model* weaponSword;
+	ModelAnimator* dreyar = NULL;
+	ModelAnimator* castleGuard = NULL;
 
-	ModelRender* airplane = NULL;
-
-	Model* weapon;
-	ModelAnimator* kachujin = NULL;
+	bool is_unarmed = false;
+	bool is_sword_spine = false;
+	bool is_sword = false;
+	int weapon_num = 0;
+	UINT playerClip = 0;
+	float speed = 1.3f;
+	float taketime = 0.2f;
 
 	struct ColliderDesc
 	{

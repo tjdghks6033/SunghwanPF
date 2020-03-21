@@ -21,5 +21,6 @@ private:
 	void Megan();
 	void Kachujin();
 	void Dreyar();
+	void CastleGuard();
 
 };

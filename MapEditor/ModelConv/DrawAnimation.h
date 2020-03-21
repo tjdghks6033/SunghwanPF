@@ -15,6 +15,7 @@ class DrawAnimation : public IExecute
 private:
 	void Kachujin();
 	void Dreyar();
+	void CastleGuard();
 
 private:
 	Shader* shader;
@@ -22,6 +23,7 @@ private:
 	Model* weapon;
 	ModelAnimator* kachujin = NULL;
 	ModelAnimator* dreyar = NULL;
+	ModelAnimator* castleGuard = NULL;
 
 	int weapon_num = 0;
 	UINT playerClip = 0;

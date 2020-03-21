@@ -156,6 +156,35 @@ void Convert::Dreyar()
 	SafeDelete(conv);
 }
 
+void Convert::CastleGuard()
+{
+	Converter* conv = new Converter();
+	conv->ReadFile(L"CastleGuard/CastleGuard.fbx");
+	conv->ExportMaterial(L"CastleGuard/Mesh", false);
+	conv->ExportMesh(L"CastleGuard/Mesh");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"CastleGuard/Idle.fbx");
+	conv->ExportAnimClip(0, L"CastleGuard/Idle");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"CastleGuard/Running.fbx");
+	conv->ExportAnimClip(0, L"CastleGuard/Running");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"CastleGuard/Attacking.fbx");
+	conv->ExportAnimClip(0, L"CastleGuard/Attacking");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"CastleGuard/StandingReactLeft.fbx");
+	conv->ExportAnimClip(0, L"CastleGuard/StandingReactLeft");
+	SafeDelete(conv);
+}
+
 void Convert::Megan()
 {
 	Converter* conv = new Converter();

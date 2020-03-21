@@ -117,13 +117,18 @@ void ComputeLight(out MaterialDesc output, float3 normal, float3 wPosition)
     float3 direction = -GlobalLight.Direction;
     float NdotL = dot(direction, normalize(normal));
     
-    output.Ambient = GlobalLight.Ambient * Material.Ambient;        
+    output.Ambient = GlobalLight.Ambient * Material.Ambient;    
+	//output.Ambient = Material.Ambient;
+	//output.Ambient = 1;
+	
     float3 E = normalize(ViewPosition() - wPosition);
        
     [flatten]
     if(NdotL > 0.0f)
     {
         output.Diffuse = NdotL * Material.Diffuse;
+		//output.Diffuse = Material.Diffuse;
+		//output.Diffuse = 1;
         
         [flatten]
         if (any(Material.Specular.rgb))
@@ -132,8 +137,11 @@ void ComputeLight(out MaterialDesc output, float3 normal, float3 wPosition)
             float RdotE = saturate(dot(R, E));
 
             float specular = pow(RdotE, Material.Specular.a);
-            output.Specular = specular * Material.Specular * GlobalLight.Specular;
-        }
+			output.Specular = specular * Material.Specular * GlobalLight.Specular;
+			//output.Specular = specular * Material.Specular; //* GlobalLight.Specular;
+			//output.Specular = Material.Specular;
+
+		}
     }
         
     [flatten]
@@ -143,7 +151,8 @@ void ComputeLight(out MaterialDesc output, float3 normal, float3 wPosition)
         float emissive = smoothstep(1.0f - Material.Emissive.a, 1.0f, 1.0f - saturate(NdotE));
             
         output.Emissive = Material.Emissive * emissive;
-    }
+		//output.Emissive = Material.Emissive;
+	}
 }
 
 void NormalMapping(float2 uv, float3 normal, float3 tangent, SamplerState samp)
@@ -167,7 +176,8 @@ void NormalMapping(float2 uv, float3 normal, float3 tangent, SamplerState samp)
     //ÅºÁ¨Æ® °ø°£À¸·Î º¯È¯
     coord = mul(coord, TBN);
     
-    Material.Diffuse *= saturate(dot(coord, -GlobalLight.Direction));
+	//Material.Diffuse *= saturate(dot(coord, -GlobalLight.Direction));
+	Material.Diffuse = Material.Diffuse;
 }
 
 void NormalMapping(float2 uv, float3 normal, float3 tangent)
@@ -352,7 +362,7 @@ float4 PS_AllLight(MeshOutput input)
     
     
     float3 color = MaterialToColor(result);
-    CalcualteFogColor(float4(color, 1), input.wPosition);
+   // CalcualteFogColor(float4(color, 1), input.wPosition);
     
     return float4(color.rgb, 1.0f);
 }
@@ -444,7 +454,7 @@ float4 PS_Shadow(MeshOutput input, float4 color)
     }
     
     factor = saturate(factor + depth);
-    return float4(color.rgb * factor, 1);
+	return float4(color.rgb * factor, 1);
 }
 
 float4 PS_Shadow(float4 position, float4 color)

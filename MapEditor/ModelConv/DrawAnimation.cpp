@@ -8,15 +8,16 @@ void DrawAnimation::Initialize()
 	Context::Get()->GetCamera()->Position(0, 5, -15);
 	((Freedom *)Context::Get()->GetCamera())->Speed(20, 2);
 
-	shader = new Shader(L"27_Animation.fx");
+	shader = new Shader(L"27_Animation.fxo");
 
 	Kachujin();
 	Dreyar();
+	CastleGuard();
 }
 
 void DrawAnimation::Update()
-{
-	
+{	
+	castleGuard->Update();
 	if (kachujin != NULL)
 	{
 		if (Keyboard::Get()->Down(VK_SHIFT))
@@ -99,6 +100,9 @@ void DrawAnimation::Render()
 		kachujin->Pass(2);
 		kachujin->Render();
 	}
+	castleGuard->Render();
+
+
 	static bool is_unarmed = false;
 	static bool is_sword_spine = false;
 	static bool is_sword = false;
@@ -250,4 +254,29 @@ void DrawAnimation::Dreyar()
 	transform->Scale(0.001f, 0.001f, 0.001f);
 
 	dreyar->UpdateTransforms();
+}
+
+void DrawAnimation::CastleGuard()
+{
+	castleGuard = new ModelAnimator(shader);
+	castleGuard->ReadMaterial(L"CastleGuard/Mesh");
+	castleGuard->ReadMesh(L"CastleGuard/Mesh");
+	castleGuard->ReadClip(L"CastleGuard/Idle");
+	castleGuard->ReadClip(L"CastleGuard/Running");
+	castleGuard->ReadClip(L"CastleGuard/Attacking");
+	castleGuard->ReadClip(L"CastleGuard/StandingReactLeft");
+
+	Transform attachTransform;
+	attachTransform.Position(-10, 0, -10);
+	attachTransform.Scale(1.0f, 1.0f, 1.0f);
+
+	castleGuard->GetModel()->Attach(shader, weapon, 23, &attachTransform);
+
+	castleGuard->Pass(2);
+
+	Transform* transform = castleGuard->AddTransform();
+	transform->Position(4, 0, 0);
+	transform->Scale(0.01f, 0.01f, 0.01f);
+
+	castleGuard->UpdateTransforms();
 }
