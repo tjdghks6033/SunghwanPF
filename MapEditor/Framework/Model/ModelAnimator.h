@@ -10,6 +10,7 @@ public:
 	void Render();
 	void Render2();
 	void Render3();
+	void Render4();
 
 public:
 	void ReadMaterial(wstring file);
@@ -24,8 +25,11 @@ public:
 
 	int weapon_num = 0;
 
-	void SetWeaponNum(int weapon_num) { weapon_num %= 3; this->weapon_num = weapon_num; }
-	
+	void SetWeaponNum(int weapon_num) { weapon_num %= 4; this->weapon_num = weapon_num; }
+
+	bool GetStopAnim(int animnum) { return stopanim[animnum]; }
+	void SetStopAnim(int animnum, const bool& is) { this->stopanim[animnum] = is; }
+
 	void SetSrv(int weapon_num);
 
 	Transform* AddTransform();
@@ -35,6 +39,7 @@ public:
 	Matrix GetAttachTransform(UINT index);
 
 	int GetTime() { return runningtime; }
+	int GetTime(int mon_num) { return monrunningtime[mon_num]; }
 	void SetTime(int a) { this->runningtime = a; }
 
 	void CreateComputeDesc();
@@ -73,7 +78,9 @@ private:
 
 	ID3D11Texture2D* sword_texture = NULL;
 	ID3D11ShaderResourceView* sword_srv = NULL;
-
+	
+	ID3D11Texture2D* bow_texture = NULL;
+	ID3D11ShaderResourceView* bow_srv = NULL;
 
 private:
 	struct KeyframeDesc
@@ -139,6 +146,8 @@ private:
 
 	int runningtime = 0;
 
+	int monrunningtime[10];
+	bool stopanim[10];
 private:
 	Shader* computeShader;
 	StructuredBuffer* computeBuffer = NULL;

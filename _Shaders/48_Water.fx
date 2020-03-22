@@ -25,11 +25,14 @@ float4 PS(MeshOutput input) : SV_Target
 	////CalcualteFogColor(float4(color, 1), input.wPosition);
     
 	////return float4(color.rgb, 1.0f);
+	
+	
 	float3 diffuse = DiffuseMap.Sample(LinearSampler, input.Uv);
 	float NdotL = dot(normalize(input.Normal), -GlobalLight.Direction);
 
-	return float4(diffuse * NdotL, 1);
-	//return PS_Shadow(input, PS_AllLight(input));	
+	//return float4(diffuse * NdotL, 1);
+	
+	return PS_Shadow(input, PS_AllLight(input));	
 }
 
 technique11 T0

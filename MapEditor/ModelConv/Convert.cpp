@@ -10,7 +10,8 @@ void Convert::Initialize()
 	//Kachujin();
 	//Megan();
 	//Weapon();
-	Dreyar();
+	//Dreyar(); 
+	CastleGuard();
 }
 
 void Convert::Airplane()
@@ -182,6 +183,16 @@ void Convert::CastleGuard()
 	conv = new Converter();
 	conv->ReadFile(L"CastleGuard/StandingReactLeft.fbx");
 	conv->ExportAnimClip(0, L"CastleGuard/StandingReactLeft");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"CastleGuard/ShootingArrow.fbx");
+	conv->ExportAnimClip(0, L"CastleGuard/ShootingArrow");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"CastleGuard/StandingDeathBackward.fbx");
+	conv->ExportAnimClip(0, L"CastleGuard/StandingDeathBackward");
 	SafeDelete(conv);
 }
 

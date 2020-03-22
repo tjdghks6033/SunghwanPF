@@ -101,7 +101,7 @@ void ModelAnimator::Update()
 	}//for(i)
 
 	frameBuffer->Apply();
-	if (computeBuffer != NULL)
+	/*if (computeBuffer != NULL)
 	{
 		computeAttachBuffer->Apply();
 		sComputeAttachBuffer->SetConstantBuffer(computeAttachBuffer->Buffer());
@@ -112,7 +112,7 @@ void ModelAnimator::Update()
 
 		computeShader->Dispatch(0, 0, 1, 1, 1);
 		computeBuffer->Copy(csOutput, sizeof(CS_OutputDesc) * MAX_MODEL_TRANSFORMS);
-	}
+	}*/
 	
 	for (ModelMesh* mesh : model->Meshes())
 		mesh->Update();
@@ -175,6 +175,28 @@ void ModelAnimator::Render3()
 	if (weapon_num == 2)
 	{
 		SetSrv(2);
+	}
+	frameBuffer->Apply();
+
+	instanceBuffer->Render();
+	sFrameBuffer->SetConstantBuffer(frameBuffer->Buffer());
+
+	for (ModelMesh* mesh : model->Meshes())
+		mesh->Render(transforms.size());
+}
+
+void ModelAnimator::Render4()
+{
+	if (bow_texture == NULL)
+	{
+		weapon_num = 3;
+		CreateTexture(3);
+		//CreateComputeDesc();
+	}
+
+	if (weapon_num == 3)
+	{
+		SetSrv(3);
 	}
 	frameBuffer->Apply();
 
@@ -314,6 +336,10 @@ void ModelAnimator::CreateTexture(int temp)
 		{
 			Check(D3D::GetDevice()->CreateTexture2D(&desc, subResource, &sword_texture));
 		}
+		else if (temp == 3)
+		{
+			Check(D3D::GetDevice()->CreateTexture2D(&desc, subResource, &bow_texture));
+		}
 		SafeDeleteArray(subResource);
 		VirtualFree(p, 0, MEM_RELEASE);
 	}
@@ -332,6 +358,10 @@ void ModelAnimator::CreateTexture(int temp)
 		else if (weapon_num == 2)
 		{
 			sword_texture->GetDesc(&desc);
+		}
+		else if (weapon_num == 3)
+		{
+			bow_texture->GetDesc(&desc);
 		}
 		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
 		ZeroMemory(&srvDesc, sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC));
@@ -352,6 +382,10 @@ void ModelAnimator::CreateTexture(int temp)
 		{
 			Check(D3D::GetDevice()->CreateShaderResourceView(sword_texture, &srvDesc, &sword_srv));
 		}
+		else if (weapon_num == 3)
+		{
+			Check(D3D::GetDevice()->CreateShaderResourceView(bow_texture, &srvDesc, &bow_srv));
+		}
 	}
 }
 
@@ -371,6 +405,11 @@ void ModelAnimator::SetSrv(int weapon_num)
 	{
 		for (ModelMesh* mesh : model->Meshes())
 			mesh->TransformsSRV(sword_srv);
+	}
+	else if (weapon_num == 3)
+	{
+		for (ModelMesh* mesh : model->Meshes())
+			mesh->TransformsSRV(bow_srv);
 	}
 }
 

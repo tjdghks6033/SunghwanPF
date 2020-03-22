@@ -261,7 +261,6 @@ void Model::Dettach(Model * model, int parentBoneIndex)
 				newBone->parent = parentBone;
 				newBone->parent->childs.pop_back();
 			}
-
 			bones.pop_back();
 		}//for(bone)
 	}

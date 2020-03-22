@@ -117,6 +117,8 @@ void ComputeLight(out MaterialDesc output, float3 normal, float3 wPosition)
     float3 direction = -GlobalLight.Direction;
     float NdotL = dot(direction, normalize(normal));
     
+	NdotL = NdotL * 0.5f + 0.5f;
+	
     output.Ambient = GlobalLight.Ambient * Material.Ambient;    
 	//output.Ambient = Material.Ambient;
 	//output.Ambient = 1;
