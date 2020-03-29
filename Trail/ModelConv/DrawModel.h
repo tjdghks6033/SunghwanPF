@@ -16,6 +16,7 @@ private:
 	void Airplane();
 	void Tower();
 	void Tank();
+	void Castle();
 
 private:
 	Shader* shader;
@@ -23,4 +24,6 @@ private:
 	ModelRender* airplane = NULL;
 	ModelRender* tower = NULL;
 	ModelRender* tank = NULL;
+	ModelRender* castle = NULL;
+
 };

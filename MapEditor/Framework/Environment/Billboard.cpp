@@ -47,6 +47,8 @@ void Billboard::Update()
 		is_right = true;
 
 	shader->AsScalar("uvrandom")->SetFloat(uvrandom);
+
+	
 }
 
 void Billboard::Render()
@@ -66,4 +68,5 @@ void Billboard::Render()
 
 	sMaps->SetResource(textures->SRV());
 	shader->Draw(0, Pass(), vertexCount);
+
 }

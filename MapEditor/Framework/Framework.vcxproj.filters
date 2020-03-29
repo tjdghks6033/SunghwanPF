@@ -200,6 +200,9 @@
     <ClInclude Include="Particle\ParticleSystem.h">
       <Filter>Particle</Filter>
     </ClInclude>
+    <ClInclude Include="Viewer\OrbitCamera.h">
+      <Filter>Viewer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework.cpp" />
@@ -391,6 +394,9 @@
     </ClCompile>
     <ClCompile Include="Particle\ParticleSystem.cpp">
       <Filter>Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Viewer\OrbitCamera.cpp">
+      <Filter>Viewer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

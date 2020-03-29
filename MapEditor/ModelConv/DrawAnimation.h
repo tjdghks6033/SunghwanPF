@@ -25,6 +25,8 @@ private:
 	ModelAnimator* dreyar = NULL;
 	ModelAnimator* castleGuard = NULL;
 
+	ParticleSystem* particle = NULL;
+
 	int weapon_num = 0;
 	UINT playerClip = 0;
 	float speed = 2.0f;

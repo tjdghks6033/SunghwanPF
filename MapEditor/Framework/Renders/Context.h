@@ -60,6 +60,8 @@ public:
 	class Viewport* GetViewport() { return viewport; }
 	class Camera* GetCamera() { return camera; }
 
+	void NewOrbitCamera(Vector3* pos);
+
 	Color& Ambient() { return ambient; }
 	Color& Specular() { return specular; }
 	Vector3& Direction() { return direction; }

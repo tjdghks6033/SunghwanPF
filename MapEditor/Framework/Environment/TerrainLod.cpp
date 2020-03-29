@@ -292,7 +292,7 @@ void TerrainLod::RaiseHeight(Vector3 & position, UINT type, UINT range)
 				}
 			}
 		}
-		CreateNormalData();		
+		CreateNormalData();
 	}
 
 	/*D3D::GetDC()->UpdateSubresource
@@ -379,7 +379,7 @@ void TerrainLod::CreateVertexData()
 			UINT vertId = z * vertexPerPatchX + x;
 
 			vertices[vertId].Position = Vector3(x1, 0, z1);
-			vertices[vertId].Uv = Vector2(x * du, z * dv);
+			vertices[vertId].Uv = Vector2(x * 5 * du, z * 5 * dv);
 		}
 	}
 

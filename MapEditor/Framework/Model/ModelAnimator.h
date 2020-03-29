@@ -32,6 +32,8 @@ public:
 
 	void SetSrv(int weapon_num);
 
+	void SetAttachBone(int animnum) { this->attachDesc.AttachBoneIndex = animnum; }
+
 	Transform* AddTransform();
 	Transform* GetTransform(UINT index) { return transforms[index]; }
 	void UpdateTransforms();
@@ -146,8 +148,8 @@ private:
 
 	int runningtime = 0;
 
-	int monrunningtime[10];
-	bool stopanim[10];
+	int monrunningtime[5];
+	bool stopanim[5];
 private:
 	Shader* computeShader;
 	StructuredBuffer* computeBuffer = NULL;

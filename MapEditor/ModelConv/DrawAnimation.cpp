@@ -10,6 +10,8 @@ void DrawAnimation::Initialize()
 
 	shader = new Shader(L"27_Animation.fxo");
 
+	particle = new ParticleSystem(L"Trail_1");
+
 	Kachujin();
 	Dreyar();
 	CastleGuard();
@@ -72,6 +74,19 @@ void DrawAnimation::Update()
 
 		if (weapon_num == 1)
 		{
+			Matrix att = dreyar->GetAttachTransform(0);
+
+			Vector3 position;
+			Vector3 scale;
+			Vector3 rotation;
+			Math::MatrixDecompose(att, scale, rotation, position);
+
+			if (particle != NULL)
+			{
+				particle->Add(position);
+				particle->Update();
+			}
+
 			if (Keyboard::Get()->Down(VK_SHIFT))
 			{
 				playerClip = Math::Random(4, 6);
@@ -126,6 +141,7 @@ void DrawAnimation::Render()
 		}
 		else if (weapon_num == 1)
 		{
+			particle->Render();
 			if (is_unarmed)
 			{
 				Transform attachspineTransform;

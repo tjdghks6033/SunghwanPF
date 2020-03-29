@@ -49,6 +49,7 @@ void Terrain::Update()
 {
 	Super::Update();
 
+	
 	ImGui::Checkbox("Map Editor", &is_mapeditor);
 
 	if (is_mapeditor)
@@ -82,7 +83,7 @@ void Terrain::Update()
 		std::wstring file;
 		if (ImGui::Button("Save"))
 		{
-			Path::SaveFileDialog(file, Path::ImageFilter, L"../../Textures/", [=](std::wstring path) {
+			Path::SaveFileDialog(file, Path::ImageFilter, L"../../Textures/Save/TerrainMap/", [=](std::wstring path) {
 
 				auto writer = new BinaryWriter();
 				writer->Open(path, 1);
@@ -108,7 +109,7 @@ void Terrain::Update()
 		ImGui::SameLine();
 		if (ImGui::Button("Load"))
 		{
-			Path::OpenFileDialog(file, Path::ImageFilter, L"../../Textures/", [=](std::wstring path) {
+			Path::OpenFileDialog(file, Path::ImageFilter, L"../../Textures/Save/TerrainMap/", [=](std::wstring path) {
 				auto reader = new BinaryReader();
 
 				reader->Open(path);
@@ -138,45 +139,58 @@ void Terrain::Update()
 				reader->Close();
 			});
 		}
-	}
 
-	if (brushDesc.Type > 0)
-	{
-		if (!is_clicked)
-			brushDesc.Location = GetPickedPosition();
 
-		if (Mouse::Get()->Down(0))
-			prevlocation = brushDesc.Location;
-
-		if (Mouse::Get()->Press(0))
+		if (brushDesc.Type > 0)
 		{
-			if (is_flattening)
-				FlatHeight(brushDesc.Location, brushDesc.Type, brushDesc.Range);
-			else if (is_smoothing)
-				Smoothing(brushDesc.Location, brushDesc.Type, brushDesc.Range);
-			else if (is_noise)
-				Noise(brushDesc.Location, brushDesc.Type, brushDesc.Range);
-			else if (is_slope)
-				Slope(brushDesc.Location, brushDesc.Type, brushDesc.Range);
-			else if (is_raise)
-			{
-				RaiseHeight(brushDesc.Location, brushDesc.Type, brushDesc.Range);
-				is_clicked = true;
-			}
-			else if (is_paint)
-			{
-				Paint(brushDesc.Location, brushDesc.Type, brushDesc.Range);
-			}
-		}
+			
 
-		if (Keyboard::Get()->Press(VK_SHIFT))
-		{
-			DownHeight(brushDesc.Location, brushDesc.Type, brushDesc.Range);
-			is_clicked = true;
-		}
-		if (Mouse::Get()->Up(0))
-			is_clicked = false;
+			if (!is_clicked)
+				brushDesc.Location = GetPickedPosition();
 
+			if (Mouse::Get()->Down(0))
+				prevlocation = brushDesc.Location;
+
+			if (Mouse::Get()->Press(0))
+			{
+				ImVec2 aa = ImGui::GetMousePos();
+
+				if (aa.x >= 0.0f && aa.x < 362.0f && aa.y > 250.0f && aa.y <= 620)
+					is_hovered = true;
+				else
+					is_hovered = false;
+				
+				if (!is_hovered)
+				{
+					if (is_flattening)
+						FlatHeight(brushDesc.Location, brushDesc.Type, brushDesc.Range);
+					else if (is_smoothing)
+						Smoothing(brushDesc.Location, brushDesc.Type, brushDesc.Range);
+					else if (is_noise)
+						Noise(brushDesc.Location, brushDesc.Type, brushDesc.Range);
+					else if (is_slope)
+						Slope(brushDesc.Location, brushDesc.Type, brushDesc.Range);
+					else if (is_raise)
+					{
+						RaiseHeight(brushDesc.Location, brushDesc.Type, brushDesc.Range);
+						//is_clicked = true;
+					}
+					else if (is_paint)
+					{
+						Paint(brushDesc.Location, brushDesc.Type, brushDesc.Range);
+					}
+				}
+			}
+
+			if (Keyboard::Get()->Press(VK_SHIFT))
+			{
+				DownHeight(brushDesc.Location, brushDesc.Type, brushDesc.Range);
+				//is_clicked = true;
+			}
+			/*if (Mouse::Get()->Up(0))
+				is_clicked = false;
+			*/
+		}
 	}
 
 	ImGui::Separator();
@@ -928,8 +942,8 @@ void Terrain::CreateVertexData()
 			vertices[index].Position.y = (heights[pixel].r * 255.0f) / 10.0f;
 			vertices[index].Position.z = (float)z;
 
-			vertices[index].Uv.x = (float)x / (float)width;
-			vertices[index].Uv.y = (float)(height - 1 - z) / (float)height;
+			vertices[index].Uv.x = 5 * (float)x / (float)width;
+			vertices[index].Uv.y = 5 * (float)(height - 1 - z) / (float)height;
 		}
 	}
 }

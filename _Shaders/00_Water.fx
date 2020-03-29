@@ -42,8 +42,10 @@ VertexOutput_Water VS_Water(VertexTexture input)
     
 	output.Uv = input.Uv / NormalMapTile.x;
 	output.Uv2 = input.Uv / NormalMapTile.y;
-    
+     
+	
 	return output;
+	
 }
 
 float4 PS_Water(VertexOutput_Water input) : SV_Target
@@ -56,9 +58,11 @@ float4 PS_Water(VertexOutput_Water input) : SV_Target
     
 	float3 normal = normalMap.rgb + normalMap2.rgb;
     
+	
+	
 	float2 reflection;
 	reflection.x = input.ReflectionPosition.x / input.ReflectionPosition.w * 0.5f + 0.5f;
-	reflection.y = -input.ReflectionPosition.y / input.ReflectionPosition.w * 0.5f + 0.5f;
+	reflection.y = -input.ReflectionPosition.y / input.ReflectionPosition.w * 0.5f + 0.5f;	
 	reflection = reflection + (normal.xy * WaveScale);
 	float4 reflectionColor = ReflectionMap.Sample(LinearSampler, reflection);
     //return float4(reflectionColor.rgb, 1.0f);
@@ -74,7 +78,6 @@ float4 PS_Water(VertexOutput_Water input) : SV_Target
 	float3 light = GlobalLight.Direction;
 	light.y *= -1.0f;
 	light.z *= -1.0f;
-    
     
 	float3 view = normalize(ViewPosition() - input.wPosition);
 	float3 heightView = view.yyy;
@@ -96,7 +99,8 @@ float4 PS_Water(VertexOutput_Water input) : SV_Target
 		diffuse = saturate(diffuse + specular);
 	}
     
-	float4 color = CalcualteFogColor(float4(diffuse, 1), input.wPosition);
+	//float4 color = CalcualteFogColor(float4(diffuse, 1), input.wPosition);
+	float4 color = float4(diffuse, 1);
 	return float4(color.rgb, WaterAlpha);
 }
 

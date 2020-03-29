@@ -101,7 +101,7 @@ void Water::PreRender_Reflection()
 	Vector3 position;
 	GetTransform()->Position(&position);
 
-	Plane plane = Plane(0, 1, 0, -position.y);
+	Plane plane = Plane(0, 1, 0, -position.y - 1.15f);
 	perFrame->Clipping(plane);
 
 	reflection->Set(depthStencil);
@@ -113,7 +113,7 @@ void Water::PreRender_Refraction()
 	Vector3 position;
 	GetTransform()->Position(&position);
 
-	Plane plane = Plane(0, -1, 0, position.y + 0.1f);
+	Plane plane = Plane(0, -1, 0, position.y + 0.1f + 1.15f);
 	perFrame->Clipping(plane);
 
 	refraction->Set(depthStencil);

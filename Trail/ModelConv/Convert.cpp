@@ -11,9 +11,10 @@ void Convert::Initialize()
 	//Weapon();
 	//Kachujin();
 	//Amy();
-	CastleGuard();
-	Dreyar();
+	//CastleGuard();
+	//Dreyar();
 	//Ganfaul();
+	Castle();
 }
 
 void Convert::Airplane()
@@ -300,4 +301,13 @@ void Convert::Weapon()
 		conv->ExportMesh(L"Weapon/" + name);
 		SafeDelete(conv);
 	}
+}
+
+void Convert::Castle()
+{
+	Converter* conv = new Converter();
+	conv->ReadFile(L"Castle/Castle.fbx");
+	conv->ExportMaterial(L"Castle/Mesh", false);
+	conv->ExportMesh(L"Castle/Mesh");
+	SafeDelete(conv);
 }

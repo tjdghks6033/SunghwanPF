@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "PortFolio.h"
 #include <random>
+#include "Utilities/BinaryFile.h"
 
 void PortFolio::Initialize()
 {
@@ -9,7 +10,6 @@ void PortFolio::Initialize()
 	Context::Get()->GetCamera()->RotationDegree(-4, 1114, 0);
 	Context::Get()->GetCamera()->Position(126, 5, 125);
 	((Freedom *)Context::Get()->GetCamera())->Speed(20, 2);
-
 
 	shader = new Shader(L"48_Water.fxo");
 
@@ -31,7 +31,7 @@ void PortFolio::Initialize()
 	//Water
 	{	
 		water = new Water(shader, 127.5);
-		water->GetTransform()->Position(128.0f + 0, 5, 128.0f + 0);
+		water->GetTransform()->Position(128.0f + 0, 1.15f, 128.0f + 0);
 		//water->GetTransform()->Position(0, 0.1f, 0);
 	}
 	//Ocean
@@ -103,6 +103,16 @@ void PortFolio::Initialize()
 		bb8->AddTexture(L"Terrain/Tree5.png");
 	}
 
+	//Particle
+	{
+		particle = new ParticleSystem(L"Star");
+		particle1 = new ParticleSystem(L"Firecylinder");
+		particle2 = new ParticleSystem(L"Firecylindersmoke");
+		particle3 = new ParticleSystem(L"Firecylinderstar");
+		particle4 = new ParticleSystem(L"Spark2");
+		particle5 = new ParticleSystem(L"Trail_2");
+		
+	}
 	Mesh();
 	Weapon();
 	Dreyar();
@@ -192,12 +202,25 @@ void PortFolio::Destroy()
 	SafeDelete(sky);
 	SafeDelete(snow);
 	SafeDelete(rain);
-	SafeDelete(water);
+	SafeDelete(water); 
+	SafeDelete(particle);
+	SafeDelete(particle1);
+	SafeDelete(particle2);
+	SafeDelete(particle3);
 }
 
 void PortFolio::Update()
 {
-	ImGui::Begin("Terrain", nullptr);
+	
+
+	/*Matrix R, T;
+	D3DXMatrixRotationYawPitchRoll(&R, camerarotation.y, camerarotation.x, camerarotation.z);
+	D3DXMatrixTranslation(&T, cameraposition.x, cameraposition.y, cameraposition.z);
+
+	world = R * T;*/
+
+
+	ImGui::Begin("Terrain", nullptr, ImVec2(0, 250), 0.4f);
 	{
 		ImGui::SliderInt("Terrain", (int *)&terrain_num, 0, 2);
 		ImGui::Separator();
@@ -208,7 +231,9 @@ void PortFolio::Update()
 			terrain->Update();
 			if (!is_billboard) {}
 			else if (is_billboard)
+			{
 				BillboardLayer();
+			}
 
 		}
 		else if (terrain_num == 2)
@@ -254,6 +279,29 @@ void PortFolio::Update()
 				Vector3 rotation;
 				dreyar->GetTransform(0)->Rotation(&rotation);
 
+
+				//Orbit Camera 
+				//Setting.
+				ImGui::SliderFloat("cameraLatitude", &cameraLatitude, -10, 10);
+				ImGui::SliderFloat("cameraLongitude", &cameraLongitude, -2.0f, -1.6f);
+				ImGui::SliderFloat("orbitDistance", &orbitDistance, 10, 35);
+
+				camerarotation.x = -sinf(cameraLatitude) * cosf(cameraLongitude);
+				camerarotation.z = -sinf(cameraLongitude);
+				camerarotation.y = cosf(cameraLatitude) * cosf(cameraLongitude);
+				cameraposition.x = position.x - camerarotation.x * orbitDistance;
+				cameraposition.y = position.y - camerarotation.y * orbitDistance;
+				cameraposition.z = position.z - camerarotation.z * orbitDistance;
+
+				Context::Get()->GetCamera()->Position(cameraposition);
+				Context::Get()->GetCamera()->RotationDegree(camerarotation);
+
+				if (particle != NULL)
+				{
+					particle->Add(position);
+					particle->Update();
+				}				
+				
 				if (Keyboard::Get()->Press(VK_LBUTTON))
 				{
 					picked = terrain->GetPickedPosition();
@@ -261,46 +309,81 @@ void PortFolio::Update()
 					pickrotation = atan2f(picked.x - position.x, picked.z - position.z);
 
 					is_running = true;
-
-					is_sword_attack = false;
-					is_sword_jump_attack = false;
+					is_particle_attack_two = false;
+					is_particle_attack_one = false;
+					is_attackcombo_one = false;
+					is_attackcombo_two = false;
 					is_attacking = false;
 					is_heat = false;
 					is_death = false;
 				}
 
-				//공격키
+				//기본공격키
 				if (Keyboard::Get()->Press(VK_SPACE))
 				{
 					is_attacking = true;
-					is_arrow_initialize = false;
+					//is_arrow_initialize = true;
 					is_arrow_moving = false;
 
-					is_sword_attack = false;
-					is_sword_jump_attack = false;
+					is_particle_attack_two = false;
+					is_particle_attack_one = false;
+					is_attackcombo_one = false;
+					is_attackcombo_two = false;
 					is_running = false;
 					is_heat = false;
 					is_death = false;
 				}
 
-				//Player - Q key (범위공격)
+				//Player - Q key (소드어택콤보 1)
 				if (Keyboard::Get()->Down(0x51))
 				{
-					is_sword_attack = true;
+					is_attackcombo_one = true;
 
-					is_sword_jump_attack = false;
+					is_particle_attack_two = false;
+					is_particle_attack_one = false;
+					is_attackcombo_two = false;
 					is_attacking = false;
 					is_running = false;
 					is_heat = false;
 					is_death = false;
 				}
 
-				//Player - W key (대쉬공격)
+				//Player - W key (소드어택콤보 2)
 				if (Keyboard::Get()->Down(0x57))
 				{
-					is_sword_jump_attack = true;
+					is_attackcombo_two = true;
 
-					is_sword_attack = false;
+					is_particle_attack_two = false;
+					is_particle_attack_one = false;
+					is_attackcombo_one = false;
+					is_attacking = false;
+					is_running = false;
+					is_heat = false;
+					is_death = false;
+				}
+
+				//Player - E key (파티클 공격 - 1)
+				if (Keyboard::Get()->Down(0x45))
+				{
+					is_particle_attack_one = true;
+
+					is_particle_attack_two = false;
+					is_attackcombo_two = false;
+					is_attackcombo_one = false;
+					is_attacking = false;
+					is_running = false;
+					is_heat = false;
+					is_death = false;
+				}
+
+				//Player - R key (파티클 공격 - 2)
+				if (Keyboard::Get()->Down(0x52))
+				{
+					is_particle_attack_two = true;
+
+					is_particle_attack_one = false;
+					is_attackcombo_two = false;
+					is_attackcombo_one = false;
 					is_attacking = false;
 					is_running = false;
 					is_heat = false;
@@ -319,27 +402,9 @@ void PortFolio::Update()
 				ImGui::SliderFloat("monbowattackrange", &monbowattackrange, 0, 1000);
 				ImGui::SliderFloat("montracerange", &montracerange, 0, 1000);
 				ImGui::SliderFloat("monwaybackrange", &monwaybackrange, 0, 1000);
+				ImGui::SliderFloat("arrowposy", &arrowposy, 0, 10.0f);
 
-				if (is_sword_attack) //q
-				{
-					if (weapon_num == 0)
-					{
-						if (playerClip != 4)
-						{
-							playerClip = 4;
-							dreyar->PlayClip(0, playerClip, animspeed, taketime);
-						}
-					}
-					else if (weapon_num == 1)
-					{
-						if (playerClip != 11)
-						{
-							playerClip = 11;
-							dreyar->PlayClip(0, playerClip, animspeed, taketime);
-						}
-					}
-				}
-				else if (is_sword_jump_attack) //w
+				if (is_attackcombo_one) //q
 				{
 					if (weapon_num == 0)
 					{
@@ -351,42 +416,23 @@ void PortFolio::Update()
 					}
 					else if (weapon_num == 1)
 					{
-						if (playerClip != 12)
+						if (playerClip != 11)
 						{
-							playerClip = 12;
+							playerClip = 11;
 							dreyar->PlayClip(0, playerClip, animspeed, taketime);
 						}
+						int aaaaaa = dreyar->GetTime();
+						ImGui::SliderInt("aa", &aaaaaa, 0, 200);
+
+						if (dreyar->GetTime() == 13)
+							is_trail = true;
+
+						if (dreyar->GetTime() == 50)
+							is_trail = false;
+
 					}
 				}
-				else if (is_heat)
-				{
-					if (weapon_num == 0)
-					{
-						if (playerClip  != 7)
-						{
-							playerClip  = 7;
-							dreyar->PlayClip(0, playerClip , animspeed, taketime);
-						}
-					}
-					else if (weapon_num == 1)
-					{
-						if (playerClip  != 7)
-						{
-							playerClip  = 7;
-							dreyar->PlayClip(0, playerClip, animspeed, taketime);
-
-						}
-					}
-					else if (weapon_num == 2)
-					{
-						if (playerClip  != 7)
-						{
-							playerClip  = 7;
-							dreyar->PlayClip(0, playerClip, animspeed, taketime);
-						}
-					}
-				}//Is_heat
-				else if (is_attacking)
+				else if (is_attackcombo_two) //w
 				{
 					if (weapon_num == 0)
 					{
@@ -396,23 +442,150 @@ void PortFolio::Update()
 							dreyar->PlayClip(0, playerClip, animspeed, taketime);
 						}
 					}
-					if (weapon_num == 1)
+					else if (weapon_num == 1)
+					{
+						if (playerClip != 12)
+						{
+							playerClip = 12;
+							dreyar->PlayClip(0, playerClip, animspeed, taketime);
+						}
+
+						int aaaaaa = dreyar->GetTime();
+						ImGui::SliderInt("aa", &aaaaaa, 0, 200);
+
+
+						if (dreyar->GetTime() == 13)
+							is_trail = true;
+
+						if (dreyar->GetTime() == 70)
+							is_trail = false;
+					}
+				}
+				else if (is_particle_attack_one && weapon_num == 0) //e
+				{
+					Vector3 meshposition;
+					sphere->GetTransform(0)->Position(&meshposition);
+					
+					if (is_particle_attack_once)
+					{
+						meshposition = position;
+						is_particle_attack_once = false;
+					}
+
+					{
+						particle1->Add(meshposition);
+						particle1->Update();
+						particle2->Add(meshposition);
+						particle2->Update();
+						particle3->Add(meshposition);
+						particle3->Update();
+						particle4->Add(meshposition);
+						particle4->Update();
+					}
+
+					if (playerClip != 13)
+					{
+						playerClip = 13;
+						dreyar->PlayClip(0, playerClip, animspeed, taketime);
+						sphere->GetTransform(0)->Position(dreyar->GetAttachTransform(0)._41, dreyar->GetAttachTransform(0)._42, dreyar->GetAttachTransform(0)._43);
+						is_particle_attack_once = true;
+					}
+						
+					meshposition.x += 0.15f * sinf(pickrotation);
+					meshposition.z += 0.15f * cosf(pickrotation);
+
+					sphere->GetTransform(0)->Position(meshposition);
+					
+				}
+				else if (is_particle_attack_two && weapon_num == 0) //R
+				{
+					if (playerClip != 14)
+					{
+						playerClip = 14;
+						dreyar->PlayClip(0, playerClip, animspeed, taketime);
+					}
+
+				}
+				else if (is_attacking)
+				{
+					if (weapon_num == 0)
+					{
+						if (playerClip != 4)
+						{
+							playerClip = 4;
+							dreyar->PlayClip(0, playerClip, animspeed, taketime);
+						}
+					}
+					else if (weapon_num == 1)
 					{
 						if (playerClip  != 10)
 						{
-							playerClip  = 10;							
+							playerClip  = 10;	
 							dreyar->PlayClip(0, playerClip, animspeed, taketime);
+						}
+						
+						if (dreyar->GetTime() == 13)
+							is_trail = true;
+						
+						if (dreyar->GetTime() == 30)
+							is_trail = false;
+					}
+					else if (weapon_num == 2)
+					{
+						if (playerClip  != 17)
+						{
+							playerClip  = 17;
+							dreyar->PlayClip(0, playerClip, animspeed * 2, taketime);
+						}						
+
+						if (!is_arrow_initialize)
+						{
+							if (playerClip != 17)
+							{
+								playerClip = 17;
+								dreyar->PlayClip(0, playerClip, animspeed, taketime);
+							}
+
+							arrow_position = position;
+							arrow_position.y = position.y + arrowposy;
+
+							arrow_rotation.x = rotation.x;
+							arrow_rotation.y = rotation.y;
+							arrow_rotation.z = rotation.z;
+							weaponArrow->GetTransform(0)->Rotation(arrow_rotation.x - 1.56f, arrow_rotation.y, arrow_rotation.z - 3.14f);
+							is_arrow_initialize = true;
+							is_arrow_moving = true;
+						}
+					}
+				}//Attacking
+				else if (is_heat)
+				{
+					if (weapon_num == 0)
+					{
+						if (playerClip != 7)
+						{
+							playerClip = 7;
+							dreyar->PlayClip(0, playerClip, animspeed, taketime);
+						}
+					}
+					else if (weapon_num == 1)
+					{
+						if (playerClip != 7)
+						{
+							playerClip = 7;
+							dreyar->PlayClip(0, playerClip, animspeed, taketime);
+
 						}
 					}
 					else if (weapon_num == 2)
 					{
-						if (playerClip  != 8)
+						if (playerClip != 7)
 						{
-							playerClip  = 8;
+							playerClip = 7;
 							dreyar->PlayClip(0, playerClip, animspeed, taketime);
 						}
 					}
-				}//Attacking
+				}//Is_heat
 				else if (is_running)
 				{
 					if (playerClip  != 1)
@@ -427,6 +600,7 @@ void PortFolio::Update()
 					}
 
 					position.x += 0.15f * sinf(pickrotation);
+					position.y = terrain->GetHeight(position);
 					position.z += 0.15f * cosf(pickrotation);
 
 					if (abs(picked.x - position.x) < 0.2f && abs(picked.z - position.z) < 0.2f)
@@ -441,7 +615,7 @@ void PortFolio::Update()
 						}
 					}
 				}//Running
-				else  //Idle
+				else  
 				{
 					if (weapon_num == 0)
 					{
@@ -459,7 +633,32 @@ void PortFolio::Update()
 							dreyar->PlayClip(0, playerClip, animspeed, taketime);
 						}
 					}
-				}//Idle
+				}
+				//Idle
+
+
+				if (is_arrow_moving && is_arrow_initialize)
+				{
+					arrow_position.x -= 1.5f * sinf(arrow_rotation.y);
+					arrow_position.z -= 1.5f * cosf(arrow_rotation.y);
+
+					weaponArrow->GetTransform(0)->Position(arrow_position);
+					//weaponArrow->UpdateTransforms();
+				}
+
+				//if (arrow_position.x < 0.0f || arrow_position.x > 256.0f ||
+				//	arrow_position.z < 0.0f || arrow_position.z > 256.0f)
+				//{
+				//	is_arrow_initialize = false;
+				//	weaponArrow->GetTransform(0)->Position(-1000, -1000, -1000);
+				//}
+				if (is_attacking && dreyar->GetTime() == 40)
+				{
+					is_arrow_initialize = false;
+					is_arrow_moving = true;
+				}
+
+				
 
 
 				dreyar->GetTransform(0)->Position(position);
@@ -473,18 +672,19 @@ void PortFolio::Update()
 						is_mon_attack[i] = false;
 						is_mon_patrol[i] = false;
 					}
-					else if (is_sword_attack && powf(mon_position[i].x - position.x, 2) + powf(mon_position[i].z - position.z, 2) < 100.0f &&
+					/*else if (is_attackcombo_two && powf(mon_position[i].x - position.x, 2) + powf(mon_position[i].z - position.z, 2) < sword_jump_attack_range &&
 						dreyar->GetTime() > 45)
 					{
 						is_mon_heat[i] = true;
-					}
-					else if (powf(mon_position[i].x - position.x, 2) + powf(mon_position[i].z - position.z, 2) < monwaybackrange &&
-						powf(mon_position[i].x - position.x, 2) + powf(mon_position[i].z - position.z, 2) > montracerange)
+					}*/
+					else if (powf(mon_position[i].x - position.x, 2) + powf(mon_position[i].z - position.z, 2) < montracerange &&
+						powf(mon_position[i].x - position.x, 2) + powf(mon_position[i].z - position.z, 2) > monattackrange)
 					{
 						is_mon_running[i] = true;
 					}
-					else if (powf(mon_position[i].x - position.x, 2) + powf(mon_position[i].z - position.z, 2) < monattackrange)
+					else if (powf(mon_position[i].x - position.x, 2) + powf(mon_position[i].z - position.z, 2) <= monattackrange)
 					{
+						is_mon_running[i] = false;
 						is_mon_attack[i] = true;
 						is_mon_patrol[i] = false;
 					}
@@ -508,6 +708,20 @@ void PortFolio::Update()
 
 						is_mon_death[i] = true;
 					}
+					else if (is_mon_attack[i] && mon_hp[i] > 0.0f)
+					{
+						if (clip[i] != 2)
+						{
+							clip[i] = 2;
+							castleGuardSword->PlayClip(i, clip[i], monanimspeed, montaketime);
+						}
+						
+						if (powf(mon_position[i].x - position.x, 2) + powf(mon_position[i].z - position.z, 2) > monattackrange)
+						{
+							is_mon_running[i] = true;
+							is_mon_attack[i] = false;
+						}
+					}
 					else if (is_mon_running[i] && mon_hp[i] > 0.0f)
 					{
 						if (clip[i] != 1)
@@ -528,7 +742,7 @@ void PortFolio::Update()
 							is_mon_attack[i] = false;
 						}
 
-						if (powf(mon_position[i].x - position.x, 2) + powf(mon_position[i].z - position.z, 2) < monattackrange)
+						if (powf(mon_position[i].x - position.x, 2) + powf(mon_position[i].z - position.z, 2) <= monattackrange)
 						{
 							is_mon_running[i] = false;
 							is_mon_attack[i] = true;
@@ -547,19 +761,11 @@ void PortFolio::Update()
 						mon_position[i].z -= 0.15f * cosf(rotationy);
 						castleGuardSword->GetTransform(i)->Position(mon_position[i]);
 
-						if (powf(mon_position[i].x - mon_waypoint[i].x, 2) + powf(mon_position[i].z - mon_waypoint[i].z, 2) < 10.0f)
+						/*if (powf(mon_position[i].x - mon_waypoint[i].x, 2) + powf(mon_position[i].z - mon_waypoint[i].z, 2) < 10.0f)
 						{
 							is_mon_running_to_waypoint[i] = false;
 							is_mon_patrol[i] = true;
-						}
-					}
-					else if (is_mon_attack[i] && mon_hp[i] > 0.0f)
-					{
-						if (clip[i] != 2)
-						{
-							clip[i] = 2;
-							castleGuardSword->PlayClip(i, clip[i], monanimspeed, montaketime);
-						}
+						}*/
 					}
 					else if (is_mon_patrol[i] && mon_hp[i] > 0.0f)
 					{
@@ -598,15 +804,18 @@ void PortFolio::Update()
 							mon_direction[i] = 3;
 						}
 
-						castleGuardSword->GetTransform(i)->Position(mon_position[i]);
+						//castleGuardSword->GetTransform(i)->Position(mon_position[i]);
 						castleGuardSword->GetTransform(i)->RotationDegree(mon_rotation[i]);
 					}
 
 					if (is_mon_death[i])
 					{
-						if (castleGuardSword->GetTime(i) >= 65)
+						if (castleGuardSword->GetTime(i) == 55)
 							castleGuardSword->SetStopAnim(i, true);
 					}
+					mon_position[i].y = terrain->GetHeight(mon_position[i]);
+					castleGuardSword->GetTransform(i)->Position(mon_position[i]);
+
 				}
 
 				//castleGuardBow
@@ -617,18 +826,19 @@ void PortFolio::Update()
 						is_mon_attack[i] = false;
 						is_mon_patrol[i] = false;
 					}
-					else if (is_sword_attack && powf(mon_position[i].x - position.x, 2) + powf(mon_position[i].z - position.z, 2) < 1000.0f &&
+					/*else if (is_attackcombo_two && powf(mon_position[i].x - position.x, 2) + powf(mon_position[i].z - position.z, 2) < sword_jump_attack_range &&
 						dreyar->GetTime() > 45)
 					{
 						is_mon_heat[i] = true;
-					}
-					else if (powf(mon_position[i].x - position.x, 2) + powf(mon_position[i].z - position.z, 2) < monwaybackrange &&
-						powf(mon_position[i].x - position.x, 2) + powf(mon_position[i].z - position.z, 2) >= montracerange)
+					}*/
+					else if (powf(mon_position[i].x - position.x, 2) + powf(mon_position[i].z - position.z, 2) < montracerange &&
+						powf(mon_position[i].x - position.x, 2) + powf(mon_position[i].z - position.z, 2) > monbowattackrange)
 					{
 						is_mon_running[i] = true;
 					}
-					else if (powf(mon_position[i].x - position.x, 2) + powf(mon_position[i].z - position.z, 2) < monbowattackrange)
+					else if (powf(mon_position[i].x - position.x, 2) + powf(mon_position[i].z - position.z, 2) <= monbowattackrange)
 					{
+						is_mon_running[i] = false;
 						is_mon_attack[i] = true;
 						is_mon_patrol[i] = false;
 					}
@@ -645,9 +855,9 @@ void PortFolio::Update()
 
 						mon_hp[i] = 0.0f;
 
-						if (clip[i] != 3)
+						if (clip[i] != 5)
 						{
-							clip[i] = 3;
+							clip[i] = 5;
 							castleGuardBow->PlayClip(i - 5, clip[i], monanimspeed, montaketime);
 						}
 
@@ -672,7 +882,7 @@ void PortFolio::Update()
 							is_mon_running[i] = false;
 							is_mon_attack[i] = false;
 						}
-						if (powf(mon_position[i].x - position.x, 2) + powf(mon_position[i].z - position.z, 2) < monbowattackrange)
+						if (powf(mon_position[i].x - position.x, 2) + powf(mon_position[i].z - position.z, 2) <= monbowattackrange)
 						{
 							is_mon_running[i] = false;
 							is_mon_attack[i] = true;
@@ -706,12 +916,12 @@ void PortFolio::Update()
 						if (!is_monarrow_initialize[i - 5])
 						{
 							monarrow_position[i - 5] = mon_position[i];
-							monarrow_position[i - 5].y = 10.0f;
+							monarrow_position[i - 5].y = mon_position[i].y + monarrowposy;
 
 							monarrow_rotation[i - 5].x = mon_rotation[i].x;
 							monarrow_rotation[i - 5].y = rotationarrow;
 							monarrow_rotation[i - 5].z = mon_rotation[i].z;
-							weaponArrow->GetTransform(i + 1)->Rotation(monarrow_rotation[i - 5].x - 1.56f, monarrow_rotation[i - 5].y, monarrow_rotation[i - 5].z - 3.14f);
+							weaponArrow->GetTransform(i - 4)->Rotation(monarrow_rotation[i - 5].x - 1.56f, monarrow_rotation[i - 5].y, monarrow_rotation[i - 5].z - 3.14f);
 							is_monarrow_initialize[i - 5] = true;
 							is_monarrow_moving[i - 5] = true;
 						}
@@ -719,7 +929,7 @@ void PortFolio::Update()
 						if (clip[i] != 4)
 						{
 							clip[i] = 4;
-							castleGuardBow->PlayClip(i - 5, clip[i], monanimspeed, montaketime);
+							castleGuardBow->PlayClip(i - 5, clip[i], monanimspeed * 2, montaketime);
 						}
 					}
 					else if (is_mon_patrol[i] && mon_hp[i] > 0.0f)
@@ -759,36 +969,112 @@ void PortFolio::Update()
 							mon_direction[i] = 3;
 						}
 
-						castleGuardBow->GetTransform(i - 5)->Position(mon_position[i]);
+						//castleGuardBow->GetTransform(i - 5)->Position(mon_position[i]);
 						castleGuardBow->GetTransform(i - 5)->RotationDegree(mon_rotation[i]);
 					}
 
 					if (is_monarrow_moving[i - 5] && is_monarrow_initialize[i - 5])
 					{
-						monarrow_position[i - 10].x -= 1.5f * sinf(monarrow_rotation[i - 5].y);
-						monarrow_position[i - 10].z -= 1.5f * cosf(monarrow_rotation[i - 5].y);
+						monarrow_position[i - 5].x -= 1.5f * sinf(monarrow_rotation[i - 5].y);
+						monarrow_position[i - 5].z -= 1.5f * cosf(monarrow_rotation[i - 5].y);
 
-						weaponArrow->GetTransform(i + 1)->Position(monarrow_position[i - 5]);
+						weaponArrow->GetTransform(i - 4)->Position(monarrow_position[i - 5]);
 					}
 
-					if (monarrow_position[i - 5].x < 0.0f || monarrow_position[i - 5].x > 256.0f ||
+					/*if (monarrow_position[i - 5].x < 0.0f || monarrow_position[i - 5].x > 256.0f ||
 						monarrow_position[i - 5].z < 0.0f || monarrow_position[i - 5].z > 256.0f)
 					{
 						is_monarrow_initialize[i - 5] = false;
-						weaponArrow->GetTransform(i + 1)->Position(-1000, -1000, -1000);
+						weaponArrow->GetTransform(i - 4)->Position(-1000, -1000, -1000);
+					}*/
+					
+
+					if (is_mon_attack[i] && castleGuardBow->GetTime(i - 5) == 40)
+					{
+						is_monarrow_initialize[i - 5] = false;
+						is_monarrow_moving[i - 5] = true;
 					}
 
 					if (is_mon_death[i])
 					{
-						if (castleGuardBow->GetTime(i - 5) >= 65)
+						if (castleGuardBow->GetTime(i - 5) == 55)
 							castleGuardBow->SetStopAnim(i - 5, true);
 					}
-				}
+					mon_position[i].y = terrain->GetHeight(mon_position[i]);
+					castleGuardBow->GetTransform(i - 5)->Position(mon_position[i]);
 
+				}//bow
+
+				sphere->UpdateTransforms();
+				weaponArrow->UpdateTransforms();
 				castleGuardBow->UpdateTransforms();
 				castleGuardSword->UpdateTransforms();
 				dreyar->UpdateTransforms();
 				dreyar->Update();
+				castleGuardSword->Update();
+				castleGuardBow->Update();
+				weaponArrow->Update();
+
+				//Collision
+
+				//Player
+				{
+					Matrix player_matrix = dreyar->GetTransform(0)->World();
+					player_colliders.Collider->GetTransform()->World(player_matrix);
+					player_colliders.Collider->Update();
+				}
+
+				//Player Sword
+				{
+					Matrix player_sword = dreyar->GetAttachTransform(0);
+					player_sword_colliders.Collider->GetTransform()->World(player_sword);
+					if (weapon_num == 1)
+						player_sword_colliders.Collider->Update();
+
+					Vector3 position2;
+					Vector3 scale2;
+					Vector3 rotation2;
+					Math::MatrixDecompose(player_sword, scale2, rotation2, position2);
+
+					if (particle5 != NULL && is_trail)
+					{
+						particle5->Add(position2);
+						particle5->Update();
+					}
+				}
+
+				//Monster Body
+				for (int i = 0; i < 5; i++)
+				{
+					Matrix attach2 = castleGuardSword->GetTransform(i)->World();
+					monster_colliders[i].Collider->GetTransform()->World(attach2);
+					monster_colliders[i].Collider->Update();
+				}
+				for (int i = 5; i < 10; i++)
+				{
+					Matrix attach2 = castleGuardBow->GetTransform(i - 5)->World();
+					monster_colliders[i].Collider->GetTransform()->World(attach2);
+					monster_colliders[i].Collider->Update();
+				}
+
+				//Mon Sword
+				for (int i = 0; i < 5; i++)
+				{
+					Matrix attach2 = castleGuardSword->GetAttachTransform(i);
+					mon_sword_colliders[i].Collider->GetTransform()->World(attach2);
+					mon_sword_colliders[i].Collider->Update();
+				}
+
+				//Arrow
+				for (int i = 0; i < 6; i++)
+				{
+					Matrix attach3 = weaponArrow->GetTransform(i)->World();
+
+					attach3._42 = arrowposy;
+
+					arrow_colliders[i].Collider->GetTransform()->World(attach3);
+					arrow_colliders[i].Collider->Update();
+				}
 			}
 		}
 		else if (!is_model)
@@ -807,14 +1093,23 @@ void PortFolio::Update()
 	ImGui::Begin("Water", nullptr);
 	{
 		ImGui::Checkbox("Water", &is_water);
-		water->Update();
+		if (is_water)
+		{
+			Vector3 position;
+			water->GetTransform()->Position(&position);
+			ImGui::SliderFloat3("pos", position, 0, 5);
+			water->GetTransform()->Position(position);
+			water->Update();
+		}
 	}
 	ImGui::End();
 
 	ImGui::Begin("Ocean", nullptr);
 	{
 		ImGui::Checkbox("Ocean", &is_ocean);
-		ocean->Update(Time::Get()->Running());
+
+		if(is_ocean)
+			ocean->Update(Time::Get()->Running());
 	}
 	ImGui::End();
 
@@ -896,8 +1191,9 @@ void PortFolio::PreRender()
 		if (is_model)
 		{
 			//kachujin->Render();
-			castleGuardSword->Render();
+			castleGuardSword->Render2();
 			castleGuardBow->Render3();
+			weaponArrow->Render();
 
 			if (dreyar != NULL)
 			{
@@ -970,8 +1266,7 @@ void PortFolio::PreRender()
 		bb8->Render();
 
 	}
-
-	
+		
 	//Reflection
 	{
 		water->PreRender_Reflection();
@@ -993,8 +1288,9 @@ void PortFolio::PreRender()
 		if (is_model)
 		{
 			//kachujin->Render();
-			castleGuardSword->Render();
+			castleGuardSword->Render2();
 			castleGuardBow->Render3();
+			weaponArrow->Render();
 
 			if (dreyar != NULL)
 			{
@@ -1090,8 +1386,9 @@ void PortFolio::PreRender()
 		if (is_model)
 		{
 			//kachujin->Render();
-			castleGuardSword->Render();
-			castleGuardBow->Render();
+			weaponArrow->Render();
+			castleGuardSword->Render2();
+			castleGuardBow->Render3();
 			if (dreyar != NULL)
 			{
 				//dreyar->Pass(15);
@@ -1198,10 +1495,23 @@ void PortFolio::Render()
 
 	if (is_model)
 	{
-		castleGuardSword->Render();
+		weaponArrow->Render();
+		castleGuardSword->Render2();
 		castleGuardBow->Render3();
 		if (dreyar != NULL)
 		{
+			if (particle != NULL)
+				particle->Render();
+
+			
+
+			if (is_particle_attack_one)
+			{
+				particle1->Render();
+				particle2->Render();
+				particle3->Render();
+				particle4->Render();
+			}
 			if (weapon_num == 0)
 			{
 				if (is_bow)
@@ -1217,6 +1527,9 @@ void PortFolio::Render()
 			}
 			else if (weapon_num == 1)
 			{
+				if (particle5 != NULL && is_trail)
+					particle5->Render();
+
 				if (is_unarmed)
 				{
 					Transform attachTransform;
@@ -1250,10 +1563,115 @@ void PortFolio::Render()
 				dreyar->Render3();
 			}
 		}
+
+		//충돌
+		//Player - MonSword
+		for (int i = 0; i < 5; i++)
+		{
+			is_collision_sword[i] = player_colliders.Collider->IsIntersect(mon_sword_colliders[i].Collider);
+			if (is_collision_sword[i] == true)
+				is_collision = true;
+		}
+		//Player - MonArrow
+		for (int i = 1; i < 6; i++)
+		{
+			is_collision_arrow[i] = player_colliders.Collider->IsIntersect(arrow_colliders[i].Collider);
+			if (is_collision_arrow[i] == true)
+				is_collision = true;
+		}
+		if (
+			is_collision_sword[0] == false && 
+			is_collision_sword[1] == false && 
+			is_collision_sword[2] == false && 
+			is_collision_sword[3] == false && 
+			is_collision_sword[4] == false && 												
+			is_collision_arrow[1] == false &&	
+			is_collision_arrow[2] == false &&	
+			is_collision_arrow[3] == false &&	
+			is_collision_arrow[4] == false &&	
+			is_collision_arrow[5] == false  
+			)
+			is_collision = false;
+
+		//Playersword - Monbody
+		for (int i = 0; i < 10; i++)
+		{
+			if ((weapon_num == 1 && is_attacking) || (weapon_num == 1 && is_attackcombo_two))
+			{
+				is_collision_sword_mon[i] = monster_colliders[i].Collider->IsIntersect(player_sword_colliders.Collider);
+				if (is_collision_sword_mon[i] == true)
+					is_mon_heat[i] = true;
+			}
+			//Playerarrow - Monbody	
+			if (weapon_num == 2 && is_arrow_moving)
+			{
+				is_collision_arrow_mon[i] = monster_colliders[i].Collider->IsIntersect(arrow_colliders[0].Collider);
+				if (is_collision_arrow_mon[i] == true)
+					is_mon_heat[i] = true;
+			}
+
+			if (is_collision_sword_mon[i] == false && is_collision_arrow_mon[i] == false)
+				is_mon_heat[i] = false;
+		}
+
+		for (int i = 0; i < 10; i++)
+		{
+			if ((weapon_num == 0 && is_particle_attack_one))
+			{
+				Vector3 meshposition;
+				sphere->GetTransform(0)->Position(&meshposition);
+
+				if (powf(mon_position[i].x - meshposition.x, 2) + powf(mon_position[i].z - meshposition.z, 2) < 10.0f)
+				{
+					is_mon_heat[i] = true;
+				}
+			}
+		}
+
+
+		if (is_collision)
+		{
+			is_heat = true;
+		}
+
+		ImGui::Checkbox("collider render", &is_collider_rendering);
+		
+		if (is_collider_rendering)
+		{
+			//충돌체 처리
+			player_colliders.Collider->Render(is_collision ? Color(1, 0, 0, 1) : Color(0, 1, 0, 1));
+
+			//player sword
+			if (weapon_num == 1)
+				player_sword_colliders.Collider->Render(Color(0, 1, 0, 1));
+
+
+			//monster body
+			for (int i = 0; i < 10; i++)
+			{
+				if (is_mon_death[i] == false)
+					monster_colliders[i].Collider->Render(is_mon_heat[i] ? Color(1, 0, 0, 1) : Color(0, 1, 0, 1));
+			}
+
+			//mon sword
+			for (int i = 0; i < 5; i++)
+			{
+				if (is_mon_death[i] == false)
+					mon_sword_colliders[i].Collider->Render(Color(0, 1, 0, 1));
+			}
+
+			//arrow
+			for (int i = 0; i < 6; i++)
+			{
+				arrow_colliders[i].Collider->Render(Color(0, 1, 0, 1));
+			}
+
+		}
+
 	}
 	else if (!is_model)
 	{
-
+		
 	}
 
 	if (is_weather)
@@ -1270,9 +1688,9 @@ void PortFolio::Render()
 	}	
 
 	//Height Text
-	Vector3 picked = terrainLod->GetPickedPosition();
-	string str = to_string(picked.x) + ", " + to_string(picked.y) + ", " + to_string(picked.z);
-	Gui::Get()->RenderText(Vector2(10, 60), Color(1, 0, 0, 1), "Picked : " + str);
+	//Vector3 picked = terrainLod->GetPickedPosition();
+	//string str = to_string(picked.x) + ", " + to_string(picked.y) + ", " + to_string(picked.z);
+	//Gui::Get()->RenderText(Vector2(10, 60), Color(1, 0, 0, 1), "Picked : " + str);
 
 	
 	bb->Render();
@@ -1309,16 +1727,11 @@ void PortFolio::Mesh()
 	{
 		Transform* transform = NULL;
 
-		sphere = new MeshRender(shader, new MeshSphere(0.5f, 20, 20));
+		sphere = new MeshRender(shader, new MeshSphere(0.1f, 20, 20));
 		
 		transform = sphere->AddTransform();
-		transform->Position(128.0f + -30, 15.5f, 128.0f + -15.0f + (float)0 * 15.0f);
-		transform->Scale(5, 5, 5);
-
-		transform = sphere->AddTransform();
-		transform->Position(128.0f + 30, 15.5f, 128.0f + -15.0f + (float)0 * 15.0f);
-		transform->Scale(5, 5, 5);
-		
+		transform->Position(128.0f + -30, 0, 128.0f + -15.0f + (float)0 * 15.0f);
+		transform->Scale(0.1f, 0.1f, 0.1f);
 	}
 
 	sphere->UpdateTransforms();
@@ -1339,49 +1752,16 @@ void PortFolio::Weapon()
 	weaponArrow = new ModelRender(shader);
 	weaponArrow->ReadMaterial(L"Weapon/LongArrow");
 	weaponArrow->ReadMesh(L"Weapon/LongArrow");
-	for (float x = 0; x < 100; x += 2.5f)
+	for (float x = 0; x < 6; x++)
 	{
 		Transform* transform_arrow = weaponArrow->AddTransform();
 		transform_arrow->Position(x - 1000, 0, -1000);
 		transform_arrow->RotationDegree(Vector3(0, 0, 90));
-		transform_arrow->Scale(30.0f, 30.0f, 30.0f);
+		transform_arrow->Scale(0.1f, 0.1f, 0.1f);
 	}
 	models.push_back(weaponArrow);
 	weaponArrow->Render();
 }
-//
-//void PortFolio::Kachujin()
-//{
-//	kachujin = new ModelAnimator(shader);
-//	kachujin->ReadMaterial(L"Kachujin/Mesh");
-//	kachujin->ReadMesh(L"Kachujin/Mesh");
-//	kachujin->ReadClip(L"Kachujin/Idle");
-//	kachujin->ReadClip(L"Kachujin/Running");
-//	kachujin->ReadClip(L"Kachujin/Jump");
-//	kachujin->ReadClip(L"Kachujin/Hip_Hop_Dancing");
-//
-//	Transform attachTransform;
-//
-//	attachTransform.Position(-10, 0, -10);
-//	attachTransform.Scale(1.0f, 1.0f, 1.0f);
-//
-//	kachujin->GetModel()->Attach(shader, weaponSword, 35, &attachTransform);
-//
-//
-//	Transform* transform = NULL;
-//
-//	transform = kachujin->AddTransform();
-//	transform->Position(128.0f + -25, 0, 128.0f + -30);
-//	transform->Scale(0.075f, 0.075f, 0.075f);
-//	kachujin->PlayClip(0, 0, 0.25f);
-//
-//	kachujin->UpdateTransforms();
-//
-//	animators.push_back(kachujin);
-//
-//
-//	
-//}
 
 void PortFolio::Dreyar()
 {
@@ -1403,47 +1783,16 @@ void PortFolio::Dreyar()
 	dreyar->ReadClip(L"Dreyar/AttackCombo_3");				//12
 	dreyar->ReadClip(L"Dreyar/MagicAttack_1");				//13
 	dreyar->ReadClip(L"Dreyar/MagicAttack_2");				//14
-
-	/*dreyar->SetWeaponNum(0);
-	dreyar->Render();
-
-	Transform attachspineTransform;
-	attachspineTransform.Position(-90, 330, 200);
-	attachspineTransform.Rotation(-1.7f, 0, 1.7f);
-	attachspineTransform.Scale(10.0f, 10.0f, 10.0f);
-
-	dreyar->SetWeaponNum(1);
-	dreyar->GetModel()->Attach(shader, weaponSword, 3, &attachspineTransform);
-	dreyar->GetModel()->Attach(shader, weaponBow, 4, &attachspineTransform);
-	dreyar->Render2();
+	dreyar->ReadClip(L"Dreyar/StandingDrawArrow");			//15
+	dreyar->ReadClip(L"Dreyar/StandingAimRecoil");			//16
+	dreyar->ReadClip(L"Dreyar/ShootingArrow");				//17
+	dreyar->ReadClip(L"Dreyar/StandingDeathRight");			//18
 
 	Transform attachTransform;
 	attachTransform.Position(-60, -20, -200);
 	attachTransform.Scale(10.0f, 10.0f, 10.0f);
 
-	dreyar->SetWeaponNum(2);
-	dreyar->GetModel()->Dettach(weaponSword, 3);
-	dreyar->GetModel()->Attach(shader, weaponSword, 36, &attachTransform);
-	dreyar->Render3();
-
-	dreyar->SetWeaponNum(3);
-	dreyar->GetModel()->Dettach(weaponSword, 36);
-	attachTransform.Position(-9.0f, -3.0f, 0.0f);
-	attachTransform.RotationDegree(90, -90, 150);
-	attachTransform.Scale(10.0f, 10.0f, 10.0f);
-	dreyar->GetModel()->Attach(shader, weaponSword, 3, &attachTransform);
-	dreyar->GetModel()->Dettach(weaponBow, 4);
-	dreyar->GetModel()->Attach(shader, weaponBow, 36, &attachTransform);
-	dreyar->Render4();
-
-	dreyar->GetModel()->Dettach(weaponSword, 3);
-	dreyar->GetModel()->Dettach(weaponBow, 36);
-	dreyar->SetWeaponNum(0);
-*/
-	Transform attachTransform;
-	attachTransform.Position(-60, -20, -200);
-	attachTransform.Scale(10.0f, 10.0f, 10.0f);
-
+	dreyar->SetAttachBone(36);
 	dreyar->SetWeaponNum(0);
 	dreyar->Render();
 
@@ -1462,24 +1811,44 @@ void PortFolio::Dreyar()
 	dreyar->GetModel()->Dettach(weaponBow, 36);
 	dreyar->SetWeaponNum(0);
 
-
 	Transform* transform = dreyar->AddTransform();
-	transform->Position(128.0f, 5, 128.0f);
+	transform->Position(128.0f, 0, 128.0f);
 	transform->Scale(0.001f, 0.001f, 0.001f);
 
 	dreyar->UpdateTransforms();
 
 	animators.push_back(dreyar);
 
-	/*for (UINT i = 0; i < 4; i++)
+	//충돌 - Player Body
 	{
-		colliders[i].Init = new Transform();
-		colliders[i].Init->Scale(10, 10, 120);
-		colliders[i].Init->Position(-10, 0, -60);
+		player_colliders.Init = new Transform();
+		player_colliders.Init->Scale(400, 1600, 400);
+		player_colliders.Init->Position(0, 800, 0);
 
-		colliders[i].Transform = new Transform();
-		colliders[i].Collider = new Collider(colliders[i].Transform, colliders[i].Init);
-	}*/
+		player_colliders.Transform = new Transform();
+		player_colliders.Collider = new Collider(player_colliders.Transform, player_colliders.Init);
+	}
+
+	//Player Sword
+	{
+		player_sword_colliders.Init = new Transform();
+		player_sword_colliders.Init->Scale(100, 100, 1200);
+		player_sword_colliders.Init->Position(-100, 0, -700);
+
+		player_sword_colliders.Transform = new Transform();
+		player_sword_colliders.Collider = new Collider(player_sword_colliders.Transform, player_sword_colliders.Init);
+	}
+
+	//Collision - Arrow
+	for (int i = 0; i < 6; i++)
+	{
+		arrow_colliders[i].Init = new Transform();
+		arrow_colliders[i].Init->Scale(1, 15, 1);
+		arrow_colliders[i].Init->Position(0, 0, 0);
+
+		arrow_colliders[i].Transform = new Transform();
+		arrow_colliders[i].Collider = new Collider(arrow_colliders[i].Transform, arrow_colliders[i].Init);
+	}
 }
 
 void PortFolio::CastleGuardSword()
@@ -1487,39 +1856,50 @@ void PortFolio::CastleGuardSword()
 	castleGuardSword = new ModelAnimator(shader);
 	castleGuardSword->ReadMaterial(L"CastleGuard/Mesh");
 	castleGuardSword->ReadMesh(L"CastleGuard/Mesh");
-	castleGuardSword->ReadClip(L"CastleGuard/Idle");
-	castleGuardSword->ReadClip(L"CastleGuard/Running");
-	castleGuardSword->ReadClip(L"CastleGuard/Attacking");
-	castleGuardSword->ReadClip(L"CastleGuard/StandingReactLeft");
-	castleGuardSword->ReadClip(L"CastleGuard/ShootingArrow");
-	castleGuardSword->ReadClip(L"CastleGuard/StandingDeathBackward");
+	castleGuardSword->ReadClip(L"CastleGuard/Idle");					//0
+	castleGuardSword->ReadClip(L"CastleGuard/Running");					//1
+	castleGuardSword->ReadClip(L"CastleGuard/Attacking");				//2
+	castleGuardSword->ReadClip(L"CastleGuard/StandingReactLeft");		//3
+	castleGuardSword->ReadClip(L"CastleGuard/ShootingArrow");			//4 - 150frame
+	castleGuardSword->ReadClip(L"CastleGuard/StandingDeathBackward");	//5 - 77frame
 
 	Transform attachTransform;
 	attachTransform.Position(-10, 0, -10);
 	attachTransform.Scale(1.0f, 1.0f, 1.0f);
-
+	
+	castleGuardSword->SetAttachBone(23);
+	castleGuardSword->SetWeaponNum(1);
 	castleGuardSword->GetModel()->Attach(shader, weaponSword, 23, &attachTransform);
+	castleGuardSword->Render2();
+	castleGuardSword->CreateComputeDesc();
 
 	std::mt19937 engine3((unsigned int)time(NULL));               // MT19937 난수 엔진
 	std::uniform_real_distribution<float> distribution3(0.0f, 20.0f);       // 생성 범위
 	auto generator3 = bind(distribution3, engine3);
-
-	/*Transform* transform = castleGuardSword->AddTransform();
-	transform->Position(126.0f, 5, 128.0f);
-	transform->Scale(0.01f, 0.01f, 0.01f);*/
 
 	Transform* transform = NULL;	
 
 	for (UINT i = 0; i < 5; i++)
 	{
 		transform = castleGuardSword->AddTransform();
-		transform->Position(126.0f + generator3(), 5, 128.0f + generator3());
+		transform->Position(120.0f + generator3(), 0, 120.0f + generator3());
 		transform->Scale(0.01f, 0.01f, 0.01f);
 	}
 
 	castleGuardSword->UpdateTransforms();
 
 	animators.push_back(castleGuardSword);
+
+	//충돌처리
+	for (UINT i = 0; i < 5; i++)
+	{
+		mon_sword_colliders[i].Init = new Transform();
+		mon_sword_colliders[i].Init->Scale(10, 10, 120);
+		mon_sword_colliders[i].Init->Position(-10, 0, -60);
+
+		mon_sword_colliders[i].Transform = new Transform();
+		mon_sword_colliders[i].Collider = new Collider(mon_sword_colliders[i].Transform, mon_sword_colliders[i].Init);
+	}
 }
 
 
@@ -1528,12 +1908,12 @@ void PortFolio::CastleGuardBow()
 	castleGuardBow = new ModelAnimator(shader);
 	castleGuardBow->ReadMaterial(L"CastleGuard/Mesh");
 	castleGuardBow->ReadMesh(L"CastleGuard/Mesh");
-	castleGuardBow->ReadClip(L"CastleGuard/Idle");
-	castleGuardBow->ReadClip(L"CastleGuard/Running");
-	castleGuardBow->ReadClip(L"CastleGuard/Attacking");
-	castleGuardBow->ReadClip(L"CastleGuard/StandingReactLeft");
-	castleGuardBow->ReadClip(L"CastleGuard/ShootingArrow");
-	castleGuardBow->ReadClip(L"CastleGuard/StandingDeathBackward");
+	castleGuardBow->ReadClip(L"CastleGuard/Idle");						//0
+	castleGuardBow->ReadClip(L"CastleGuard/Running");					//1
+	castleGuardBow->ReadClip(L"CastleGuard/Attacking");					//2
+	castleGuardBow->ReadClip(L"CastleGuard/StandingReactLeft");			//3
+	castleGuardBow->ReadClip(L"CastleGuard/ShootingArrow");				//4
+	castleGuardBow->ReadClip(L"CastleGuard/StandingDeathBackward");		//5
 
 	Transform attachTransform;
 	attachTransform.Position(-9.0f, -3.0f, 0.0f);
@@ -1556,7 +1936,7 @@ void PortFolio::CastleGuardBow()
 	for (UINT i = 0; i < 5; i++)
 	{
 		transform = castleGuardBow->AddTransform();
-		transform->Position(128.0f + generator3(), 5.0f, 128.0f + generator3());
+		transform->Position(120.0f + generator3(), 5.0f, 120.0f + generator3());
 		transform->Scale(0.01f, 0.01f, 0.01f);
 	}
 
@@ -1579,53 +1959,312 @@ void PortFolio::CastleGuardBow()
 void PortFolio::BillboardLayer()
 {
 	ImGui::SliderInt("Tree Layer", &treenum, 0, 7);
+	
+	ImVec2 aa = ImGui::GetMousePos();
 
-	if (Mouse::Get()->Press(0))
+	if (aa.x >= 0.0f && aa.x < 362.0f && aa.y > 250.0f && aa.y <= 620)
+		is_billboard_hovered = true;
+	else
+		is_billboard_hovered = false;
+	
+	if (!is_billboard_hovered)
 	{
-		auto picked = terrain->GetPickedPosition();
-		for (UINT i = 0; i < 10; i++)
+		if (Mouse::Get()->Press(0))
 		{
-			Vector2 scale = Math::RandomVec2(5.0f, 10.0f);
-			float positionx = Math::Random(picked.x - 10.0f, picked.x + 10.0f);
-			float positionz = Math::Random(picked.z - 10.0f, picked.z + 10.0f);
-			float positiony = terrain->GetHeight(Vector3(positionx, 0.0f, positionz)) + scale.y * 0.5f;
-			float random = Math::Random(-1.0f, 1.0f);
+			auto picked = terrain->GetPickedPosition();
+			for (UINT i = 0; i < 10; i++)
+			{
+				Vector2 scale = Math::RandomVec2(1.0f, 3.0f);
+				float positionx = Math::Random(picked.x - 10.0f, picked.x + 10.0f);
+				float positionz = Math::Random(picked.z - 10.0f, picked.z + 10.0f);
+				float positiony = terrain->GetHeight(Vector3(positionx, 0.0f, positionz)) + scale.y * 0.5f;
+				float random = Math::Random(-1.0f, 1.0f);
 
-			if (treenum == 0)
-			{
-				bb->Add(Vector3(positionx, positiony, positionz), scale, random);
+				if (treenum == 0)
+				{
+					bb->Add(Vector3(positionx, positiony, positionz), scale, random);
+				}
+				else if (treenum == 1)
+				{
+					bb2->Add(Vector3(positionx, positiony, positionz), scale, random);
+				}
+				else if (treenum == 2)
+				{
+					bb3->Add(Vector3(positionx, positiony, positionz), scale, random);
+				}
+				else if (treenum == 3)
+				{
+					bb4->Add(Vector3(positionx, positiony, positionz), scale, random);
+				}
+				else if (treenum == 4)
+				{
+					bb5->Add(Vector3(positionx, positiony, positionz), scale, random);
+				}
+				else if (treenum == 5)
+				{
+					bb6->Add(Vector3(positionx, positiony, positionz), scale, random);
+				}
+				else if (treenum == 6)
+				{
+					bb7->Add(Vector3(positionx, positiony, positionz), scale, random);
+				}
+				else if (treenum == 7)
+				{
+					bb8->Add(Vector3(positionx, positiony, positionz), scale, random);
+				}
 			}
-			else if (treenum == 1)
-			{
-				bb2->Add(Vector3(positionx, positiony, positionz), scale, random);
-			}
-			else if (treenum == 2)
-			{
-				bb3->Add(Vector3(positionx, positiony, positionz), scale, random);
-			}
-			else if (treenum == 3)
-			{
-				bb4->Add(Vector3(positionx, positiony, positionz), scale, random);
-			}
-			else if (treenum == 4)
-			{
-				bb5->Add(Vector3(positionx, positiony, positionz), scale, random);
-			}
-			else if (treenum == 5)
-			{
-				bb6->Add(Vector3(positionx, positiony, positionz), scale, random);
-			}
-			else if (treenum == 6)
-			{
-				bb7->Add(Vector3(positionx, positiony, positionz), scale, random);
-			}
-			else if (treenum == 7)
-			{
-				bb8->Add(Vector3(positionx, positiony, positionz), scale, random);
-			}
-		}
+			
+		}		
 	}
 
+	if (ImGui::Button("BillboardSave"))
+	{
+		std::wstring file;
+		Path::SaveFileDialog(file, Path::ImageFilter, L"../../Textures/Save/Billboard/", [=](std::wstring path) {
+
+			auto writer = new BinaryWriter();
+			writer->Open(path, 1);
+
+			writer->Int(bb->GetSize());
+			writer->Int(bb2->GetSize());
+			writer->Int(bb3->GetSize());
+			writer->Int(bb4->GetSize());
+			writer->Int(bb5->GetSize());
+			writer->Int(bb6->GetSize());
+			writer->Int(bb7->GetSize());
+			writer->Int(bb8->GetSize());
+
+			if (bb->GetSize() > 0)
+			{
+				for (int i = 0; i < bb->GetSize(); i++)
+				{
+					Vector3 saveposition = bb->GetPosition(i);
+					Vector2 savescale = bb->GetScale(i);
+					float saverandom = bb->GetRandom(i);
+
+					writer->Vector3(saveposition);
+					writer->Vector2(savescale);
+					writer->Float(saverandom);
+				}
+			}
+
+			if (bb2->GetSize() > 0)
+			{
+				for (int i = 0; i < bb2->GetSize(); i++)
+				{
+					Vector3 saveposition = bb2->GetPosition(i);
+					Vector2 savescale = bb2->GetScale(i);
+					float saverandom = bb2->GetRandom(i);
+
+					writer->Vector3(saveposition);
+					writer->Vector2(savescale);
+					writer->Float(saverandom);
+				}
+			}
+
+			if (bb3->GetSize() > 0)
+			{
+				for (int i = 0; i < bb3->GetSize(); i++)
+				{
+					Vector3 saveposition = bb3->GetPosition(i);
+					Vector2 savescale = bb3->GetScale(i);
+					float saverandom = bb3->GetRandom(i);
+
+					writer->Vector3(saveposition);
+					writer->Vector2(savescale);
+					writer->Float(saverandom);
+				}
+			}
+
+			if (bb4->GetSize() > 0)
+			{
+				for (int i = 0; i < bb4->GetSize(); i++)
+				{
+					Vector3 saveposition = bb4->GetPosition(i);
+					Vector2 savescale = bb4->GetScale(i);
+					float saverandom = bb4->GetRandom(i);
+
+					writer->Vector3(saveposition);
+					writer->Vector2(savescale);
+					writer->Float(saverandom);
+				}
+			}
+
+			if (bb5->GetSize() > 0)
+			{
+				for (int i = 0; i < bb5->GetSize(); i++)
+				{
+					Vector3 saveposition = bb5->GetPosition(i);
+					Vector2 savescale = bb5->GetScale(i);
+					float saverandom = bb5->GetRandom(i);
+
+					writer->Vector3(saveposition);
+					writer->Vector2(savescale);
+					writer->Float(saverandom);
+				}
+			}
+
+			if (bb6->GetSize() > 0)
+			{
+				for (int i = 0; i < bb6->GetSize(); i++)
+				{
+					Vector3 saveposition = bb6->GetPosition(i);
+					Vector2 savescale = bb6->GetScale(i);
+					float saverandom = bb6->GetRandom(i);
+
+					writer->Vector3(saveposition);
+					writer->Vector2(savescale);
+					writer->Float(saverandom);
+				}
+			}
+
+			if (bb7->GetSize() > 0)
+			{
+				for (int i = 0; i < bb7->GetSize(); i++)
+				{
+					Vector3 saveposition = bb7->GetPosition(i);
+					Vector2 savescale = bb7->GetScale(i);
+					float saverandom = bb7->GetRandom(i);
+
+					writer->Vector3(saveposition);
+					writer->Vector2(savescale);
+					writer->Float(saverandom);
+				}
+			}
+
+			if (bb8->GetSize() > 0)
+			{
+				for (int i = 0; i < bb->GetSize(); i++)
+				{
+					Vector3 saveposition = bb8->GetPosition(i);
+					Vector2 savescale = bb8->GetScale(i);
+					float saverandom = bb8->GetRandom(i);
+
+					writer->Vector3(saveposition);
+					writer->Vector2(savescale);
+					writer->Float(saverandom);
+				}
+			}
+
+			writer->Close();
+		});
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("BillboardLoad"))
+	{
+		std::wstring file;
+		Path::OpenFileDialog(file, Path::ImageFilter, L"../../Textures/Save/Billboard/", [=](std::wstring path) {
+			auto reader = new BinaryReader();
+
+			reader->Open(path);
+			int bbsize = reader->Int();
+			int bb2size = reader->Int();
+			int bb3size = reader->Int();
+			int bb4size = reader->Int();
+			int bb5size = reader->Int();
+			int bb6size = reader->Int();
+			int bb7size = reader->Int();
+			int bb8size = reader->Int();
+
+			if (bbsize != 0)
+			{
+				for (int i = 0; i < bbsize; i++)
+				{
+					Vector3 saveposition = reader->Vector3();
+					Vector2 savescale = reader->Vector2();
+					float saverandom = reader->Float();
+
+					bb->Add(saveposition, savescale, saverandom);
+				}
+			}
+
+			if (bb2size != 0)
+			{
+				for (int i = 0; i < bb2size; i++)
+				{
+					Vector3 saveposition = reader->Vector3();
+					Vector2 savescale = reader->Vector2();
+					float saverandom = reader->Float();
+
+					bb2->Add(saveposition, savescale, saverandom);
+				}
+			}
+
+			if (bb3size != 0)
+			{
+				for (int i = 0; i < bb3size; i++)
+				{
+					Vector3 saveposition = reader->Vector3();
+					Vector2 savescale = reader->Vector2();
+					float saverandom = reader->Float();
+
+					bb3->Add(saveposition, savescale, saverandom);
+				}
+			}
+
+			if (bb4size != 0)
+			{
+				for (int i = 0; i < bb4size; i++)
+				{
+					Vector3 saveposition = reader->Vector3();
+					Vector2 savescale = reader->Vector2();
+					float saverandom = reader->Float();
+
+					bb4->Add(saveposition, savescale, saverandom);
+				}
+			}
+
+			if (bb5size != 0)
+			{
+				for (int i = 0; i < bb5size; i++)
+				{
+					Vector3 saveposition = reader->Vector3();
+					Vector2 savescale = reader->Vector2();
+					float saverandom = reader->Float();
+
+					bb5->Add(saveposition, savescale, saverandom);
+				}
+			}
+
+			if (bb6size != 0)
+			{
+				for (int i = 0; i < bb6size; i++)
+				{
+					Vector3 saveposition = reader->Vector3();
+					Vector2 savescale = reader->Vector2();
+					float saverandom = reader->Float();
+
+					bb6->Add(saveposition, savescale, saverandom);
+				}
+			}
+
+			if (bb7size != 0)
+			{
+				for (int i = 0; i < bb7size; i++)
+				{
+					Vector3 saveposition = reader->Vector3();
+					Vector2 savescale = reader->Vector2();
+					float saverandom = reader->Float();
+
+					bb7->Add(saveposition, savescale, saverandom);
+				}
+			}
+
+			if (bb8size != 0)
+			{
+				for (int i = 0; i < bb8size; i++)
+				{
+					Vector3 saveposition = reader->Vector3();
+					Vector2 savescale = reader->Vector2();
+					float saverandom = reader->Float();
+
+					bb8->Add(saveposition, savescale, saverandom);
+				}
+			}
+
+			reader->Close();
+		});
+	}
 }
 
 void PortFolio::Pass(UINT mesh, UINT model, UINT anim)

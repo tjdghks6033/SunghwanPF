@@ -74,6 +74,7 @@ typedef D3DXPLANE Plane;
 #include "Viewer/Freedom.h"
 #include "Viewer/RenderTarget.h"
 #include "Viewer/DepthStencil.h"
+#include "Viewer/OrbitCamera.h"
 
 #include "Renders/Shader.h"
 #include "Renders/Texture.h"

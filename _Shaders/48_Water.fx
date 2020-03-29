@@ -27,8 +27,8 @@ float4 PS(MeshOutput input) : SV_Target
 	////return float4(color.rgb, 1.0f);
 	
 	
-	float3 diffuse = DiffuseMap.Sample(LinearSampler, input.Uv);
-	float NdotL = dot(normalize(input.Normal), -GlobalLight.Direction);
+	//float3 diffuse = DiffuseMap.Sample(LinearSampler, input.Uv);
+	//float NdotL = dot(normalize(input.Normal), -GlobalLight.Direction);
 
 	//return float4(diffuse * NdotL, 1);
 	

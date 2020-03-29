@@ -10,7 +10,7 @@ void Convert::Initialize()
 	//Kachujin();
 	//Megan();
 	//Weapon();
-	//Dreyar(); 
+	Dreyar(); 
 	CastleGuard();
 }
 
@@ -154,6 +154,26 @@ void Convert::Dreyar()
 	conv = new Converter();
 	conv->ReadFile(L"Dreyar/MagicAttack_2.fbx");
 	conv->ExportAnimClip(0, L"Dreyar/MagicAttack_2");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Dreyar/StandingDrawArrow.fbx");
+	conv->ExportAnimClip(0, L"Dreyar/StandingDrawArrow");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Dreyar/StandingAimRecoil.fbx");
+	conv->ExportAnimClip(0, L"Dreyar/StandingAimRecoil");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Dreyar/ShootingArrow.fbx");
+	conv->ExportAnimClip(0, L"Dreyar/ShootingArrow");
+	SafeDelete(conv);
+
+	conv = new Converter();
+	conv->ReadFile(L"Dreyar/StandingDeathRight.fbx");
+	conv->ExportAnimClip(0, L"Dreyar/StandingDeathRight");
 	SafeDelete(conv);
 }
 

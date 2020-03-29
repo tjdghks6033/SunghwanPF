@@ -91,6 +91,12 @@ D3DXMATRIX Context::Projection()
 	return projection;
 }
 
+void Context::NewOrbitCamera(Vector3 * pos)
+{
+	SafeDelete(camera);
+	camera = new OrbitCamera(pos);
+}
+
 UINT Context::PointLights(OUT PointLight * lights)
 {
 	memcpy(lights, pointLights, sizeof(PointLight) * pointLightCount);

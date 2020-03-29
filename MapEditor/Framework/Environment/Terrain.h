@@ -93,4 +93,5 @@ private:
 	int noise_freq = 1;
 	Vector3 prevlocation = Vector3(0.0f, 0.0f, 0.0f);
 	int layernum = 1;
+	bool is_hovered = false;
 };

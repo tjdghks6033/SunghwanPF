@@ -8,11 +8,12 @@ void DrawModel::Initialize()
 	Context::Get()->GetCamera()->Position(0, 0, -50);
 	((Freedom *)Context::Get()->GetCamera())->Speed(20, 2);
 
-	shader = new Shader(L"27_Model.fx");
+	shader = new Shader(L"27_Model.fxo");
 
-	Airplane();
-	Tower();
-	Tank();
+	//Airplane();
+	//Tower();
+	//Tank();
+	Castle();
 }
 
 void DrawModel::Update()
@@ -20,6 +21,7 @@ void DrawModel::Update()
 	if (airplane != NULL) airplane->Update();
 	if (tower != NULL) tower->Update();
 	if (tank != NULL) tank->Update();
+	if (castle != NULL) castle->Update();
 }
 
 void DrawModel::Render()
@@ -27,6 +29,7 @@ void DrawModel::Render()
 	if (airplane != NULL) airplane->Render();
 	if (tower != NULL) tower->Render();
 	if (tank != NULL) tank->Render();
+	if (castle != NULL) castle->Render();
 }
 
 void DrawModel::Airplane()
@@ -84,4 +87,22 @@ void DrawModel::Tank()
 	tank->UpdateTransforms();
 
 	tank->Pass(1);
+}
+
+void DrawModel::Castle()
+{
+	castle = new ModelRender(shader);
+	castle->ReadMaterial(L"Castle/Mesh");
+	castle->ReadMesh(L"Castle/Mesh");
+	
+	{
+		Transform* transform = castle->AddTransform();
+
+		transform->Position(Vector3(0, 0.0f, 5.0f));
+		transform->RotationDegree(0, Math::Random(-180.0f, 180.0f), 0);
+		transform->Scale(1.0f, 1.0f, 1.0f);
+	}
+	castle->UpdateTransforms();
+
+	castle->Pass(1);
 }

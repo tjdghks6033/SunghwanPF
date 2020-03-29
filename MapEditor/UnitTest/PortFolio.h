@@ -16,7 +16,6 @@ public:
 private:
 	void Mesh();
 	void Weapon();
-	//void Kachujin();
 	void Dreyar();
 	void CastleGuardSword();
 	void CastleGuardBow();
@@ -41,6 +40,13 @@ private:
 
 	TerrainLod* terrainLod;
 
+
+	float cameraLatitude = 0.0f, cameraLongitude = -1.85f, orbitDistance = 20.0f;
+	//Vector3 camDir, camPos, targetPos;	
+	Vector3 cameraposition = Vector3(0, 0, 0);
+	Vector3 camerarotation = Vector3(0, 0, 0);
+	
+
 	UINT terrain_num = 0;
 	bool is_billboard = false;
 	bool is_wireframe = false;
@@ -61,6 +67,7 @@ private:
 	class Billboard* bb7;
 	class Billboard* bb8;
 	int treenum = 0;
+	bool is_billboard_hovered = false;
 
 	Sky* sky;
 	Snow* snow;
@@ -75,6 +82,7 @@ private:
 
 	Material* wall;
 	MeshRender* sphere;
+	MeshRender* sphere2;
 
 	Model* weaponSword;
 	Model* weaponBow;
@@ -82,6 +90,14 @@ private:
 	ModelAnimator* dreyar = NULL;
 	ModelAnimator* castleGuardSword = NULL;
 	ModelAnimator* castleGuardBow = NULL;
+
+	ParticleSystem* particle = NULL;
+	ParticleSystem* particle1 = NULL;
+	ParticleSystem* particle2 = NULL;
+	ParticleSystem* particle3 = NULL;
+	ParticleSystem* particle4 = NULL;
+	ParticleSystem* particle5 = NULL;
+	
 
 	bool is_unarmed = false;
 	bool is_sword_spine = false;
@@ -97,12 +113,17 @@ private:
 	int weapon_num = 0;					//플레이어 무기교체
 	bool is_attacking = false;			//플레이어가 공격하는지 확인
 	bool is_running = false;			//플레이어가 뛰고 있는지 확인
-	bool is_sword_attack = false;		//플레이어가 범위 공격하는지 확인
-	bool is_sword_jump_attack = false;	//플레이어가 대쉬 공격하는지 확인
+	bool is_attackcombo_one = false;		//플레이어가 범위 공격하는지 확인
+	bool is_attackcombo_two = false;	//플레이어가 대쉬 공격하는지 확인
+	bool is_particle_attack_one = false;	//플레이어가 스킬 공격하는지 확인
+	bool is_particle_attack_once = false;
+	bool is_particle_attack_two = false;
+	bool is_trail = false;
 	bool is_heat = false;				//플레이어가 맞았는지 확인
 	bool is_death = false;				//플레이어가 죽었는지 확인
 	float animspeed = 1.3f;
 	float taketime = 0.2f;
+	float sword_jump_attack_range = 100.0f;
 
 	//Monster
 	int clip[10]; //몬스터 애니매이션 변수
@@ -116,10 +137,13 @@ private:
 	bool is_mon_running_to_waypoint[10]; //몬스터가 거점으로 뛰고 있는지 확인
 	float monanimspeed = 1.3f;
 	float montaketime = 0.2f;
-	float monattackrange = 10.0f;
+	float monattackrange = 5.0f;
 	float monbowattackrange = 100.0f;
-	float montracerange = 200.0f;
-	float monwaybackrange = 300.0f;
+	float montracerange = 150.0f;
+	float monwaybackrange = 200.0f;
+
+	float arrowposy = 1.318f;
+	float monarrowposy = 1.318f;
 
 	Vector3 mon_waypoint[10];  //몬스터 거점
 	Vector3 mon_position[10];  //몬스터 위치
@@ -134,11 +158,11 @@ private:
 
 	//Collision
 	bool is_collision = false;			//플레이어가 충돌중인지
-	bool is_collision_sword[20];		//몬스터의 검과 충돌중인지
-	bool is_collision_arrow[20];		//활과 충돌중인지
+	bool is_collision_sword[5];		//몬스터의 검과 충돌중인지
+	bool is_collision_arrow[5];		//활과 충돌중인지
 
-	bool is_collision_sword_mon[20];
-	bool is_collision_arrow_mon[20];
+	bool is_collision_sword_mon[10];
+	bool is_collision_arrow_mon[10];
 
 	//몬스터 화살
 	bool is_monarrow_initialize[5];
@@ -147,10 +171,10 @@ private:
 	Vector3 arrow_position = Vector3(0, 0, 0);
 	Vector3 arrow_rotation = Vector3(0, 0, 0);
 
-	Vector3 monarrow_position[10];
-	Vector3 monarrow_rotation[10];
+	Vector3 monarrow_position[5];
+	Vector3 monarrow_rotation[5];
 
-
+	bool is_collider_rendering = false;
 
 	struct PlayerColliderDesc
 	{
@@ -184,7 +208,7 @@ private:
 		Transform* Init;
 		Transform* Transform;
 		Collider* Collider;
-	} arrow_colliders[40];
+	} arrow_colliders[6];
 
 	vector<MeshRender *> meshes;
 	vector<ModelRender *> models;

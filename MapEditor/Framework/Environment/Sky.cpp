@@ -62,7 +62,7 @@ void Sky::Update()
 	if(bRealTime == true)
 	{
 		theta += Time::Delta() * timeFactor;
-
+		//theta += 0.01f;
 		if (theta > Math::PI)
 			theta -= Math::PI * 2.0f;
 
@@ -78,6 +78,8 @@ void Sky::Update()
 
 		float x = sinf(theta);
 		float y = cosf(theta);
+
+		//theta += 0.01f;
 
 		Context::Get()->Direction() = Vector3(x, y, 0.0f);
 	}

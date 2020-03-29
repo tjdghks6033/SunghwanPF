@@ -19,10 +19,19 @@ ModelAnimator::ModelAnimator(Shader * shader)
 	computeShader = new Shader(L"30_Collider.fx");
 	computeAttachBuffer = new ConstantBuffer(&attachDesc, sizeof(AttachDesc));
 	
+	
+
 	sSrv = computeShader->AsSRV("Input");
 	sUav = computeShader->AsUAV("Output");
 	sComputeAttachBuffer = computeShader->AsConstantBuffer("CB_Attach");
 	sComputeFrameBuffer = computeShader->AsConstantBuffer("CB_AnimationFrame");
+
+
+	for (int i = 0; i < 5; i++)
+	{
+		monrunningtime[i] = 0;
+		stopanim[i] = false;
+	}
 }
 
 ModelAnimator::~ModelAnimator()
@@ -48,60 +57,64 @@ void ModelAnimator::Update()
 	{
 		TweenDesc& desc = tweenDesc[i];
 		ModelClip* clip = model->ClipByIndex(desc.Curr.Clip);
-
-		//현재 애니메이션
+		
+		if (this->stopanim[i] == false)
 		{
-			desc.Curr.RunningTime += Time::Delta();
-			float time = 1.0f / clip->FrameRate() / desc.Curr.Speed;
-			if (desc.Curr.Time >= 1.0f)
+			//현재 애니메이션
 			{
-				desc.Curr.RunningTime = 0.0f;
-
-				desc.Curr.CurrFrame = (desc.Curr.CurrFrame + 1) % clip->FrameCount();
-				desc.Curr.NextFrame = (desc.Curr.CurrFrame + 1) % clip->FrameCount();
-			}
-			desc.Curr.Time = desc.Curr.RunningTime / time;
-			runningtime = (UINT)(desc.Curr.CurrFrame / desc.Curr.Speed) % clip->FrameCount();
-		}
-
-		if (desc.Next.Clip > -1)
-		{
-			ModelClip* nextClip = model->ClipByIndex(desc.Next.Clip);
-
-			desc.RunningTime += Time::Delta();
-			desc.TweenTime = desc.RunningTime / desc.TakeTime;
-
-			if (desc.TweenTime >= 1.0f)
-			{
-				desc.Curr = desc.Next;
-
-				desc.Next.Clip = -1;
-				desc.Next.CurrFrame = 0;
-				desc.Next.NextFrame = 0;
-				desc.Next.Time = 0;
-				desc.Next.RunningTime = 0.0f;
-
-				desc.RunningTime = 0.0f;
-				desc.TweenTime = 0.0f;
-			}
-			else
-			{
-				desc.Next.RunningTime += Time::Delta();
-				float time = 1.0f / nextClip->FrameRate() / desc.Next.Speed;
-				if (desc.Next.Time >= 1.0f)
+				desc.Curr.RunningTime += Time::Delta();
+				float time = 1.0f / clip->FrameRate() / desc.Curr.Speed;
+				if (desc.Curr.Time >= 1.0f)
 				{
+					desc.Curr.RunningTime = 0.0f;
+
+					desc.Curr.CurrFrame = (desc.Curr.CurrFrame + 1) % clip->FrameCount();
+					desc.Curr.NextFrame = (desc.Curr.CurrFrame + 1) % clip->FrameCount();
+				}
+				desc.Curr.Time = desc.Curr.RunningTime / time;
+				runningtime = (UINT)(desc.Curr.CurrFrame / desc.Curr.Speed) % clip->FrameCount();
+				monrunningtime[i] = (UINT)(desc.Curr.CurrFrame / desc.Curr.Speed) % clip->FrameCount();
+			}
+
+			if (desc.Next.Clip > -1)
+			{
+				ModelClip* nextClip = model->ClipByIndex(desc.Next.Clip);
+
+				desc.RunningTime += Time::Delta();
+				desc.TweenTime = desc.RunningTime / desc.TakeTime;
+
+				if (desc.TweenTime >= 1.0f)
+				{
+					desc.Curr = desc.Next;
+
+					desc.Next.Clip = -1;
+					desc.Next.CurrFrame = 0;
+					desc.Next.NextFrame = 0;
+					desc.Next.Time = 0;
 					desc.Next.RunningTime = 0.0f;
 
-					desc.Next.CurrFrame = (desc.Next.CurrFrame + 1) % nextClip->FrameCount();
-					desc.Next.NextFrame = (desc.Next.CurrFrame + 1) % nextClip->FrameCount();
+					desc.RunningTime = 0.0f;
+					desc.TweenTime = 0.0f;
 				}
-				desc.Next.Time = desc.Next.RunningTime / time;
+				else
+				{
+					desc.Next.RunningTime += Time::Delta();
+					float time = 1.0f / nextClip->FrameRate() / desc.Next.Speed;
+					if (desc.Next.Time >= 1.0f)
+					{
+						desc.Next.RunningTime = 0.0f;
+
+						desc.Next.CurrFrame = (desc.Next.CurrFrame + 1) % nextClip->FrameCount();
+						desc.Next.NextFrame = (desc.Next.CurrFrame + 1) % nextClip->FrameCount();
+					}
+					desc.Next.Time = desc.Next.RunningTime / time;
+				}
 			}
 		}
 	}//for(i)
 
 	frameBuffer->Apply();
-	/*if (computeBuffer != NULL)
+	if (computeBuffer != NULL)
 	{
 		computeAttachBuffer->Apply();
 		sComputeAttachBuffer->SetConstantBuffer(computeAttachBuffer->Buffer());
@@ -112,7 +125,7 @@ void ModelAnimator::Update()
 
 		computeShader->Dispatch(0, 0, 1, 1, 1);
 		computeBuffer->Copy(csOutput, sizeof(CS_OutputDesc) * MAX_MODEL_TRANSFORMS);
-	}*/
+	}
 	
 	for (ModelMesh* mesh : model->Meshes())
 		mesh->Update();

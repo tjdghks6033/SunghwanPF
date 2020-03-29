@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Particle xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <BlendState>1</BlendState>
+    <TextureFile>lightning.png</TextureFile>
+    <MaxParticles>60</MaxParticles>
+    <BlendSDurationtate>1</BlendSDurationtate>
+    <DurationRandomness>0.30000001</DurationRandomness>
+    <EmitterVelocitySensitivity>1</EmitterVelocitySensitivity>
+    <MinHorizontalVelocity>0.96499997</MinHorizontalVelocity>
+    <MaxHorizontalVelocity>0.322</MaxHorizontalVelocity>
+    <MinVerticalVelocity>-100</MinVerticalVelocity>
+    <MaxVerticalVelocity>-100</MaxVerticalVelocity>
+    <Gravity X="-100" Y="1.099" Z="-100"/>
+    <EndVelocity>0.75</EndVelocity>
+    <MinColor R="1" G="1" B="1" A="1"/>
+    <MaxColor R="1" G="1" B="1" A="1"/>
+    <MinRotateSpeed>0</MinRotateSpeed>
+    <MaxRotateSpeed>0</MaxRotateSpeed>
+    <MinStartSize>22</MinStartSize>
+    <MaxStartSize>28</MaxStartSize>
+    <MinEndSize>207</MinEndSize>
+    <MaxEndSize>228</MaxEndSize>
+</Particle>

@@ -17,6 +17,7 @@ private:
 	void Tower();
 	void Tank();
 	void Weapon();
+	void Castle();
 
 	void Kachujin();
 	void Megan();
