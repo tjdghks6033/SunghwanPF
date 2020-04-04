@@ -8,7 +8,7 @@ Cloud::Cloud(Shader * shader)
 
 	render2D = new Render2D();
 	render2D->GetTransform()->Position(400 + 100, D3D::Height() - 100, 0);
-	render2D->GetTransform()->Scale(200, 200, 1);
+	render2D->GetTransform()->Scale(400, 400, 1);
 
 
 	VertexTexture vertices[6];

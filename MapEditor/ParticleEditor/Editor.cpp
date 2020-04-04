@@ -49,9 +49,14 @@ void Editor::Update()
 	else if (Keyboard::Get()->Press('U'))
 		position.y -= 20 * Time::Delta();
 
-	sphere->GetTransform(0)->Position(position);
-	sphere->UpdateTransforms();
+	position.y -= 0.1f;
 
+	if (position.y < 0)
+		position.y = 100.0f;
+
+	sphere->GetTransform(0)->Position(position);
+	
+	sphere->UpdateTransforms();
 
 	sky->Update();
 

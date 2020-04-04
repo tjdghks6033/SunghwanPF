@@ -11,9 +11,11 @@ void PortFolio::Initialize()
 	Context::Get()->GetCamera()->Position(126, 5, 125);
 	((Freedom *)Context::Get()->GetCamera())->Speed(20, 2);
 
+
 	shader = new Shader(L"48_Water.fxo");
 
-	shadow = new Shadow(shader, Vector3(0, 0, 0), 65);
+	shadow = new Shadow(shader, Vector3(125, 0, 125), 50);
+	
 
 	//Sky
 	{
@@ -51,23 +53,20 @@ void PortFolio::Initialize()
 
 	//Terrain	
 	{
-		sTerrain = new Shader(L"18_Terrain_Splatting.fxo");
-
-		terrain = new Terrain(sTerrain, L"Terrain/Gray256.png");
+		
+		terrain = new Terrain(shader, L"Terrain/Gray256.png");
 		terrain->BaseMap(L"Terrain/Dirt3.png");
 		terrain->LayerMap(L"Terrain/Grass (Hill).jpg", L"Terrain/Gray256.png");
 		terrain->LayerMap2(L"Terrain/Path (Rocky).jpg", L"Terrain/Grass (Rocky).jpg");
 		terrain->LayerMap3(L"Terrain/Cliff (Sandstone).jpg", L"Terrain/Sand (with pebbles).jpg");
-		//terrain->Pass(2);
+		terrain->Pass(19);
 	}
 
 	//TerrainLod
 	{
-		sTerrainLod = new Shader(L"49_TerrainLod.fxo");
-
 		TerrainLod::InitializeDesc desc =
 		{
-			sTerrainLod,
+			shader,
 			L"Terrain/Gray512.png",
 			1.0f,
 			16,
@@ -78,21 +77,30 @@ void PortFolio::Initialize()
 		terrainLod->BaseMap(L"Terrain/Dirt.png");
 		terrainLod->LayerMap(L"Terrain/Grass (Lawn).jpg", L"Terrain/Gray512.png");
 		terrainLod->NormalMap(L"Terrain/Dirt_Normal.png");
-		terrainLod->Pass(0);
+		terrainLod->Pass(20);
 	}
 
 	//Billboard
 	{
-		bbShader = new Shader(L"25_Billboard.fxo");
-		bb = new Billboard(bbShader);
-		bb2 = new Billboard(bbShader);
-		bb3 = new Billboard(bbShader);
-		bb4 = new Billboard(bbShader);
-		bb5 = new Billboard(bbShader);
-		bb6 = new Billboard(bbShader);
-		bb7 = new Billboard(bbShader);
-		bb8 = new Billboard(bbShader);
+		//bbShader = new Shader(L"25_Billboard.fxo");
+		bb = new Billboard(shader);
+		bb2 = new Billboard(shader);
+		bb3 = new Billboard(shader);
+		bb4 = new Billboard(shader);
+		bb5 = new Billboard(shader);
+		bb6 = new Billboard(shader);
+		bb7 = new Billboard(shader);
+		bb8 = new Billboard(shader);
 
+		tex1 = new Texture(L"Terrain/BillboardTexture1.png");
+		tex2 = new Texture(L"Terrain/BillboardTexture2.png");
+		tex3 = new Texture(L"Terrain/BillboardTexture3.png");
+		tex4 = new Texture(L"Terrain/Tree.png");
+		tex5 = new Texture(L"Terrain/Tree2.png");
+		tex6 = new Texture(L"Terrain/Tree3.png");
+		tex7 = new Texture(L"Terrain/Tree4.png");
+		tex8 = new Texture(L"Terrain/Tree5.png");
+		
 		bb->AddTexture(L"Terrain/BillboardTexture1.png");
 		bb2->AddTexture(L"Terrain/BillboardTexture2.png");
 		bb3->AddTexture(L"Terrain/BillboardTexture3.png");
@@ -101,6 +109,15 @@ void PortFolio::Initialize()
 		bb6->AddTexture(L"Terrain/Tree3.png");
 		bb7->AddTexture(L"Terrain/Tree4.png");
 		bb8->AddTexture(L"Terrain/Tree5.png");
+
+		bb->Pass(18);
+		bb2->Pass(18);
+		bb3->Pass(18);
+		bb4->Pass(18);
+		bb5->Pass(18);
+		bb6->Pass(18);
+		bb7->Pass(18);
+		bb8->Pass(18);
 	}
 
 	//Particle
@@ -110,8 +127,12 @@ void PortFolio::Initialize()
 		particle2 = new ParticleSystem(L"Firecylindersmoke");
 		particle3 = new ParticleSystem(L"Firecylinderstar");
 		particle4 = new ParticleSystem(L"Spark2");
-		particle5 = new ParticleSystem(L"Trail_2");
-		
+		particle5 = new ParticleSystem(L"Trail_2");		
+
+		meteor_particle1 = new ParticleSystem(L"Meteor_1");
+		meteor_particle2 = new ParticleSystem(L"Meteor_2");
+		meteor_particle3 = new ParticleSystem(L"Meteor_3");
+
 	}
 	Mesh();
 	Weapon();
@@ -177,6 +198,8 @@ void PortFolio::Initialize()
 	is_attacking = false;
 	speed = 10.0f;
 
+	
+
 	//AddPointLights();
 	//AddSpotLights();
 }
@@ -187,10 +210,7 @@ void PortFolio::Destroy()
 	SafeDelete(shadow);
 	SafeDelete(terrain);
 	SafeDelete(terrainLod);
-	SafeDelete(sTerrain);
-	SafeDelete(sTerrainLod);
 	SafeDelete(sOcean);
-	SafeDelete(bbShader);
 	SafeDelete(bb);
 	SafeDelete(bb2);
 	SafeDelete(bb3);
@@ -207,18 +227,14 @@ void PortFolio::Destroy()
 	SafeDelete(particle1);
 	SafeDelete(particle2);
 	SafeDelete(particle3);
+	SafeDelete(particle4);
+	SafeDelete(particle5);
 }
 
 void PortFolio::Update()
 {
-	
 
-	/*Matrix R, T;
-	D3DXMatrixRotationYawPitchRoll(&R, camerarotation.y, camerarotation.x, camerarotation.z);
-	D3DXMatrixTranslation(&T, cameraposition.x, cameraposition.y, cameraposition.z);
-
-	world = R * T;*/
-
+	ImGui::SliderFloat3("Light Direction", Context::Get()->Direction(), -1, 1);
 
 	ImGui::Begin("Terrain", nullptr, ImVec2(0, 250), 0.4f);
 	{
@@ -234,16 +250,15 @@ void PortFolio::Update()
 			{
 				BillboardLayer();
 			}
-
 		}
 		else if (terrain_num == 2)
 		{
 			ImGui::Checkbox("WireFrame", &is_wireframe);
 			terrainLod->Update();
 			if (!is_wireframe)
-				terrainLod->Pass(0);
+				terrainLod->Pass(20);
 			else if (is_wireframe)
-				terrainLod->Pass(1);
+				terrainLod->Pass(21);
 		}
 	}
 	ImGui::End();
@@ -268,6 +283,10 @@ void PortFolio::Update()
 		ImGui::Checkbox("Model", &is_model);
 		if (is_model)
 		{
+			//Vector3 campos;
+			//dreyar->GetTransform(0)->Position(&campos);
+			//Context::Get()->NewOrbitCamera(&campos);
+
 			//kachujin->Update();
 			castleGuardSword->Update();
 			castleGuardBow->Update();
@@ -279,10 +298,12 @@ void PortFolio::Update()
 				Vector3 rotation;
 				dreyar->GetTransform(0)->Rotation(&rotation);
 
+				((Freedom *)Context::Get()->GetCamera())->SetTarget(position);
+				((Freedom *)Context::Get()->GetCamera())->SetOrbitCamera(true);
 
 				//Orbit Camera 
 				//Setting.
-				ImGui::SliderFloat("cameraLatitude", &cameraLatitude, -10, 10);
+				/*ImGui::SliderFloat("cameraLatitude", &cameraLatitude, -10, 10);
 				ImGui::SliderFloat("cameraLongitude", &cameraLongitude, -2.0f, -1.6f);
 				ImGui::SliderFloat("orbitDistance", &orbitDistance, 10, 35);
 
@@ -294,13 +315,13 @@ void PortFolio::Update()
 				cameraposition.z = position.z - camerarotation.z * orbitDistance;
 
 				Context::Get()->GetCamera()->Position(cameraposition);
-				Context::Get()->GetCamera()->RotationDegree(camerarotation);
+				Context::Get()->GetCamera()->RotationDegree(camerarotation);*/
 
 				if (particle != NULL)
 				{
 					particle->Add(position);
 					particle->Update();
-				}				
+				}
 				
 				if (Keyboard::Get()->Press(VK_LBUTTON))
 				{
@@ -377,10 +398,18 @@ void PortFolio::Update()
 				}
 
 				//Player - R key (파티클 공격 - 2)
-				if (Keyboard::Get()->Down(0x52))
+				if (Keyboard::Get()->Press(0x52))
 				{
+					is_particle_attack_twice = true;
+				}
+
+				if (is_particle_attack_twice && Keyboard::Get()->Up(0x52))
+				{
+					is_particle_attack_twice = false;
+
 					is_particle_attack_two = true;
 
+					particleposition = terrain->GetPickedPosition();
 					is_particle_attack_one = false;
 					is_attackcombo_two = false;
 					is_attackcombo_one = false;
@@ -503,8 +532,36 @@ void PortFolio::Update()
 					{
 						playerClip = 14;
 						dreyar->PlayClip(0, playerClip, animspeed, taketime);
+						sphere->GetTransform(0)->Position(dreyar->GetAttachTransform(0)._41, dreyar->GetAttachTransform(0)._42, dreyar->GetAttachTransform(0)._43);
+						is_particle_attack_once = true;
 					}
 
+					Vector3 meshposition;
+					sphere->GetTransform(0)->Position(&meshposition);
+
+					if (is_particle_attack_once)
+					{
+						meshposition = particleposition;
+						particleposition.y = 10.0f;
+						meshposition.y = 10.0f;
+						is_particle_attack_once = false;
+					}
+
+					{
+						meteor_particle1->Add(meshposition);
+						meteor_particle1->Update();
+						meteor_particle2->Add(meshposition);
+						meteor_particle2->Update();
+						meteor_particle3->Add(meshposition);
+						meteor_particle3->Update();
+					}
+
+					meshposition.y -= 0.15f;
+					particleposition.y -= 0.15f;
+
+					sphere->GetTransform(0)->Position(meshposition);
+
+					
 				}
 				else if (is_attacking)
 				{
@@ -645,13 +702,7 @@ void PortFolio::Update()
 					weaponArrow->GetTransform(0)->Position(arrow_position);
 					//weaponArrow->UpdateTransforms();
 				}
-
-				//if (arrow_position.x < 0.0f || arrow_position.x > 256.0f ||
-				//	arrow_position.z < 0.0f || arrow_position.z > 256.0f)
-				//{
-				//	is_arrow_initialize = false;
-				//	weaponArrow->GetTransform(0)->Position(-1000, -1000, -1000);
-				//}
+				
 				if (is_attacking && dreyar->GetTime() == 40)
 				{
 					is_arrow_initialize = false;
@@ -722,7 +773,7 @@ void PortFolio::Update()
 							is_mon_attack[i] = false;
 						}
 					}
-					else if (is_mon_running[i] && mon_hp[i] > 0.0f)
+					else if (is_mon_running[i] && mon_hp[i] > 0.0f && !is_mon_running_to_waypoint[i])
 					{
 						if (clip[i] != 1)
 						{
@@ -761,11 +812,11 @@ void PortFolio::Update()
 						mon_position[i].z -= 0.15f * cosf(rotationy);
 						castleGuardSword->GetTransform(i)->Position(mon_position[i]);
 
-						/*if (powf(mon_position[i].x - mon_waypoint[i].x, 2) + powf(mon_position[i].z - mon_waypoint[i].z, 2) < 10.0f)
+						if (powf(mon_position[i].x - mon_waypoint[i].x, 2) + powf(mon_position[i].z - mon_waypoint[i].z, 2) < 10.0f)
 						{
 							is_mon_running_to_waypoint[i] = false;
 							is_mon_patrol[i] = true;
-						}*/
+						}
 					}
 					else if (is_mon_patrol[i] && mon_hp[i] > 0.0f)
 					{
@@ -831,19 +882,22 @@ void PortFolio::Update()
 					{
 						is_mon_heat[i] = true;
 					}*/
-					else if (powf(mon_position[i].x - position.x, 2) + powf(mon_position[i].z - position.z, 2) < montracerange &&
-						powf(mon_position[i].x - position.x, 2) + powf(mon_position[i].z - position.z, 2) > monbowattackrange)
-					{
-						is_mon_running[i] = true;
-					}
 					else if (powf(mon_position[i].x - position.x, 2) + powf(mon_position[i].z - position.z, 2) <= monbowattackrange)
 					{
 						is_mon_running[i] = false;
 						is_mon_attack[i] = true;
 						is_mon_patrol[i] = false;
 					}
+					else if (powf(mon_position[i].x - position.x, 2) + powf(mon_position[i].z - position.z, 2) < montracerange &&
+						powf(mon_position[i].x - position.x, 2) + powf(mon_position[i].z - position.z, 2) > monbowattackrange)
+					{
+						is_mon_running[i] = true;
+						is_mon_attack[i] = false;
+						is_mon_patrol[i] = false;
+					}
 					else
 					{
+						is_mon_running[i] = false;
 						is_mon_attack[i] = false;
 						is_mon_patrol[i] = true;
 					}
@@ -863,7 +917,7 @@ void PortFolio::Update()
 
 						is_mon_death[i] = true;
 					}
-					else if (is_mon_running[i] && mon_hp[i] > 0.0f)
+					else if (is_mon_running[i] && mon_hp[i] > 0.0f && !is_mon_running_to_waypoint[i])
 					{
 						if (clip[i] != 1)
 						{
@@ -981,14 +1035,6 @@ void PortFolio::Update()
 						weaponArrow->GetTransform(i - 4)->Position(monarrow_position[i - 5]);
 					}
 
-					/*if (monarrow_position[i - 5].x < 0.0f || monarrow_position[i - 5].x > 256.0f ||
-						monarrow_position[i - 5].z < 0.0f || monarrow_position[i - 5].z > 256.0f)
-					{
-						is_monarrow_initialize[i - 5] = false;
-						weaponArrow->GetTransform(i - 4)->Position(-1000, -1000, -1000);
-					}*/
-					
-
 					if (is_mon_attack[i] && castleGuardBow->GetTime(i - 5) == 40)
 					{
 						is_monarrow_initialize[i - 5] = false;
@@ -1069,8 +1115,11 @@ void PortFolio::Update()
 				for (int i = 0; i < 6; i++)
 				{
 					Matrix attach3 = weaponArrow->GetTransform(i)->World();
-
-					attach3._42 = arrowposy;
+					
+					if(i == 0)
+						attach3._42 = position.y + arrowposy + 0.1f;
+					else
+						attach3._42 = mon_position[i + 4].y + monarrowposy + 0.1f;
 
 					arrow_colliders[i].Collider->GetTransform()->World(attach3);
 					arrow_colliders[i].Collider->Update();
@@ -1079,7 +1128,7 @@ void PortFolio::Update()
 		}
 		else if (!is_model)
 		{
-
+			((Freedom *)Context::Get()->GetCamera())->SetOrbitCamera(false);
 		}
 	}
 	ImGui::End();
@@ -1264,7 +1313,6 @@ void PortFolio::PreRender()
 		bb6->Render();
 		bb7->Render();
 		bb8->Render();
-
 	}
 		
 	//Reflection
@@ -1273,6 +1321,20 @@ void PortFolio::PreRender()
 
 		sky->Pass(10, 11, 12);
 		sky->Render();
+
+		if (terrain_num == 1)
+		{
+			//terrain->Pass(18);
+			terrain->Render();
+		}
+		else if (terrain_num == 2)
+		{
+			terrainLod->Render();
+		}
+		else
+		{
+
+		}
 
 		Pass(13, 14, 15);
 		if (is_mesh)
@@ -1353,14 +1415,6 @@ void PortFolio::PreRender()
 		{
 
 		}
-		bb->Render();
-		bb2->Render();
-		bb3->Render();
-		bb4->Render();
-		bb5->Render();
-		bb6->Render();
-		bb7->Render();
-		bb8->Render();
 	}
 
 	//Refraction
@@ -1370,13 +1424,27 @@ void PortFolio::PreRender()
 		sky->Pass(4, 5, 6);
 		sky->Render();
 
+		if (terrain_num == 1)
+		{
+			//terrain->Pass(18);
+			terrain->Render();
+		}
+		else if (terrain_num == 2)
+		{
+			terrainLod->Render();
+		}
+		else
+		{
+
+		}
+
 		Pass(7, 8, 9);
-		
+
 		if (is_mesh)
 		{
 			wall->Render();
 			sphere->Render();
-			
+
 		}
 		else if (!is_mesh)
 		{
@@ -1449,15 +1517,9 @@ void PortFolio::PreRender()
 		{
 
 		}
-		bb->Render();
-		bb2->Render();
-		bb3->Render();
-		bb4->Render();
-		bb5->Render();
-		bb6->Render();
-		bb7->Render();
-		bb8->Render();
 	}
+	water->ResetClipPlane();
+
 }
 
 void PortFolio::Render()
@@ -1471,7 +1533,10 @@ void PortFolio::Render()
 	sky->Render();
 
 	if (terrain_num == 1)
+	{
+		//terrain->Pass(18);
 		terrain->Render();
+	}
 	else if (terrain_num == 2)
 		terrainLod->Render();	
 
@@ -1501,9 +1566,7 @@ void PortFolio::Render()
 		if (dreyar != NULL)
 		{
 			if (particle != NULL)
-				particle->Render();
-
-			
+				particle->Render();			
 
 			if (is_particle_attack_one)
 			{
@@ -1512,6 +1575,14 @@ void PortFolio::Render()
 				particle3->Render();
 				particle4->Render();
 			}
+
+			if (is_particle_attack_two && particleposition.y > -5)
+			{
+				meteor_particle1->Render();
+				meteor_particle2->Render();
+				meteor_particle3->Render();
+			}
+
 			if (weapon_num == 0)
 			{
 				if (is_bow)
@@ -1626,6 +1697,20 @@ void PortFolio::Render()
 					is_mon_heat[i] = true;
 				}
 			}
+
+			if ((weapon_num == 0 && is_particle_attack_two))
+			{
+				Vector3 meshposition;
+				sphere->GetTransform(0)->Position(&meshposition);
+
+				if (meshposition.y < 5.0f)
+				{
+					if (powf(mon_position[i].x - meshposition.x, 2) + powf(mon_position[i].z - meshposition.z, 2) < 10.0f)
+					{
+						is_mon_heat[i] = true;
+					}
+				}
+			}
 		}
 
 
@@ -1634,7 +1719,13 @@ void PortFolio::Render()
 			is_heat = true;
 		}
 
-		ImGui::Checkbox("collider render", &is_collider_rendering);
+		//arrow
+		for (int i = 0; i < 6; i++)
+		{
+			arrow_colliders[i].Collider->Render(Color(0, 1, 0, 1));
+		}
+
+		//ImGui::Checkbox("collider render", &is_collider_rendering);
 		
 		if (is_collider_rendering)
 		{
@@ -1660,11 +1751,7 @@ void PortFolio::Render()
 					mon_sword_colliders[i].Collider->Render(Color(0, 1, 0, 1));
 			}
 
-			//arrow
-			for (int i = 0; i < 6; i++)
-			{
-				arrow_colliders[i].Collider->Render(Color(0, 1, 0, 1));
-			}
+			
 
 		}
 
@@ -1707,6 +1794,8 @@ void PortFolio::PostRender()
 {
 	//sky->PostRender();
 	
+	ImGui::Image(shadow->SRV(), ImVec2(200, 200));
+
 	if(is_ocean)
 		ocean->RenderFFT();
 }
@@ -1812,7 +1901,7 @@ void PortFolio::Dreyar()
 	dreyar->SetWeaponNum(0);
 
 	Transform* transform = dreyar->AddTransform();
-	transform->Position(128.0f, 0, 128.0f);
+	transform->Position(128.0f, terrain->GetHeight(Vector3(128,0,128)), 128.0f);
 	transform->Scale(0.001f, 0.001f, 0.001f);
 
 	dreyar->UpdateTransforms();
@@ -1902,7 +1991,6 @@ void PortFolio::CastleGuardSword()
 	}
 }
 
-
 void PortFolio::CastleGuardBow()
 {
 	castleGuardBow = new ModelAnimator(shader);
@@ -1955,7 +2043,6 @@ void PortFolio::CastleGuardBow()
 	}
 }
 
-
 void PortFolio::BillboardLayer()
 {
 	ImGui::SliderInt("Tree Layer", &treenum, 0, 7);
@@ -1966,7 +2053,32 @@ void PortFolio::BillboardLayer()
 		is_billboard_hovered = true;
 	else
 		is_billboard_hovered = false;
-	
+
+	if (ImGui::ImageButton(tex1->SRV(), ImVec2(70, 70)))
+		treenum = 0;
+	ImGui::SameLine();
+	if (ImGui::ImageButton(tex2->SRV(), ImVec2(70, 70)))
+		treenum = 1;
+	ImGui::SameLine();
+	if (ImGui::ImageButton(tex3->SRV(), ImVec2(70, 70)))
+		treenum = 2;
+	ImGui::SameLine();
+	if (ImGui::ImageButton(tex4->SRV(), ImVec2(70, 70)))
+		treenum = 3;
+
+	if (ImGui::ImageButton(tex5->SRV(), ImVec2(70, 70)))
+		treenum = 4;
+	ImGui::SameLine();
+	if (ImGui::ImageButton(tex6->SRV(), ImVec2(70, 70)))
+		treenum = 5;
+	ImGui::SameLine();
+	if (ImGui::ImageButton(tex7->SRV(), ImVec2(70, 70)))
+		treenum = 6;
+	ImGui::SameLine();
+	if (ImGui::ImageButton(tex8->SRV(), ImVec2(70, 70)))
+		treenum = 7;
+
+
 	if (!is_billboard_hovered)
 	{
 		if (Mouse::Get()->Press(0))

@@ -4,6 +4,7 @@
 #include "00_Sky.fx"
 #include "00_Terrain.fx"
 #include "00_Water.fx"
+#include "00_Billboard.fx"
 
 ///////////////////////////////////////////////////////////////////////////////
 // PreRender
@@ -32,7 +33,7 @@ float4 PS(MeshOutput input) : SV_Target
 
 	//return float4(diffuse * NdotL, 1);
 	
-	return PS_Shadow(input, PS_AllLight(input));	
+	return PS_Shadow(input.sPosition, PS_AllLight(input));
 }
 
 technique11 T0
@@ -48,6 +49,7 @@ technique11 T0
     P_BS_VP(P5, AlphaBlend, VS_Moon, PS_Moon)
     P_BS_VP(P6, AlphaBlend, VS_Cloud, PS_Cloud)
 
+	
     //Render
     P_VP(P7, VS_Mesh, PS)
     P_VP(P8, VS_Model, PS)
@@ -67,4 +69,14 @@ technique11 T0
 
 	//Trail
 	P_BS_VP(P17, AlphaBlend_AlphaToCoverage, VS_Trail, PS_Trail)
+
+	//Billboard
+    P_BS_VGP(P18, AlphaBlend_AlphaToCoverage, VS_Billboard, GS_Billboard, PS_Billboard)
+
+	//Terrain
+	P_VP(P19, VS_Terrain, PS_Terrain)
+
+	//TerrainLod
+	P_VTP(P20, VS_TerrainLod, HS_TerrainLod, DS_TerrainLod, PS_TerrainLod)
+	P_RS_VTP(P21, FillMode_WireFrame, VS_TerrainLod, HS_TerrainLod, DS_TerrainLod, PS_TerrainLod)
 }
