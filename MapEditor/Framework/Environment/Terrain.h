@@ -80,7 +80,6 @@ private:
 	ConstantBuffer* lineBuffer;
 	ID3DX11EffectConstantBuffer* sLineBuffer;
 
-
 	bool is_mapeditor = false;
 
 	bool is_flattening = false;

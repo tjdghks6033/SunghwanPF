@@ -24,20 +24,11 @@ float4 PS_Terrain(VertexTerrain input) : SV_Target0
     //else
     //    return float4(diffuse * NdotL, 1) + brushColor + lineColor + alpha; //+ input.Color;
     
-	//return float4(diffuse * NdotL, 1) + brushColor + lineColor;
-	
-	float3 shadowPosition = input.wPosition;
-
-	shadowPosition = mul(shadowPosition, ShadowView);
-
-	shadowPosition = mul(shadowPosition, ShadowProjection);
-	
-	return PS_Shadow(float4(shadowPosition, 1), float4(diffuse * NdotL, 1) + brushColor + lineColor);
-	
+	return float4(diffuse * NdotL, 1) + brushColor + lineColor;
 }
 
 technique11 T0
 {
     P_VP(P0, VS_Terrain, PS_Terrain)
-    P_RS_VP(P1, FillMode_WireFrame, VS_Terrain, PS_Terrain)
+    P_RS_VP(P1, RS, VS_Terrain, PS_Terrain)
 }

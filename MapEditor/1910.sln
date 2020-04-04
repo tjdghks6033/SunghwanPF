@@ -19,7 +19,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ModelConv", "ModelConv\Mode
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "00", "00", "{E26E4FDE-09A6-4D06-A8DB-D9B266A6B6FF}"
 	ProjectSection(SolutionItems) = preProject
-		..\_Shaders\00_Billboard.fx = ..\_Shaders\00_Billboard.fx
 		..\_Shaders\00_Deffered.fx = ..\_Shaders\00_Deffered.fx
 		..\_Shaders\00_Global.fx = ..\_Shaders\00_Global.fx
 		..\_Shaders\00_Light.fx = ..\_Shaders\00_Light.fx

@@ -27,7 +27,6 @@ Terrain::Terrain(Shader * shader, wstring heightFile)
 	//vertexBuffer = new VertexBuffer(vertices, vertexCount, sizeof(TerrainVertex), 0, false, true);
 	vertexBuffer = new VertexBuffer(vertices, vertexCount, sizeof(TerrainVertex), 0, true);
 	indexBuffer = new IndexBuffer(indices, indexCount);
-
 }
 
 Terrain::~Terrain()
@@ -49,6 +48,7 @@ Terrain::~Terrain()
 void Terrain::Update()
 {
 	Super::Update();
+
 	
 	ImGui::Checkbox("Map Editor", &is_mapeditor);
 
@@ -635,7 +635,7 @@ void Terrain::Smoothing(Vector3 & position, UINT type, UINT range)
 		rect.right = (LONG)position.x + range;
 		rect.bottom = (LONG)position.z - range;
 
-		
+
 		if (rect.left < 0) rect.left = 0;
 		if (rect.top >= (LONG)height) rect.top = (LONG)height;
 		if (rect.right >= (LONG)width) rect.right = (LONG)width;
@@ -657,15 +657,7 @@ void Terrain::Smoothing(Vector3 & position, UINT type, UINT range)
 					UINT indexcb = width * ((UINT)z - 1) + (UINT)x;	//cb
 					UINT indexrb = width * ((UINT)z - 1) + (UINT)x + 1;	//rb
 
-					if (index < 0 || index > 65536 ||
-						indexlt < 0 || indexlt  > 65536 ||
-						indextc < 0 || indextc  > 65536 ||
-						indexrt < 0 || indexrt  > 65536 ||
-						indexlc < 0 || indexlc  > 65536 ||
-						indexrc < 0 || indexrc  > 65536 ||
-						indexlb < 0 || indexlb  > 65536 ||
-						indexcb < 0 || indexcb  > 65536 ||
-						indexrb < 0 || indexrb  > 65536) return;
+					
 
 					float cc = vertices[index].Position.y  ;
 					float lt = vertices[indexlt].Position.y;

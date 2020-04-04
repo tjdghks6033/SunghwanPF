@@ -34,6 +34,8 @@ private:
 	Shadow* shadow;
 
 	Terrain* terrain;
+	Shader* sTerrain;
+	Shader* sTerrainLod;
 	Shader* sOcean;
 
 	TerrainLod* terrainLod;
@@ -45,7 +47,7 @@ private:
 	Vector3 camerarotation = Vector3(0, 0, 0);
 	
 
-	UINT terrain_num = 1;
+	UINT terrain_num = 0;
 	bool is_billboard = false;
 	bool is_wireframe = false;
 	bool is_mesh = false;
@@ -55,6 +57,7 @@ private:
 	bool is_water = false;
 	bool is_ocean = false;
 
+	Shader* bbShader;
 	class Billboard* bb;
 	class Billboard* bb2;
 	class Billboard* bb3;
@@ -65,16 +68,6 @@ private:
 	class Billboard* bb8;
 	int treenum = 0;
 	bool is_billboard_hovered = false;
-
-	Texture* tex1;
-	Texture* tex2;
-	Texture* tex3;
-	Texture* tex4;
-	Texture* tex5;
-	Texture* tex6;
-	Texture* tex7;
-	Texture* tex8;
-
 
 	Sky* sky;
 	Snow* snow;
@@ -104,37 +97,30 @@ private:
 	ParticleSystem* particle3 = NULL;
 	ParticleSystem* particle4 = NULL;
 	ParticleSystem* particle5 = NULL;
-
-	ParticleSystem* meteor_particle1 = NULL;
-	ParticleSystem* meteor_particle2 = NULL;
-	ParticleSystem* meteor_particle3 = NULL;
-
-	Vector3 particleposition = Vector3(0, 0, 0);
 	
 
 	bool is_unarmed = false;
 	bool is_sword_spine = false;
-	bool is_sword = false;
+	bool is_sword = false;	
 	bool is_bow = false;
 	
 	//Player
-	Vector3 picked;							//마우스 위치
-	float speed;							//플레이어 스피드
-	float pickrotation = 0.0f;				//마우스 위치에 대한 회전
-	UINT playerClip = 0;					//플레이어클립
-	int player_prev_clip = 0;				//플레이어 이전 클립
-	int weapon_num = 0;						//플레이어 무기교체
-	bool is_attacking = false;				//플레이어가 공격하는지 확인
-	bool is_running = false;				//플레이어가 뛰고 있는지 확인
+	Vector3 picked;						//마우스 위치
+	float speed;						//플레이어 스피드
+	float pickrotation = 0.0f;			//마우스 위치에 대한 회전
+	UINT playerClip = 0;				//플레이어클립
+	int player_prev_clip = 0;			//플레이어 이전 클립
+	int weapon_num = 0;					//플레이어 무기교체
+	bool is_attacking = false;			//플레이어가 공격하는지 확인
+	bool is_running = false;			//플레이어가 뛰고 있는지 확인
 	bool is_attackcombo_one = false;		//플레이어가 범위 공격하는지 확인
-	bool is_attackcombo_two = false;		//플레이어가 대쉬 공격하는지 확인
+	bool is_attackcombo_two = false;	//플레이어가 대쉬 공격하는지 확인
 	bool is_particle_attack_one = false;	//플레이어가 스킬 공격하는지 확인
 	bool is_particle_attack_once = false;
-	bool is_particle_attack_twice = false;
 	bool is_particle_attack_two = false;
 	bool is_trail = false;
-	bool is_heat = false;					//플레이어가 맞았는지 확인
-	bool is_death = false;					//플레이어가 죽었는지 확인
+	bool is_heat = false;				//플레이어가 맞았는지 확인
+	bool is_death = false;				//플레이어가 죽었는지 확인
 	float animspeed = 1.3f;
 	float taketime = 0.2f;
 	float sword_jump_attack_range = 100.0f;
@@ -151,10 +137,10 @@ private:
 	bool is_mon_running_to_waypoint[10]; //몬스터가 거점으로 뛰고 있는지 확인
 	float monanimspeed = 1.3f;
 	float montaketime = 0.2f;
-	float monattackrange = 3.0f;
+	float monattackrange = 5.0f;
 	float monbowattackrange = 100.0f;
 	float montracerange = 150.0f;
-	float monwaybackrange = 2000.0f;
+	float monwaybackrange = 200.0f;
 
 	float arrowposy = 1.318f;
 	float monarrowposy = 1.318f;

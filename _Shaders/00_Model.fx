@@ -52,7 +52,7 @@ output.Cull.y = dot(float4(output.wPosition, 1), Culling[1]); \
 output.Cull.z = dot(float4(output.wPosition, 1), Culling[2]); \
 output.Cull.w = dot(float4(output.wPosition, 1), Culling[3]); \
 \
-output.Clip.x = dot(float4(output.wPosition, 1), WaterClipping); \
+output.Clip.x = dot(float4(output.wPosition, 1), Clipping); \
 output.Clip.y = 0; \
 output.Clip.z = 0; \
 output.Clip.w = 0;

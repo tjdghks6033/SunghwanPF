@@ -16,8 +16,8 @@
     <MaxColor R="0.7" G="0" B="0.7" A="1"/>
     <MinRotateSpeed>-5</MinRotateSpeed>
     <MaxRotateSpeed>5</MaxRotateSpeed>
-    <MinStartSize>1</MinStartSize>
-    <MaxStartSize>1</MaxStartSize>
-    <MinEndSize>3</MinEndSize>
-    <MaxEndSize>3</MaxEndSize>
+    <MinStartSize>0.5</MinStartSize>
+    <MaxStartSize>0.5</MaxStartSize>
+    <MinEndSize>5</MinEndSize>
+    <MaxEndSize>10</MaxEndSize>
 </Particle>

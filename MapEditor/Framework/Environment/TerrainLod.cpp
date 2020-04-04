@@ -45,6 +45,7 @@ TerrainLod::TerrainLod(InitializeDesc & initDesc)
 
 	camera = new Fixity();
 	perspective = new Perspective(D3D::Width(), D3D::Height(), 0.1f, 1000.0f, Math::PI * 0.35f);
+
 	frustum = new Frustum(NULL, perspective);
 	//frustum = new Frustum(camera, perspective);
 }
