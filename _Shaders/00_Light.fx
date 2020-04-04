@@ -178,8 +178,8 @@ void NormalMapping(float2 uv, float3 normal, float3 tangent, SamplerState samp)
     //ÅºÁ¨Æ® °ø°£À¸·Î º¯È¯
     coord = mul(coord, TBN);
     
-	//Material.Diffuse *= saturate(dot(coord, -GlobalLight.Direction));
-	Material.Diffuse = Material.Diffuse;
+	Material.Diffuse *= saturate(dot(coord, -GlobalLight.Direction));
+	//Material.Diffuse = Material.Diffuse;
 }
 
 void NormalMapping(float2 uv, float3 normal, float3 tangent)

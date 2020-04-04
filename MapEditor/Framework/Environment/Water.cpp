@@ -64,7 +64,8 @@ Water::~Water()
 void Water::ResetClipPlane()
 {
 	Plane plane(0, 0, 0, 0);
-	perFrame->Clipping(plane);
+	//perFrame->Clipping(plane);
+	shader->AsVector("WaterClipping")->SetFloatVector(plane);
 }
 
 void Water::Update()
@@ -101,8 +102,10 @@ void Water::PreRender_Reflection()
 	Vector3 position;
 	GetTransform()->Position(&position);
 
-	Plane plane = Plane(0, 1, 0, -position.y - 1.15f);
-	perFrame->Clipping(plane);
+	Plane plane = Plane(0, 1, 0, -position.y);
+	//perFrame->Clipping(plane);
+	
+	shader->AsVector("WaterClipping")->SetFloatVector(plane);
 
 	reflection->Set(depthStencil);
 	viewport->RSSetViewport();
@@ -113,8 +116,9 @@ void Water::PreRender_Refraction()
 	Vector3 position;
 	GetTransform()->Position(&position);
 
-	Plane plane = Plane(0, -1, 0, position.y + 0.1f + 1.15f);
-	perFrame->Clipping(plane);
+	Plane plane = Plane(0, -1, 0, position.y + 0.1f);
+	//perFrame->Clipping(plane);
+	shader->AsVector("WaterClipping")->SetFloatVector(plane);
 
 	refraction->Set(depthStencil);
 	viewport->RSSetViewport();

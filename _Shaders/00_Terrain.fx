@@ -9,6 +9,7 @@ struct VertexTerrain
 {
 	float4 Position : SV_Position0;
 	float3 wPosition : Position1;
+	float4 sPosition : Position2;
 	float2 Uv : Uv0;
 	float3 Normal : Normal0;
 	float4 Color : Color0;
@@ -23,13 +24,49 @@ VertexTerrain VS_Terrain(VertexTextureNormalAlpha input)
     
 	output.Position = mul(output.Position, View);
 	output.Position = mul(output.Position, Projection);
+	
 
+	output.sPosition = WorldPosition(input.Position);
+	output.sPosition = mul(output.sPosition, ShadowView);
+	output.sPosition = mul(output.sPosition, ShadowProjection);
+	
 	output.Normal = mul(input.Normal, (float3x3) World);
 	output.Uv = input.Uv;
 
 	output.Color = input.Color;
 
 	return output;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+float4 GetBaseColor(float2 uv)
+{
+	return BaseMap.Sample(LinearSampler, uv);
+}
+
+float4 GetLayerColor(float2 uv)
+{
+	float4 base = GetBaseColor(uv);
+	float alpha = AlphaMap.Sample(LinearSampler, uv).r;
+	float4 layer = LayerMap.Sample(LinearSampler, uv);
+
+	return lerp(base, layer, alpha);
+
+}
+
+float4 GetLayerColor2(float2 uv, float4 color)
+{
+	float4 base = GetBaseColor(uv);
+	float4 layer = LayerMap.Sample(LinearSampler, uv);
+	float4 layer2 = LayerMap2.Sample(LinearSampler, uv);
+	float4 layer3 = LayerMap3.Sample(LinearSampler, uv);
+
+	base = lerp(base, layer, color.r);
+	base = lerp(base, layer2, color.g);
+	base = lerp(base, layer3, color.b);
+
+	return base;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -132,35 +169,20 @@ float4 GetLineColor(float3 wPosition)
 	return lerp(TerrainLine.Color, float4(0, 0, 0, 0), thick);
 }
 
-///////////////////////////////////////////////////////////////////////////////
 
-float4 GetBaseColor(float2 uv)
+float4 PS_Terrain(VertexTerrain input) : SV_Target0
 {
-	return BaseMap.Sample(LinearSampler, uv);
-}
+	float3 diffuse = GetLayerColor2(input.Uv, input.Color); 
+	float NdotL = dot(normalize(input.Normal), -GlobalLight.Direction);
 
-float4 GetLayerColor(float2 uv)
-{
-	float4 base = GetBaseColor(uv);
-	float alpha = AlphaMap.Sample(LinearSampler, uv).r;
-	float4 layer = LayerMap.Sample(LinearSampler, uv);
-
-	return lerp(base, layer, alpha);
-
-}
-
-float4 GetLayerColor2(float2 uv, float4 color)
-{
-	float4 base = GetBaseColor(uv);
-	float4 layer = LayerMap.Sample(LinearSampler, uv);
-	float4 layer2 = LayerMap2.Sample(LinearSampler, uv);
-	float4 layer3 = LayerMap3.Sample(LinearSampler, uv);
-
-	base = lerp(base, layer, color.r);
-	base = lerp(base, layer2, color.g);
-	base = lerp(base, layer3, color.b);
-
-	return base;
+	float4 brushColor = GetBrushColor(input.wPosition);
+	float4 lineColor = GetLineColor(input.wPosition);
+    
+	//return float4(diffuse * NdotL, 1) + brushColor + lineColor;	
+	float4 color = float4(diffuse * NdotL, 1) + brushColor + lineColor;
+	
+	
+	return PS_Shadow(input.sPosition, color);
 }
 
 
