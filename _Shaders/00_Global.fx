@@ -35,6 +35,8 @@ cbuffer CB_Trail
 	matrix Trail;
 };
 
+float4 WaterClipping;
+
 Texture2D DiffuseMap;
 Texture2D SpecularMap;
 Texture2D NormalMap;
