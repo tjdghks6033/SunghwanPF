@@ -49,11 +49,12 @@ private:
 	bool is_billboard = false;
 	bool is_wireframe = false;
 	bool is_mesh = false;
-	bool is_model = false;
+	bool is_model = true;
 	bool is_weather = true;
 	bool is_light = false;
-	bool is_water = false;
+	bool is_water = true;
 	bool is_ocean = false;
+	bool is_sky = true;
 
 	class Billboard* bb;
 	class Billboard* bb2;

@@ -14,7 +14,7 @@ void PortFolio::Initialize()
 
 	shader = new Shader(L"48_Water.fxo");
 
-	shadow = new Shadow(shader, Vector3(125, 0, 125), 50);
+	shadow = new Shadow(shader, Vector3(125, 0, 125), 65000, 4096, 4096);
 	
 
 	//Sky
@@ -74,7 +74,7 @@ void PortFolio::Initialize()
 		};
 
 		terrainLod = new TerrainLod(desc);
-		terrainLod->BaseMap(L"Terrain/Dirt.png");
+		terrainLod->BaseMap(L"Terrain/Dirt3.png");
 		terrainLod->LayerMap(L"Terrain/Grass (Lawn).jpg", L"Terrain/Gray512.png");
 		terrainLod->NormalMap(L"Terrain/Dirt_Normal.png");
 		terrainLod->Pass(20);
@@ -556,8 +556,8 @@ void PortFolio::Update()
 						meteor_particle3->Update();
 					}
 
-					meshposition.y -= 0.15f;
-					particleposition.y -= 0.15f;
+					meshposition.y -= 0.05f;
+					particleposition.y -= 0.05f;
 
 					sphere->GetTransform(0)->Position(meshposition);
 
@@ -656,9 +656,9 @@ void PortFolio::Update()
 						rotation.y = pickrotation - 3.14f;
 					}
 
-					position.x += 0.15f * sinf(pickrotation);
+					position.x += 0.05f * sinf(pickrotation);
 					position.y = terrain->GetHeight(position);
-					position.z += 0.15f * cosf(pickrotation);
+					position.z += 0.05f * cosf(pickrotation);
 
 					if (abs(picked.x - position.x) < 0.2f && abs(picked.z - position.z) < 0.2f)
 					{
@@ -671,9 +671,12 @@ void PortFolio::Update()
 							dreyar->PlayClip(0, playerClip, animspeed, taketime);
 						}
 					}
+
+					is_trail = false;
 				}//Running
 				else  
 				{
+					is_trail = false;
 					if (weapon_num == 0)
 					{
 						if (playerClip  != 3)
@@ -696,8 +699,8 @@ void PortFolio::Update()
 
 				if (is_arrow_moving && is_arrow_initialize)
 				{
-					arrow_position.x -= 1.5f * sinf(arrow_rotation.y);
-					arrow_position.z -= 1.5f * cosf(arrow_rotation.y);
+					arrow_position.x -= 0.5f * sinf(arrow_rotation.y);
+					arrow_position.z -= 0.5f * cosf(arrow_rotation.y);
 
 					weaponArrow->GetTransform(0)->Position(arrow_position);
 					//weaponArrow->UpdateTransforms();
@@ -709,7 +712,6 @@ void PortFolio::Update()
 					is_arrow_moving = true;
 				}
 
-				
 
 
 				dreyar->GetTransform(0)->Position(position);
@@ -782,8 +784,8 @@ void PortFolio::Update()
 						}
 						float rotationy = atan2f(mon_position[i].x - position.x, mon_position[i].z - position.z);
 						castleGuardSword->GetTransform(i)->Rotation(mon_rotation[i].x, rotationy, mon_rotation[i].z);
-						mon_position[i].x -= 0.15f * sinf(rotationy);
-						mon_position[i].z -= 0.15f * cosf(rotationy);
+						mon_position[i].x -= 0.05f * sinf(rotationy);
+						mon_position[i].z -= 0.05f * cosf(rotationy);
 						castleGuardSword->GetTransform(i)->Position(mon_position[i]);
 
 						if (powf(mon_position[i].x - mon_waypoint[i].x, 2) + powf(mon_position[i].z - mon_waypoint[i].z, 2) > monwaybackrange)
@@ -808,8 +810,8 @@ void PortFolio::Update()
 						}
 						float rotationy = atan2f(mon_position[i].x - mon_waypoint[i].x, mon_position[i].z - mon_waypoint[i].z);
 						castleGuardSword->GetTransform(i)->Rotation(mon_rotation[i].x, rotationy, mon_rotation[i].z);
-						mon_position[i].x -= 0.15f * sinf(rotationy);
-						mon_position[i].z -= 0.15f * cosf(rotationy);
+						mon_position[i].x -= 0.05f * sinf(rotationy);
+						mon_position[i].z -= 0.05f * cosf(rotationy);
 						castleGuardSword->GetTransform(i)->Position(mon_position[i]);
 
 						if (powf(mon_position[i].x - mon_waypoint[i].x, 2) + powf(mon_position[i].z - mon_waypoint[i].z, 2) < 10.0f)
@@ -926,8 +928,8 @@ void PortFolio::Update()
 						}
 						float rotationy = atan2f(mon_position[i].x - position.x, mon_position[i].z - position.z);
 						castleGuardBow->GetTransform(i - 5)->Rotation(mon_rotation[i].x, rotationy, mon_rotation[i].z);
-						mon_position[i].x -= 0.15f * sinf(rotationy);
-						mon_position[i].z -= 0.15f * cosf(rotationy);
+						mon_position[i].x -= 0.05f * sinf(rotationy);
+						mon_position[i].z -= 0.05f * cosf(rotationy);
 						castleGuardBow->GetTransform(i - 5)->Position(mon_position[i]);
 
 						if (powf(mon_position[i].x - mon_waypoint[i].x, 2) + powf(mon_position[i].z - mon_waypoint[i].z, 2) > monwaybackrange)
@@ -951,8 +953,8 @@ void PortFolio::Update()
 						}
 						float rotationy = atan2f(mon_position[i].x - mon_waypoint[i].x, mon_position[i].z - mon_waypoint[i].z);
 						castleGuardBow->GetTransform(i - 5)->Rotation(mon_rotation[i].x, rotationy, mon_rotation[i].z);
-						mon_position[i].x -= 0.15f * sinf(rotationy);
-						mon_position[i].z -= 0.15f * cosf(rotationy);
+						mon_position[i].x -= 0.05f * sinf(rotationy);
+						mon_position[i].z -= 0.05f * cosf(rotationy);
 						castleGuardBow->GetTransform(i - 5)->Position(mon_position[i]);
 
 						if (powf(mon_position[i].x - mon_waypoint[i].x, 2) + powf(mon_position[i].z - mon_waypoint[i].z, 2) < 10.0f)
@@ -1135,7 +1137,12 @@ void PortFolio::Update()
 	
 	ImGui::Begin("Sky", nullptr);
 	{
-		sky->Update();
+		ImGui::Checkbox("Sky", &is_sky);
+		if (is_sky)
+		{
+			sky->Update();
+		}
+		
 	}
 	ImGui::End();
 		
@@ -1530,7 +1537,11 @@ void PortFolio::Render()
 	}
 
 	sky->Pass(4, 5, 6);
-	sky->Render();
+	
+	if (is_sky)
+	{
+		sky->Render();
+	}
 
 	if (terrain_num == 1)
 	{
@@ -2086,7 +2097,7 @@ void PortFolio::BillboardLayer()
 			auto picked = terrain->GetPickedPosition();
 			for (UINT i = 0; i < 10; i++)
 			{
-				Vector2 scale = Math::RandomVec2(1.0f, 3.0f);
+				Vector2 scale = Math::RandomVec2(0.5f, 1.0f);
 				float positionx = Math::Random(picked.x - 10.0f, picked.x + 10.0f);
 				float positionz = Math::Random(picked.z - 10.0f, picked.z + 10.0f);
 				float positiony = terrain->GetHeight(Vector3(positionx, 0.0f, positionz)) + scale.y * 0.5f;
@@ -2283,6 +2294,7 @@ void PortFolio::BillboardLayer()
 				for (int i = 0; i < bbsize; i++)
 				{
 					Vector3 saveposition = reader->Vector3();
+					//saveposition.y = terrain->GetHeight(saveposition);
 					Vector2 savescale = reader->Vector2();
 					float saverandom = reader->Float();
 
@@ -2295,6 +2307,7 @@ void PortFolio::BillboardLayer()
 				for (int i = 0; i < bb2size; i++)
 				{
 					Vector3 saveposition = reader->Vector3();
+					//saveposition.y = terrain->GetHeight(saveposition);
 					Vector2 savescale = reader->Vector2();
 					float saverandom = reader->Float();
 
@@ -2307,6 +2320,7 @@ void PortFolio::BillboardLayer()
 				for (int i = 0; i < bb3size; i++)
 				{
 					Vector3 saveposition = reader->Vector3();
+					//saveposition.y = terrain->GetHeight(saveposition);
 					Vector2 savescale = reader->Vector2();
 					float saverandom = reader->Float();
 
@@ -2319,6 +2333,7 @@ void PortFolio::BillboardLayer()
 				for (int i = 0; i < bb4size; i++)
 				{
 					Vector3 saveposition = reader->Vector3();
+					//saveposition.y = terrain->GetHeight(saveposition);
 					Vector2 savescale = reader->Vector2();
 					float saverandom = reader->Float();
 
@@ -2331,6 +2346,7 @@ void PortFolio::BillboardLayer()
 				for (int i = 0; i < bb5size; i++)
 				{
 					Vector3 saveposition = reader->Vector3();
+					//saveposition.y = terrain->GetHeight(saveposition);
 					Vector2 savescale = reader->Vector2();
 					float saverandom = reader->Float();
 
@@ -2343,6 +2359,7 @@ void PortFolio::BillboardLayer()
 				for (int i = 0; i < bb6size; i++)
 				{
 					Vector3 saveposition = reader->Vector3();
+					//saveposition.y = terrain->GetHeight(saveposition);
 					Vector2 savescale = reader->Vector2();
 					float saverandom = reader->Float();
 
@@ -2355,6 +2372,7 @@ void PortFolio::BillboardLayer()
 				for (int i = 0; i < bb7size; i++)
 				{
 					Vector3 saveposition = reader->Vector3();
+					//saveposition.y = terrain->GetHeight(saveposition);
 					Vector2 savescale = reader->Vector2();
 					float saverandom = reader->Float();
 
@@ -2367,6 +2385,7 @@ void PortFolio::BillboardLayer()
 				for (int i = 0; i < bb8size; i++)
 				{
 					Vector3 saveposition = reader->Vector3();
+					//saveposition.y = terrain->GetHeight(saveposition);
 					Vector2 savescale = reader->Vector2();
 					float saverandom = reader->Float();
 

@@ -352,7 +352,7 @@ VertexOutput_Cloud VS_PreRender_Reflection_Cloud(VertexTexture input)
 
 float Fade(float t)
 {
-  // return t * t * (3.0 - 2.0 * t);
+   //return t * t * (3.0 - 2.0 * t);
     return t * t * t * (t * (t * 6.0 - 15.0) + 10.0);
 }
 

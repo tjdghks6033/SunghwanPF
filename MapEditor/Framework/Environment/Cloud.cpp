@@ -8,10 +8,10 @@ Cloud::Cloud(Shader * shader)
 
 	render2D = new Render2D();
 	render2D->GetTransform()->Position(400 + 100, D3D::Height() - 100, 0);
-	render2D->GetTransform()->Scale(400, 400, 1);
+	render2D->GetTransform()->Scale(100, 100, 1);
 
 
-	VertexTexture vertices[6];
+	/*VertexTexture vertices[6];
 
 	vertices[0].Position = Vector3(-1.0f, -1.0f, 0.0f);
 	vertices[1].Position = Vector3(-1.0f, +1.0f, 0.0f);
@@ -28,8 +28,94 @@ Cloud::Cloud(Shader * shader)
 	vertices[5].Uv = Vector2(1, 0);
 
 	vertexBuffer = new VertexBuffer(vertices, 6, sizeof(VertexTexture));
+*/
+
+	UINT latitude = 32 / 2; // 위도
+	UINT longitude = 32; // 경도
+
+	vertexCount = longitude * latitude * 2;
+	indexCount = (longitude - 1) * (latitude - 1) * 2 * 8;
 
 
+	VertexTexture* vertices = new VertexTexture[vertexCount];
+
+	UINT index = 0;
+	for (UINT i = 0; i < longitude; i++)
+	{
+		float xz = 100.0f * (i / (longitude - 1.0f)) * Math::PI / 180.0f;
+
+		for (UINT j = 0; j < latitude; j++)
+		{
+			float y = Math::PI * j / (latitude - 1);
+
+			vertices[index].Position.x = sinf(xz) * cosf(y);
+			vertices[index].Position.y = cosf(xz);
+			vertices[index].Position.z = sinf(xz) * sinf(y);
+
+			vertices[index].Uv.x = 0.5f / (float)longitude + i / (float)longitude;
+			vertices[index].Uv.y = 0.5f / (float)latitude + j / (float)latitude;
+
+			index++;
+		} // for(j)
+	}  // for(i)
+
+	for (UINT i = 0; i < longitude; i++)
+	{
+		float xz = 100.0f * (i / (longitude - 1.0f)) * Math::PI / 180.0f;
+
+		for (UINT j = 0; j < latitude; j++)
+		{
+			float y = (Math::PI * 2.0f) - (Math::PI * j / (latitude - 1));
+
+			vertices[index].Position.x = sinf(xz) * cosf(y);
+			vertices[index].Position.y = cosf(xz);
+			vertices[index].Position.z = sinf(xz) * sinf(y);
+
+			vertices[index].Uv.x = 0.5f / (float)longitude + i / (float)longitude;
+			vertices[index].Uv.y = 0.5f / (float)latitude + j / (float)latitude;
+
+			index++;
+		} // for(j)
+	}  // for(i)
+
+
+	index = 0;
+	UINT* indices = new UINT[indexCount * 3];
+
+	for (UINT i = 0; i < longitude - 1; i++)
+	{
+		for (UINT j = 0; j < latitude - 1; j++)
+		{
+			indices[index++] = i * latitude + j;
+			indices[index++] = (i + 1) * latitude + j;
+			indices[index++] = (i + 1) * latitude + (j + 1);
+
+			indices[index++] = (i + 1) * latitude + (j + 1);
+			indices[index++] = i * latitude + (j + 1);
+			indices[index++] = i * latitude + j;
+		}
+	}
+
+	UINT offset = latitude * longitude;
+	for (UINT i = 0; i < longitude - 1; i++)
+	{
+		for (UINT j = 0; j < latitude - 1; j++)
+		{
+			indices[index++] = offset + i * latitude + j;
+			indices[index++] = offset + (i + 1) * latitude + (j + 1);
+			indices[index++] = offset + (i + 1) * latitude + j;
+
+			indices[index++] = offset + i * latitude + (j + 1);
+			indices[index++] = offset + (i + 1) * latitude + (j + 1);
+			indices[index++] = offset + i * latitude + j;
+		}
+	}
+
+	vertexBuffer = new VertexBuffer(vertices, vertexCount, sizeof(VertexTexture));
+	indexBuffer = new IndexBuffer(indices, indexCount);
+
+	SafeDeleteArray(vertices);
+	SafeDeleteArray(indices);
 	CreateTexture();
 }
 
@@ -47,15 +133,15 @@ void Cloud::Update()
 	Vector3 position(0, 0, 0);
 	//Context::Get()->GetCamera()->Position(&position);
 	
-	static float CloudTiles;
+	static float CloudTiles = 4.4f;
 	static float CloudCover = -0.1f;
-	static float CloudSharpness = 0.25f;
-	static float CloudSpeed = 0.01f;
+	static float CloudSharpness = 0.05f;
+	static float CloudSpeed = 0.21f;
 
 
 	ImGui::SliderFloat("CloudTiles", &CloudTiles, 0, 100);
 	ImGui::SliderFloat("CloudCover", &CloudCover, -10, 10);
-	ImGui::SliderFloat("CloudSharpness", &CloudSharpness, 0, 3.14f);
+	ImGui::SliderFloat("CloudSharpness", &CloudSharpness, 0.00001, 0.14f);
 	ImGui::SliderFloat("CloudSpeed", &CloudSpeed, -1, 1);
 
 	shader->AsScalar("CloudTiles")->SetFloat(CloudTiles);
@@ -83,9 +169,9 @@ void Cloud::Render()
 	D3D::GetDC()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	sSRV->SetResource(srv);
-	shader->Draw(0, Pass(), 6);
+	//shader->Draw(0, Pass(), 6);
+	shader->DrawIndexed(0, Pass(), indexCount);
 }
-
 void Cloud::PostRender()
 {
 	render2D->Update();
