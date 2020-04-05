@@ -78,35 +78,7 @@ void Terrain::Update()
 
 		ImGui::Checkbox("Paint", &is_paint);
 
-		if (is_paint)
-		{
-			ImGui::Text(" BaseMap");
-			ImGui::SameLine();
-			ImGui::Text("   AlphaMap");
-			ImGui::Image(baseMap->SRV(), ImVec2(70, 70));
-			ImGui::SameLine();
-			ImGui::Image(alphaMap->SRV(), ImVec2(70, 70));
-
-			ImGui::Separator();
-
-			ImGui::Text(" LayerMap1");
-			ImGui::SameLine();
-			ImGui::Text("   LayerMap2");
-			ImGui::SameLine();
-			ImGui::Text("   LayerMap3");
-			if(ImGui::ImageButton(layerMap->SRV(), ImVec2(70, 70)))
-				layernum = 1;
-			ImGui::SameLine();
-			if (ImGui::ImageButton(layerMap2->SRV(), ImVec2(70, 70)))
-				layernum = 2;
-			ImGui::SameLine();
-			if (ImGui::ImageButton(layerMap3->SRV(), ImVec2(70, 70)))
-				layernum = 3;
-		}
-
 		ImGui::SliderInt("Layer Num", &layernum, 1, 3);
-		
-
 
 		std::wstring file;
 		if (ImGui::Button("Save"))
@@ -171,6 +143,8 @@ void Terrain::Update()
 
 		if (brushDesc.Type > 0)
 		{
+			
+
 			if (!is_clicked)
 				brushDesc.Location = GetPickedPosition();
 
