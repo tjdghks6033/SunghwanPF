@@ -63,7 +63,7 @@ Water::~Water()
 
 void Water::ResetClipPlane()
 {
-	Plane plane(0, 0, 0, 0);
+	Plane plane(0, 1, 0, 0);
 	//perFrame->Clipping(plane);
 	shader->AsVector("WaterClipping")->SetFloatVector(plane);
 }
@@ -102,7 +102,7 @@ void Water::PreRender_Reflection()
 	Vector3 position;
 	GetTransform()->Position(&position);
 
-	Plane plane = Plane(0, 1, 0, -position.y);
+	Plane plane = Plane(0, 1, 0, -position.y + 0.1f);
 	//perFrame->Clipping(plane);
 	
 	shader->AsVector("WaterClipping")->SetFloatVector(plane);

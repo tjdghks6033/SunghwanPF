@@ -14,7 +14,7 @@ void PortFolio::Initialize()
 
 	shader = new Shader(L"48_Water.fxo");
 
-	shadow = new Shadow(shader, Vector3(125, 0, 125), 50);
+	shadow = new Shadow(shader, Vector3(125, 0, 125), 50, 2048, 2048);
 	
 
 	//Sky
@@ -133,6 +133,7 @@ void PortFolio::Initialize()
 		meteor_particle2 = new ParticleSystem(L"Meteor_2");
 		meteor_particle3 = new ParticleSystem(L"Meteor_3");
 
+		cloud = new ParticleSystem(L"Cloud");
 	}
 	Mesh();
 	Weapon();
@@ -1136,6 +1137,10 @@ void PortFolio::Update()
 	ImGui::Begin("Sky", nullptr);
 	{
 		sky->Update();
+		static Vector3 ppp;
+		ImGui::SliderFloat3("p[pp", ppp, -200, 200);
+		cloud->Add(ppp);
+		cloud->Update();
 	}
 	ImGui::End();
 		
@@ -1227,6 +1232,15 @@ void PortFolio::PreRender()
 
 		Pass(0, 1, 2);
 
+		bb->Render();
+		bb2->Render();
+		bb3->Render();
+		bb4->Render();
+		bb5->Render();
+		bb6->Render();
+		bb7->Render();
+		bb8->Render();
+
 		if (is_mesh)
 		{
 			wall->Render();
@@ -1305,14 +1319,7 @@ void PortFolio::PreRender()
 		{
 
 		}
-		bb->Render();
-		bb2->Render();
-		bb3->Render();
-		bb4->Render();
-		bb5->Render();
-		bb6->Render();
-		bb7->Render();
-		bb8->Render();
+		
 	}
 		
 	//Reflection
@@ -1415,6 +1422,8 @@ void PortFolio::PreRender()
 		{
 
 		}
+
+		water->ResetClipPlane();
 	}
 
 	//Refraction
@@ -1517,8 +1526,9 @@ void PortFolio::PreRender()
 		{
 
 		}
+
+		water->ResetClipPlane();
 	}
-	water->ResetClipPlane();
 
 }
 
@@ -1531,6 +1541,7 @@ void PortFolio::Render()
 
 	sky->Pass(4, 5, 6);
 	sky->Render();
+	cloud->Render();
 
 	if (terrain_num == 1)
 	{

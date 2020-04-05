@@ -2,9 +2,9 @@
 #include "00_Deffered.fx"
 #include "00_Model.fx"
 #include "00_Sky.fx"
-#include "00_Terrain.fx"
 #include "00_Water.fx"
 #include "00_Billboard.fx"
+#include "00_Terrain.fx"
 
 ///////////////////////////////////////////////////////////////////////////////
 // PreRender

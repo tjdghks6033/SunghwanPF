@@ -352,8 +352,8 @@ VertexOutput_Cloud VS_PreRender_Reflection_Cloud(VertexTexture input)
 
 float Fade(float t)
 {
-  // return t * t * (3.0 - 2.0 * t);
-    return t * t * t * (t * (t * 6.0 - 15.0) + 10.0);
+   return t * t * (3.0 - 2.0 * t);
+   //return t * t * t * (t * (t * 6.0 - 15.0) + 10.0);
 }
 
 texture2D CloudMap;
@@ -396,7 +396,7 @@ float4 PS_Cloud(VertexOutput_Cloud input) : SV_Target
     if (c < 0) 
         c = 0;
  
-    float density = 1.0 - pow(CloudSharpness, c);
+    float density = 1.0 - pow(CloudSharpness,c );
     float4 color = density;
     
     return color;
