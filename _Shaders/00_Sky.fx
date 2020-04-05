@@ -352,8 +352,13 @@ VertexOutput_Cloud VS_PreRender_Reflection_Cloud(VertexTexture input)
 
 float Fade(float t)
 {
+<<<<<<< HEAD
    return t * t * (3.0 - 2.0 * t);
    //return t * t * t * (t * (t * 6.0 - 15.0) + 10.0);
+=======
+   //return t * t * (3.0 - 2.0 * t);
+    return t * t * t * (t * (t * 6.0 - 15.0) + 10.0);
+>>>>>>> aff062ff0e2aacb12a19a518177188cabc2b9787
 }
 
 texture2D CloudMap;

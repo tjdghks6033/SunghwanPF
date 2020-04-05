@@ -49,11 +49,11 @@ void Editor::Update()
 	else if (Keyboard::Get()->Press('U'))
 		position.y -= 20 * Time::Delta();
 
-	position.y -= 0.1f;
+	/*position.y -= 0.1f;
 
 	if (position.y < 0)
 		position.y = 100.0f;
-
+*/
 	sphere->GetTransform(0)->Position(position);
 	
 	sphere->UpdateTransforms();
