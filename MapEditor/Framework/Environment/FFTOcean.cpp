@@ -145,7 +145,7 @@ void FFTOcean::CreateOceanSimAndRender()
 	ocean_param.wind_dependency = 0.07f;
 	// Control the scale of horizontal movement. Higher value creates
 	// pointy crests.
-	ocean_param.choppy_scale = 1.3f;
+	ocean_param.choppy_scale = 2.0f;
 
 	oceanSimulator = new FFTOceanSimulator(ocean_param);
 
@@ -210,6 +210,8 @@ void FFTOcean::Update(float time)
 	ImGui::SliderFloat3("OceanScale", (float*)&scale, 1, 50);
 	GetTransform()->Scale(scale);
 
+	
+
 	transform->Update();
 	oceanSimulator->UpdateDisplacementMap(time);
 	SRV_Displacemnet= oceanSimulator->GetDisplacementMap();
@@ -225,6 +227,20 @@ void FFTOcean::Render(float time)
 	shader->AsSRV("TexGradient")->SetResource(SRV_Gradient);
 	shader->AsSRV("TexFresnel")->SetResource(SRV_Fresnel);
 	shader->AsSRV("TexReflectCube")->SetResource(SRV_ReflectCube);
+
+
+	/*ImGui::ColorEdit4("SkyColor", shadingDesc.SkyColor);
+	ImGui::ColorEdit4("SunColor", shadingDesc.SunColor);
+	ImGui::ColorEdit4("WaterbodyColor", shadingDesc.WaterbodyColor);
+	ImGui::SliderFloat3("SunDir", shadingDesc.SunDir, -1, 1);
+	ImGui::SliderFloat("Shineness", &shadingDesc.Shineness, -100, 100);
+	ImGui::SliderFloat3("BendParam", shadingDesc.BendParam, -10, 10);
+	ImGui::SliderFloat("PerlinSize", &shadingDesc.PerlinSize, -10, 10);
+	ImGui::SliderFloat3("PerlinAmplitude", shadingDesc.PerlinAmplitude, -100, 100);
+	ImGui::SliderFloat("TexelLength_x2", &shadingDesc.TexelLength_x2, -10, 10);
+	ImGui::SliderFloat3("PerlinOctave", shadingDesc.PerlinOctave, -2,2);
+	ImGui::SliderFloat3("PerlinGradient", shadingDesc.PerlinGradient, -2, 2);
+*/
 
 	shadingDesc.SunDir = Context::Get()->Direction();
 	shadingDesc.SunDir.x = -shadingDesc.SunDir.x;
