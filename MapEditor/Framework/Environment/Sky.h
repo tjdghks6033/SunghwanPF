@@ -38,6 +38,14 @@ private:
 		float Speed = 0.05f;
 	} cloudDesc;
 
+	struct PerlinCloudDesc
+	{
+		float translation = 0.0f;
+		float scale = 0.3f;
+		float brightness = 0.5f;
+		float padding;
+	} perlincloudDesc;
+
 private:
 	Shader* shader;
 
@@ -57,7 +65,13 @@ private:
 	class Dome* dome;
 	class Moon* moon;
 
-	class Cloud* cloud;
-	ConstantBuffer* cloudBuffer;
-	ID3DX11EffectConstantBuffer* sCloudBuffer;
+	//class Cloud* cloud;
+
+	class PerlinCloud* perlinCloud;
+
+	//ConstantBuffer* cloudBuffer;
+	//ID3DX11EffectConstantBuffer* sCloudBuffer;
+
+	ConstantBuffer* perlincloudBuffer;
+	ID3DX11EffectConstantBuffer* sPerlinCloudBuffer;
 };

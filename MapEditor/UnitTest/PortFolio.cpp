@@ -14,11 +14,8 @@ void PortFolio::Initialize()
 
 	shader = new Shader(L"48_Water.fxo");
 
-<<<<<<< HEAD
 	shadow = new Shadow(shader, Vector3(125, 0, 125), 50, 2048, 2048);
-=======
 	shadow = new Shadow(shader, Vector3(125, 0, 125), 65000, 4096, 4096);
->>>>>>> aff062ff0e2aacb12a19a518177188cabc2b9787
 	
 
 	//Sky
@@ -135,9 +132,7 @@ void PortFolio::Initialize()
 
 		meteor_particle1 = new ParticleSystem(L"Meteor_1");
 		meteor_particle2 = new ParticleSystem(L"Meteor_2");
-		meteor_particle3 = new ParticleSystem(L"Meteor_3");
-
-		cloud = new ParticleSystem(L"Cloud");
+		meteor_particle3 = new ParticleSystem(L"Meteor_3");		
 	}
 	Mesh();
 	Weapon();
@@ -1142,20 +1137,15 @@ void PortFolio::Update()
 	
 	ImGui::Begin("Sky", nullptr);
 	{
-<<<<<<< HEAD
 		sky->Update();
 		static Vector3 ppp;
 		ImGui::SliderFloat3("p[pp", ppp, -200, 200);
-		cloud->Add(ppp);
-		cloud->Update();
-=======
 		ImGui::Checkbox("Sky", &is_sky);
 		if (is_sky)
 		{
 			sky->Update();
 		}
 		
->>>>>>> aff062ff0e2aacb12a19a518177188cabc2b9787
 	}
 	ImGui::End();
 		
@@ -1554,17 +1544,11 @@ void PortFolio::Render()
 		ocean->Render(Time::Get()->Running());
 	}
 
-	sky->Pass(4, 5, 6);
-<<<<<<< HEAD
-	sky->Render();
-	cloud->Render();
-=======
-	
 	if (is_sky)
 	{
+		sky->Pass(4, 5, 6);
 		sky->Render();
 	}
->>>>>>> aff062ff0e2aacb12a19a518177188cabc2b9787
 
 	if (terrain_num == 1)
 	{

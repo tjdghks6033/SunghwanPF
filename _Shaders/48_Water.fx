@@ -47,7 +47,8 @@ technique11 T0
     P_VP(P3, VS_Scattering, PS_Scattering)
     P_VP(P4, VS_Dome, PS_Dome)
     P_BS_VP(P5, AlphaBlend, VS_Moon, PS_Moon)
-    P_BS_VP(P6, AlphaBlend, VS_Cloud, PS_Cloud)
+   // P_BS_VP(P6, AlphaBlend, VS_Cloud, PS_Cloud)
+    P_BS_VP(P6, AlphaBlend, SkyPlaneVertexShader, SkyPlanePixelShader)
 
 	
     //Render
@@ -58,7 +59,8 @@ technique11 T0
     //PreRender - Water
     P_VP(P10, VS_PreRender_Reflection_Dome, PS_Dome)
     P_BS_VP(P11, AlphaBlend, VS_PreRender_Reflection_Moon, PS_Moon)
-    P_BS_VP(P12, AlphaBlend, VS_PreRender_Reflection_Cloud, PS_Cloud)
+   // P_BS_VP(P12, AlphaBlend, VS_PreRender_Reflection_Cloud, PS_Cloud)
+    P_BS_VP(P12, AlphaBlend, VS_PreRender_Reflection_SkyPlaneVertexShader, SkyPlanePixelShader)
 
     P_VP(P13, VS_PreRender_Reflection_Mesh, PS)
     P_VP(P14, VS_PreRender_Reflection_Model, PS)

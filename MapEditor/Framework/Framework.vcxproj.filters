@@ -203,6 +203,9 @@
     <ClInclude Include="Viewer\OrbitCamera.h">
       <Filter>Viewer</Filter>
     </ClInclude>
+    <ClInclude Include="PerlinCloud.h">
+      <Filter>Environment\Sky</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework.cpp" />
@@ -397,6 +400,9 @@
     </ClCompile>
     <ClCompile Include="Viewer\OrbitCamera.cpp">
       <Filter>Viewer</Filter>
+    </ClCompile>
+    <ClCompile Include="PerlinCloud.cpp">
+      <Filter>Environment\Sky</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

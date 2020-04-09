@@ -110,7 +110,6 @@ private:
 	ParticleSystem* meteor_particle2 = NULL;
 	ParticleSystem* meteor_particle3 = NULL;
 
-	ParticleSystem* cloud = NULL;
 
 	Vector3 particleposition = Vector3(0, 0, 0);
 	

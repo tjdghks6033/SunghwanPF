@@ -141,11 +141,7 @@ void Cloud::Update()
 
 	ImGui::SliderFloat("CloudTiles", &CloudTiles, 0, 100);
 	ImGui::SliderFloat("CloudCover", &CloudCover, -10, 10);
-<<<<<<< HEAD
-	ImGui::SliderFloat("CloudSharpness", &CloudSharpness, -3.14f, 3.14f);
-=======
-	ImGui::SliderFloat("CloudSharpness", &CloudSharpness, 0.00001, 0.14f);
->>>>>>> aff062ff0e2aacb12a19a518177188cabc2b9787
+	ImGui::SliderFloat("CloudSharpness", &CloudSharpness, 0.00001f, 0.14f);
 	ImGui::SliderFloat("CloudSpeed", &CloudSpeed, -1, 1);
 
 	shader->AsScalar("CloudTiles")->SetFloat(CloudTiles);

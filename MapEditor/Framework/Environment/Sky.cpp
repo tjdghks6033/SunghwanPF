@@ -4,6 +4,7 @@
 #include "Dome.h"
 #include "Moon.h"
 #include "Cloud.h"
+#include "PerlinCloud.h"
 
 Sky::Sky(Shader * shader)
 	: shader(shader)
@@ -24,10 +25,15 @@ Sky::Sky(Shader * shader)
 	dome = new Dome(shader, Vector3(128.0f + 0, 16, 128.0f + 0), Vector3(120, 120, 120));
 	moon = new Moon(shader);
 
-	cloud = new Cloud(shader);
+	/*cloud = new Cloud(shader);
 	cloudBuffer = new ConstantBuffer(&cloudDesc, sizeof(CloudDesc));
-	sCloudBuffer = shader->AsConstantBuffer("CB_Cloud");
+	sCloudBuffer = shader->AsConstantBuffer("CB_Cloud");*/
 
+	perlinCloud = new PerlinCloud(shader);
+	
+	perlincloudBuffer = new ConstantBuffer(&perlincloudDesc, sizeof(PerlinCloudDesc));
+	sPerlinCloudBuffer = shader->AsConstantBuffer("CB_SkyBuffer");
+	
 
 	sRayleighMap = shader->AsSRV("RayleighMap");
 	sMieMap = shader->AsSRV("MieMap");
@@ -41,8 +47,11 @@ Sky::~Sky()
 	SafeDelete(dome);
 	SafeDelete(moon);
 
-	SafeDelete(cloud);
-	SafeDelete(cloudBuffer);
+	//SafeDelete(cloud);
+	//SafeDelete(cloudBuffer);
+
+	SafeDelete(perlinCloud);
+	SafeDelete(perlincloudBuffer);
 }
 
 void Sky::ScatteringPass(UINT val)
@@ -54,7 +63,8 @@ void Sky::Pass(UINT domePass, UINT moonPass, UINT cloudPass)
 {
 	dome->Pass(domePass);
 	moon->Pass(moonPass);
-	cloud->Pass(cloudPass);
+	//cloud->Pass(cloudPass);
+	perlinCloud->Pass(cloudPass);
 }
 
 void Sky::Update()
@@ -92,7 +102,8 @@ void Sky::Update()
 	scattering->Update();
 	dome->Update();
 	moon->Update();
-	cloud->Update();
+	//cloud->Update();
+	perlinCloud->Update();
 }
 
 void Sky::PreRender()
@@ -120,17 +131,43 @@ void Sky::Render()
 
 	//Cloud
 	{
-		cloudBuffer->Apply();
-		sCloudBuffer->SetConstantBuffer(cloudBuffer->Buffer());
+		//cloudBuffer->Apply();
+		//sCloudBuffer->SetConstantBuffer(cloudBuffer->Buffer());
 
-		cloud->Render();
+		//cloud->Render();
+	}
+
+	//PerlinCloud
+	{
+		Vector3 position;
+		Vector3 scale;
+		Vector3 rotation;
+		perlinCloud->GetTransform()->Position(&position);
+		perlinCloud->GetTransform()->Rotation(&rotation);
+		perlinCloud->GetTransform()->Scale(&scale);
+
+		ImGui::SliderFloat3("aa", position, -200, 200);
+		ImGui::SliderFloat3("bb", rotation, -3.14f, 3.14f);
+		ImGui::SliderFloat3("cc", scale, -200, 200);
+
+		perlinCloud->GetTransform()->Position(position);
+		perlinCloud->GetTransform()->Rotation(rotation);
+		perlinCloud->GetTransform()->Scale(scale);
+
+		perlincloudDesc.translation += 0.0001f;
+
+		perlincloudBuffer->Apply();
+		sPerlinCloudBuffer->SetConstantBuffer(perlincloudBuffer->Buffer());
+
+		perlinCloud->Render();
 	}
 }
 
 void Sky::PostRender()
 {
 	scattering->PostRender();
-	cloud->PostRender();
+	//cloud->PostRender();
+	perlinCloud->PostRender();
 }
 
 void Sky::RealTime(bool val, float theta, float timeFactor)
