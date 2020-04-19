@@ -20,12 +20,20 @@ struct DepthOutput
     float4 sPosition : Position1;
 };
 
+struct DepthModelOutput
+{
+	float4 Position : SV_Position0;
+	float4 sPosition : Position1;
+	float2 Uv : Uv;
+};
+
 float4 PS_Depth(DepthOutput input) : SV_Target
 {
     float depth = input.Position.z / input.Position.w;
     
     return float4(depth, depth, depth, 1.0f);
 }
+
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -173,6 +181,21 @@ DepthOutput VS_Depth_Model(VertexModel input)
     VS_DEPTH_GENERATE
 
     return output;
+}
+
+DepthModelOutput VS_Depth_Model2(VertexModel input)
+{
+	DepthModelOutput output;
+	SetModelWorld(World, input);
+
+	output.Position = WorldPosition(input.Position);
+	output.Position = mul(output.Position, ShadowView);
+	output.Position = mul(output.Position, ShadowProjection);
+	output.sPosition = output.Position;
+
+	output.Uv = input.Uv;
+	
+	return output;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

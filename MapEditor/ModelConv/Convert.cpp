@@ -7,11 +7,13 @@ void Convert::Initialize()
 	//Airplane();
 	//Tower();
 	//Tank();
+	//Stones();
+	//Tree();
 	//Kachujin();
 	//Megan();
 	//Weapon();
-	Dreyar(); 
-	CastleGuard();
+	//Dreyar(); 
+	//CastleGuard();
 }
 
 void Convert::Airplane()
@@ -44,6 +46,70 @@ void Convert::Tank()
 	SafeDelete(conv);
 }
 
+void Convert::Stones()
+{
+	Converter* conv = new Converter();
+	conv->ReadFile(L"Stones/stone_1.fbx");
+	conv->ExportMaterial(L"Stones/stone_1", false);
+	conv->ExportMesh(L"Stones/stone_1");
+	SafeDelete(conv);
+
+	Converter* conv2 = new Converter();
+	conv2->ReadFile(L"Stones/stone_2.fbx");
+	conv2->ExportMaterial(L"Stones/stone_2", false);
+	conv2->ExportMesh(L"Stones/stone_2");
+	SafeDelete(conv2);
+
+	Converter* conv3 = new Converter();
+	conv3->ReadFile(L"Stones/stone_3.fbx");
+	conv3->ExportMaterial(L"Stones/stone_3", false);
+	conv3->ExportMesh(L"Stones/stone_3");
+	SafeDelete(conv3);
+
+	Converter* conv4 = new Converter();
+	conv4->ReadFile(L"Stones/stone_4.fbx");
+	conv4->ExportMaterial(L"Stones/stone_4", false);
+	conv4->ExportMesh(L"Stones/stone_4");
+	SafeDelete(conv4);
+
+	Converter* conv5 = new Converter();
+	conv5->ReadFile(L"Stones/stone_5.fbx");
+	conv5->ExportMaterial(L"Stones/stone_5", false);
+	conv5->ExportMesh(L"Stones/stone_5");
+	SafeDelete(conv5);
+}
+void Convert::Tree()
+{
+	Converter* conv = new Converter();
+	conv->ReadFile(L"Tree/Tree1.obj");
+	conv->ExportMaterial(L"Tree/Tree1", false);
+	conv->ExportMesh(L"Tree/Tree1");
+	SafeDelete(conv);
+
+	Converter* conv2 = new Converter();
+	conv2->ReadFile(L"Tree/Tree2.fbx");
+	conv2->ExportMaterial(L"Tree/Tree2", false);
+	conv2->ExportMesh(L"Tree/Tree2");
+	SafeDelete(conv2);
+	
+	Converter* conv3 = new Converter();
+	conv3->ReadFile(L"Tree/cgaxis_models_115_37_fbx.fbx");
+	conv3->ExportMaterial(L"Tree/Tree3" , false);
+	conv3->ExportMesh(L"Tree/Tree3");
+	SafeDelete(conv3);
+
+	Converter* conv4 = new Converter();
+	conv4->ReadFile(L"Tree/Tree3.fbx");
+	conv4->ExportMaterial(L"Tree/Tree4", false);
+	conv4->ExportMesh(L"Tree/Tree4");
+	SafeDelete(conv4);
+
+	Converter* conv5 = new Converter();
+	conv5->ReadFile(L"Tree/TREE_TRUNK_26_10K.fbx");
+	conv5->ExportMaterial(L"Tree/Tree5", false);
+	conv5->ExportMesh(L"Tree/Tree5");
+	SafeDelete(conv5);
+}
 void Convert::Kachujin()
 {
 	Converter* conv = new Converter();

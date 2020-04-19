@@ -296,7 +296,7 @@ RasterizerState FillMode_WireFrame
 RasterizerState CullMode_None
 {
     CullMode = None;
-    FillMode = Wireframe;
+   // FillMode = Wireframe;
 };
 
 RasterizerState CullMode_Front

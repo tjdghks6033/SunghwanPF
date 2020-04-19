@@ -11,8 +11,8 @@ void Main::Initialize()
 {
 	//Push(new Convert());
 	//Push(new DrawMesh());
-	//Push(new DrawModel());
-	Push(new DrawAnimation());
+	Push(new DrawModel());
+	//Push(new DrawAnimation());
 }
 
 void Main::Ready()

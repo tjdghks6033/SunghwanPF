@@ -19,7 +19,7 @@ private:
 	void Dreyar();
 	void CastleGuardSword();
 	void CastleGuardBow();
-
+	void ModelTowerTreeStones();
 
 	void BillboardLayer();
 
@@ -49,7 +49,10 @@ private:
 	bool is_billboard = false;
 	bool is_wireframe = false;
 	bool is_mesh = false;
-	bool is_model = true;
+	bool is_model = false;
+	bool is_tree = false;
+	bool is_stones = false;
+	bool is_tower = false;
 	bool is_weather = true;
 	bool is_light = false;
 	bool is_water = true;
@@ -98,6 +101,18 @@ private:
 	ModelAnimator* dreyar = NULL;
 	ModelAnimator* castleGuardSword = NULL;
 	ModelAnimator* castleGuardBow = NULL;
+	
+	ModelRender* tower = NULL;
+	ModelRender* stone1 = NULL;
+	ModelRender* stone2 = NULL;
+	ModelRender* stone3 = NULL;
+	ModelRender* stone4 = NULL;
+	ModelRender* stone5 = NULL;
+	ModelRender* tree1 = NULL;
+	ModelRender* tree2 = NULL;
+	ModelRender* tree3 = NULL;
+	ModelRender* tree4 = NULL;
+	ModelRender* tree5 = NULL;
 
 	ParticleSystem* particle = NULL;
 	ParticleSystem* particle1 = NULL;

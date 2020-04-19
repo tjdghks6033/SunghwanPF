@@ -16,6 +16,8 @@ private:
 	void Airplane();
 	void Tower();
 	void Tank();
+	void Stones();
+	void Tree();
 
 private:
 	Shader* shader;
@@ -23,4 +25,15 @@ private:
 	ModelRender* airplane = NULL;
 	ModelRender* tower = NULL;
 	ModelRender* tank = NULL;
+	ModelRender* stone1 = NULL;
+	ModelRender* stone2 = NULL;
+	ModelRender* stone3 = NULL;
+	ModelRender* stone4 = NULL;
+	ModelRender* stone5 = NULL;
+	ModelRender* tree1 = NULL;
+	ModelRender* tree2 = NULL;
+	ModelRender* tree3 = NULL;
+	ModelRender* tree4 = NULL;
+	ModelRender* tree5 = NULL;
+
 };

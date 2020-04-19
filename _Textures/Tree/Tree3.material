@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Materials xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <Material>
+        <Name>cgaxis_models_115_37_04</Name>
+        <DiffuseFile>cgaxis_models_115_37_04.png</DiffuseFile>
+        <SpecularFile>cgaxis_models_115_37_04.png</SpecularFile>
+        <NormalFile>cgaxis_models_115_37_04.png</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0.5" G="0.5" B="0.5" A="1"/>
+        <Specular R="0.031372551" G="0.031372551" B="0.031372551" A="32"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>cgaxis_models_115_37_02</Name>
+        <DiffuseFile>Untitled-2.png</DiffuseFile>
+        <SpecularFile>Untitled-2.png</SpecularFile>
+        <NormalFile>Untitled-2.png</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0.5" G="0.5" B="0.5" A="1"/>
+        <Specular R="0.031372551" G="0.031372551" B="0.031372551" A="32"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>cgaxis_models_115_37_01</Name>
+        <DiffuseFile>Untitled-4.png</DiffuseFile>
+        <SpecularFile>Untitled-4.png</SpecularFile>
+        <NormalFile>Untitled-4.png</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0.5" G="0.5" B="0.5" A="1"/>
+        <Specular R="0.031372551" G="0.031372551" B="0.031372551" A="32"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>cgaxis_models_115_37_03</Name>
+        <DiffuseFile>cgaxis_models_115_37_03.png</DiffuseFile>
+        <SpecularFile>cgaxis_models_115_37_03.png</SpecularFile>
+        <NormalFile>cgaxis_models_115_37_03.png</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0.5" G="0.5" B="0.5" A="1"/>
+        <Specular R="0.031372551" G="0.031372551" B="0.031372551" A="32"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+</Materials>

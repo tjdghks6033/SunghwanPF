@@ -155,7 +155,7 @@ DepthStencilState DepthRead
 {
 	DepthEnable = true;
 	DepthWriteMask = 0;
-	DepthFunc = Always;
+	DepthFunc = Less_Equal;
 	StencilEnable = false;
 };
 

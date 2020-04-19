@@ -36,13 +36,41 @@ float4 PS(MeshOutput input) : SV_Target
 	return PS_Shadow(input.sPosition, PS_AllLight(input));
 }
 
+float4 PS_DepthModel(DepthModelOutput input) : SV_Target
+{	
+	float depth = input.Position.z / input.Position.w;
+	float4 diffuse = DiffuseMap.Sample(LinearSampler, input.Uv);
+	
+	if (diffuse.a > 0.8f)
+	{
+		depth = input.sPosition.z / input.sPosition.w;
+	}
+	else
+	{
+		discard;
+	}
+	
+	return float4(depth, depth, depth, 1.0f);
+}
+
+float4 PS_Model(MeshOutput input) : SV_Target0
+{
+	float4 diffuse = DiffuseMap.Sample(LinearSampler, input.Uv);
+	
+	clip(diffuse.a - 0.5f);
+	
+	float NdotL = dot(normalize(input.Normal), -GlobalLight.Direction);
+	
+	return float4(diffuse.rgb * NdotL, 1);
+}
+
 technique11 T0
 { 
 	//Deffered - Depth SpotLights Shadow
     P_RS_VP(P0, FrontCounterClockwise_True, VS_Depth_Mesh, PS_Depth)
-    P_RS_VP(P1, FrontCounterClockwise_True, VS_Depth_Model, PS_Depth)
+    P_RS_VP(P1, FrontCounterClockwise_True, VS_Depth_Model2, PS_DepthModel)
     P_RS_VP(P2, FrontCounterClockwise_True, VS_Depth_Animation, PS_Depth)
-
+	
     //Sky
     P_VP(P3, VS_Scattering, PS_Scattering)
     P_VP(P4, VS_Dome, PS_Dome)
@@ -53,7 +81,7 @@ technique11 T0
 	
     //Render
     P_VP(P7, VS_Mesh, PS)
-    P_VP(P8, VS_Model, PS)
+    P_VP(P8, VS_Model, PS_Model)
     P_VP(P9, VS_Animation, PS)
 
     //PreRender - Water
@@ -63,7 +91,7 @@ technique11 T0
     P_BS_VP(P12, AlphaBlend, VS_PreRender_Reflection_SkyPlaneVertexShader, SkyPlanePixelShader)
 
     P_VP(P13, VS_PreRender_Reflection_Mesh, PS)
-    P_VP(P14, VS_PreRender_Reflection_Model, PS)
+    P_VP(P14, VS_PreRender_Reflection_Model, PS_Model)
     P_VP(P15, VS_PreRender_Reflection_Animation, PS)
 
     //Water
@@ -81,4 +109,8 @@ technique11 T0
 	//TerrainLod
 	P_VTP(P20, VS_TerrainLod, HS_TerrainLod, DS_TerrainLod, PS_TerrainLod)
 	P_RS_VTP(P21, FillMode_WireFrame, VS_TerrainLod, HS_TerrainLod, DS_TerrainLod, PS_TerrainLod)
+
+	//BillboardDepth
+    P_RS_VGP(P22, FrontCounterClockwise_True, VS_BillboardDepth, GS_BillboardDepth, PS_BillboardDepth)
+	
 }

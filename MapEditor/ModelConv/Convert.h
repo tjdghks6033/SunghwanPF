@@ -16,6 +16,8 @@ private:
 	void Airplane();
 	void Tower();
 	void Tank();
+	void Stones();
+	void Tree();
 	void Weapon();
 	
 	void Megan();

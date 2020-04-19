@@ -15,7 +15,7 @@ void PortFolio::Initialize()
 	shader = new Shader(L"48_Water.fxo");
 
 	shadow = new Shadow(shader, Vector3(125, 0, 125), 50, 2048, 2048);
-	shadow = new Shadow(shader, Vector3(125, 0, 125), 65000, 4096, 4096);
+	//shadow = new Shadow(shader, Vector3(125, 0, 125), 65000, 4096, 4096);
 	
 
 	//Sky
@@ -139,6 +139,7 @@ void PortFolio::Initialize()
 	Dreyar();
 	CastleGuardSword();
 	CastleGuardBow();
+	ModelTowerTreeStones();
 
 	std::mt19937 engine((unsigned int)time(NULL));               // MT19937 난수 엔진
 	std::uniform_int_distribution<int> distribution(1, 4);       // 생성 범위
@@ -1132,20 +1133,55 @@ void PortFolio::Update()
 		{
 			((Freedom *)Context::Get()->GetCamera())->SetOrbitCamera(false);
 		}
+
+		ImGui::Checkbox("Tree", &is_tree);
+		if (is_tree)
+		{			
+			if (tree1 != NULL) tree1->Update();
+			if (tree2 != NULL) tree2->Update();
+			if (tree3 != NULL) tree3->Update();
+			if (tree4 != NULL) tree4->Update();
+			if (tree5 != NULL) tree5->Update();
+		}
+		else if (!is_tree)
+		{
+
+		}
+		ImGui::Checkbox("Stones", &is_stones);
+		if (is_stones)
+		{
+			if (stone1 != NULL) stone1->Update();
+			if (stone2 != NULL) stone2->Update();
+			if (stone3 != NULL) stone3->Update();
+			if (stone4 != NULL) stone4->Update();
+			if (stone5 != NULL) stone5->Update();
+		}
+		else if (!is_stones)
+		{
+
+		}
+		ImGui::Checkbox("Tower", &is_tower);
+		if (is_tower)
+		{
+			if (tower != NULL) tower->Update();
+		}
+		else if (!is_tower)
+		{
+
+		}
 	}
 	ImGui::End();
 	
 	ImGui::Begin("Sky", nullptr);
 	{
-		sky->Update();
-		static Vector3 ppp;
-		ImGui::SliderFloat3("p[pp", ppp, -200, 200);
+		//sky->Update();
+		//static Vector3 ppp;
+		//ImGui::SliderFloat3("p[pp", ppp, -200, 200);
 		ImGui::Checkbox("Sky", &is_sky);
 		if (is_sky)
 		{
 			sky->Update();
-		}
-		
+		}		
 	}
 	ImGui::End();
 		
@@ -1237,6 +1273,15 @@ void PortFolio::PreRender()
 
 		Pass(0, 1, 2);
 
+		bb->Pass(22);
+		bb2->Pass(22);
+		bb3->Pass(22);
+		bb4->Pass(22);
+		bb5->Pass(22);
+		bb6->Pass(22);
+		bb7->Pass(22);
+		bb8->Pass(22);
+
 		bb->Render();
 		bb2->Render();
 		bb3->Render();
@@ -1256,8 +1301,41 @@ void PortFolio::PreRender()
 
 		}
 
-		if (is_model)
+		if (is_tree)
 		{
+			if (tree1 != NULL) tree1->Render();
+			if (tree2 != NULL) tree2->Render();
+			if (tree3 != NULL) tree3->Render();
+			if (tree4 != NULL) tree4->Render();
+			if (tree5 != NULL) tree5->Render();
+		}
+		else if (!is_tree)
+		{
+
+		}
+		if (is_stones)
+		{
+			if (stone1 != NULL) stone1->Render();
+			if (stone2 != NULL) stone2->Render();
+			if (stone3 != NULL) stone3->Render();
+			if (stone4 != NULL) stone4->Render();
+			if (stone5 != NULL) stone5->Render();
+		}
+		else if (!is_stones)
+		{
+
+		}
+		if (is_tower)
+		{
+			if (tower != NULL) tower->Render();
+		}
+		else if (!is_tower)
+		{
+
+		}
+
+		if (is_model)
+		{			
 			//kachujin->Render();
 			castleGuardSword->Render2();
 			castleGuardBow->Render3();
@@ -1359,8 +1437,42 @@ void PortFolio::PreRender()
 
 		}
 
+		if (is_tree)
+		{
+			if (tree1 != NULL) tree1->Render();
+			if (tree2 != NULL) tree2->Render();
+			if (tree3 != NULL) tree3->Render();
+			if (tree4 != NULL) tree4->Render();
+			if (tree5 != NULL) tree5->Render();
+		}
+		else if (!is_tree)
+		{
+
+		}
+		if (is_stones)
+		{
+			if (stone1 != NULL) stone1->Render();
+			if (stone2 != NULL) stone2->Render();
+			if (stone3 != NULL) stone3->Render();
+			if (stone4 != NULL) stone4->Render();
+			if (stone5 != NULL) stone5->Render();
+		}
+		else if (!is_stones)
+		{
+
+		}
+		if (is_tower)
+		{
+			if (tower != NULL) tower->Render();
+		}
+		else if (!is_tower)
+		{
+
+		}
+
 		if (is_model)
 		{
+			
 			//kachujin->Render();
 			castleGuardSword->Render2();
 			castleGuardBow->Render3();
@@ -1465,8 +1577,42 @@ void PortFolio::PreRender()
 
 		}
 
+		if (is_tree)
+		{
+			if (tree1 != NULL) tree1->Render();
+			if (tree2 != NULL) tree2->Render();
+			if (tree3 != NULL) tree3->Render();
+			if (tree4 != NULL) tree4->Render();
+			if (tree5 != NULL) tree5->Render();
+		}
+		else if (!is_tree)
+		{
+
+		}
+		if (is_stones)
+		{
+			if (stone1 != NULL) stone1->Render();
+			if (stone2 != NULL) stone2->Render();
+			if (stone3 != NULL) stone3->Render();
+			if (stone4 != NULL) stone4->Render();
+			if (stone5 != NULL) stone5->Render();
+		}
+		else if (!is_stones)
+		{
+
+		}
+		if (is_tower)
+		{
+			if (tower != NULL) tower->Render();
+		}
+		else if (!is_tower)
+		{
+
+		}
+
 		if (is_model)
 		{
+			
 			//kachujin->Render();
 			weaponArrow->Render();
 			castleGuardSword->Render2();
@@ -1572,6 +1718,40 @@ void PortFolio::Render()
 		
 	}
 	else if (!is_mesh)
+	{
+
+	}
+	
+	
+	if (is_tree)
+	{
+		if (tree1 != NULL) tree1->Render();
+		if (tree2 != NULL) tree2->Render();
+		if (tree3 != NULL) tree3->Render();
+		if (tree4 != NULL) tree4->Render();
+		if (tree5 != NULL) tree5->Render();
+	}
+	else if (!is_tree)
+	{
+
+	}
+	if (is_stones)
+	{
+		if (stone1 != NULL) stone1->Render();
+		if (stone2 != NULL) stone2->Render();
+		if (stone3 != NULL) stone3->Render();
+		if (stone4 != NULL) stone4->Render();
+		if (stone5 != NULL) stone5->Render();
+	}
+	else if (!is_stones)
+	{
+
+	}
+	if (is_tower)
+	{
+		if (tower != NULL) tower->Render();
+	}
+	else if (!is_tower)
 	{
 
 	}
@@ -1797,7 +1977,15 @@ void PortFolio::Render()
 	//string str = to_string(picked.x) + ", " + to_string(picked.y) + ", " + to_string(picked.z);
 	//Gui::Get()->RenderText(Vector2(10, 60), Color(1, 0, 0, 1), "Picked : " + str);
 
-	
+	bb->Pass(18);
+	bb2->Pass(18);
+	bb3->Pass(18);
+	bb4->Pass(18);
+	bb5->Pass(18);
+	bb6->Pass(18);
+	bb7->Pass(18);
+	bb8->Pass(18);
+
 	bb->Render();
 	bb2->Render();
 	bb3->Render();
@@ -2059,6 +2247,228 @@ void PortFolio::CastleGuardBow()
 		monster_colliders[i].Transform = new Transform();
 		monster_colliders[i].Collider = new Collider(monster_colliders[i].Transform, monster_colliders[i].Init);
 	}
+}
+
+void PortFolio::ModelTowerTreeStones()
+{
+	int tower_num = 1;
+
+	int stone1_num = 1;
+	int stone2_num = 1;
+	int stone3_num = 1;
+	int stone4_num = 1;
+	int stone5_num = 1;
+
+	int tree1_num = 1;
+	int tree2_num = 1;
+	int tree3_num = 1;
+	int tree4_num = 1;
+	int tree5_num = 1;
+
+	tower = new ModelRender(shader);
+	tower->ReadMaterial(L"Tower/Tower");
+	tower->ReadMesh(L"Tower/Tower");
+
+	std::mt19937 engine4((unsigned int)time(NULL));               // MT19937 난수 엔진
+	std::uniform_real_distribution<float> distribution4(0.0f, 20.0f);       // 생성 범위
+	auto generator4 = bind(distribution4, engine4);
+
+	for (int i = 0; i < tower_num; i++)
+	{
+		Transform* transform = tower->AddTransform();
+
+		Vector3 towerposition = Vector3(generator4(), 0.0f, generator4());
+
+		transform->Position(Vector3(125 + towerposition.x, terrain->GetHeight(towerposition), 125 + towerposition.z));
+		transform->RotationDegree(0, Math::Random(-180.0f, 180.0f), 0);
+		transform->Scale(0.01f, 0.01f, 0.01f);
+	}
+	tower->UpdateTransforms();
+	models.push_back(tower);
+	tower->Render();
+	//tower->Pass(1);
+
+	stone1 = new ModelRender(shader);
+	stone1->ReadMaterial(L"Stones/stone_1");
+	stone1->ReadMesh(L"Stones/stone_1");
+	for (int i = 0; i < stone1_num; i++)
+	{
+		Transform* transform = stone1->AddTransform();
+
+		Vector3 stoneposition = Vector3(generator4(), 0.0f, generator4());
+
+		transform->Position(Vector3(125 + stoneposition.x, terrain->GetHeight(stoneposition), 125 + stoneposition.z));
+		transform->RotationDegree(0, Math::Random(-180.0f, 180.0f), 0);
+		transform->Scale(0.1f, 0.1f, 0.1f);
+	}
+	stone1->UpdateTransforms();
+	models.push_back(stone1);
+	stone1->Render();
+	//stone1->Pass(1);
+
+	stone2 = new ModelRender(shader);
+	stone2->ReadMaterial(L"Stones/stone_2");
+	stone2->ReadMesh(L"Stones/stone_2");
+	for (int i = 0; i < stone2_num; i++)
+	{
+		Transform* transform = stone2->AddTransform();
+
+		Vector3 stoneposition = Vector3(generator4(), 0.0f, generator4());
+
+		transform->Position(Vector3(125 + stoneposition.x, terrain->GetHeight(stoneposition), 125 + stoneposition.z));
+		transform->RotationDegree(0, Math::Random(-180.0f, 180.0f), 0);
+		transform->Scale(0.1f, 0.1f, 0.1f);
+	}
+	stone2->UpdateTransforms();
+	models.push_back(stone2);
+	stone2->Render();
+	//stone2->Pass(1);
+
+	stone3 = new ModelRender(shader);
+	stone3->ReadMaterial(L"Stones/stone_3");
+	stone3->ReadMesh(L"Stones/stone_3");
+	for (int i = 0; i < stone3_num; i++)
+	{
+		Transform* transform = stone3->AddTransform();
+
+		Vector3 stoneposition = Vector3(generator4(), 0.0f, generator4());
+
+		transform->Position(Vector3(125 + stoneposition.x, terrain->GetHeight(stoneposition), 125 + stoneposition.z));
+		transform->RotationDegree(0, Math::Random(-180.0f, 180.0f), 0);
+		transform->Scale(0.1f, 0.1f, 0.1f);
+	}
+	stone3->UpdateTransforms();
+	models.push_back(stone3);
+	stone3->Render();
+	//stone3->Pass(1);
+
+	stone4 = new ModelRender(shader);
+	stone4->ReadMaterial(L"Stones/stone_4");
+	stone4->ReadMesh(L"Stones/stone_4");
+	for (int i = 0; i < stone4_num; i++)
+	{
+		Transform* transform = stone4->AddTransform();
+
+		Vector3 stoneposition = Vector3(generator4(), 0.0f, generator4());
+
+		transform->Position(Vector3(125 + stoneposition.x, terrain->GetHeight(stoneposition), 125 + stoneposition.z));
+		transform->RotationDegree(0, Math::Random(-180.0f, 180.0f), 0);
+		transform->Scale(0.1f, 0.1f, 0.1f);
+	}
+	stone4->UpdateTransforms();
+	models.push_back(stone4);
+	stone4->Render();
+	//stone4->Pass(1);
+
+	stone5 = new ModelRender(shader);
+	stone5->ReadMaterial(L"Stones/stone_5");
+	stone5->ReadMesh(L"Stones/stone_5");
+	for (int i = 0; i < stone5_num; i++)
+	{
+		Transform* transform = stone5->AddTransform();
+
+		Vector3 stoneposition = Vector3(generator4(), 0.0f, generator4());
+
+		transform->Position(Vector3(125 + stoneposition.x, terrain->GetHeight(stoneposition), 125 + stoneposition.z));
+		transform->RotationDegree(0, Math::Random(-180.0f, 180.0f), 0);
+		transform->Scale(0.1f, 0.1f, 0.1f);
+	}
+	stone5->UpdateTransforms();
+	models.push_back(stone5);
+	stone5->Render();
+	//stone5->Pass(1);
+
+	tree1 = new ModelRender(shader);
+	tree1->ReadMaterial(L"Tree/Tree1");
+	tree1->ReadMesh(L"Tree/Tree1");
+	for (int i = 0; i < tree1_num; i++)
+	{
+		Transform* transform = tree1->AddTransform();
+
+		Vector3 treeposition = Vector3(generator4(), 0.0f, generator4());
+
+		transform->Position(Vector3(125 + treeposition.x, terrain->GetHeight(treeposition), 125 + treeposition.z));
+		transform->RotationDegree(0, Math::Random(-180.0f, 180.0f), 0);
+		transform->Scale(1.0f, 1.0f, 1.0f);
+	}
+	tree1->UpdateTransforms();
+	models.push_back(tree1);
+	tree1->Render();
+	//tree1->Pass(1);
+
+	tree2 = new ModelRender(shader);
+	tree2->ReadMaterial(L"Tree/Tree2");
+	tree2->ReadMesh(L"Tree/Tree2");
+	for (int i = 0; i < tree2_num; i++)
+	{
+		Transform* transform = tree2->AddTransform();
+
+		Vector3 treeposition = Vector3(generator4(), 0.0f, generator4());
+
+		transform->Position(Vector3(125 + treeposition.x, terrain->GetHeight(treeposition), 125 + treeposition.z));
+		transform->RotationDegree(0, Math::Random(-180.0f, 180.0f), 0);
+		transform->Scale(1.0f, 1.0f, 1.0f);
+	}
+	tree2->UpdateTransforms();
+	models.push_back(tree2);
+	tree2->Render();
+	//tree2->Pass(1);
+
+	tree3 = new ModelRender(shader);
+	tree3->ReadMaterial(L"Tree/Tree3");
+	tree3->ReadMesh(L"Tree/Tree3");
+	for (int i = 0; i < tree3_num; i++)
+	{
+		Transform* transform = tree3->AddTransform();
+
+		Vector3 treeposition = Vector3(generator4(), 0.0f, generator4());
+
+		transform->Position(Vector3(125 + treeposition.x, terrain->GetHeight(treeposition), 125 + treeposition.z));
+		transform->RotationDegree(0, Math::Random(-180.0f, 180.0f), 0);
+		transform->Scale(0.1f, 0.1f, 0.1f);
+	}
+	tree3->UpdateTransforms();
+	models.push_back(tree3);
+	tree3->Render();
+	//tree3->Pass(1);
+
+	tree4 = new ModelRender(shader);
+	tree4->ReadMaterial(L"Tree/Tree4");
+	tree4->ReadMesh(L"Tree/Tree4");
+	for (int i = 0; i < tree4_num; i++)
+	{
+		Transform* transform = tree4->AddTransform();
+
+		Vector3 treeposition = Vector3(generator4(), 0.0f, generator4());
+
+		transform->Position(Vector3(125 + treeposition.x, terrain->GetHeight(treeposition), 125 + treeposition.z));
+		transform->RotationDegree(0, Math::Random(-180.0f, 180.0f), 0);
+		transform->Scale(0.1f, 0.1f, 0.1f);
+	}
+	tree4->UpdateTransforms();
+	models.push_back(tree4);
+	tree4->Render();
+	//tree4->Pass(1);
+
+	/*tree5 = new ModelRender(shader);
+	tree5->ReadMaterial(L"Tree/Tree5");
+	tree5->ReadMesh(L"Tree/Tree5");
+	for (int i = 0; i < tree5_num; i++)
+	{
+		Transform* transform = tree5->AddTransform();
+
+		Vector3 treeposition = Vector3(generator4(), 0.0f, generator4());
+
+		transform->Position(Vector3(125 + treeposition.x, terrain->GetHeight(treeposition), 125 + treeposition.z));
+		transform->RotationDegree(0, Math::Random(-180.0f, 180.0f), 0);
+		transform->Scale(0.003f, 0.003f, 0.003f);
+	}
+	tree5->UpdateTransforms();*/
+
+	
+	//models.push_back(tree5);
+
+	//tree5->Pass(1);
 }
 
 void PortFolio::BillboardLayer()

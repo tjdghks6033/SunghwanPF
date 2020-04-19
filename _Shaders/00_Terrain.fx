@@ -55,7 +55,7 @@ float4 GetLayerColor(float2 uv)
 
 }
 
-float4 GetLayerColor2(float2 uv, float4 color)
+float3 GetLayerColor2(float2 uv, float4 color)
 {
 	float4 base = GetBaseColor(uv);
 	float4 layer = LayerMap.Sample(LinearSampler, uv);
@@ -66,7 +66,7 @@ float4 GetLayerColor2(float2 uv, float4 color)
 	base = lerp(base, layer2, color.g);
 	base = lerp(base, layer3, color.b);
 
-	return base;
+	return base.rgb;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -172,7 +172,7 @@ float4 GetLineColor(float3 wPosition)
 
 float4 PS_Terrain(VertexTerrain input) : SV_Target0
 {
-	float3 diffuse = GetLayerColor2(input.Uv, input.Color); 
+	float3 diffuse = GetLayerColor2(input.Uv, input.Color);
 	float NdotL = dot(normalize(input.Normal), -GlobalLight.Direction);
 
 	float4 brushColor = GetBrushColor(input.wPosition);
