@@ -56,11 +56,11 @@ void Editor::Update()
 */
 	sphere->GetTransform(0)->Position(position);
 	
-	sphere->UpdateTransforms();
+	//sphere->UpdateTransforms();
 
 	sky->Update();
 
-	sphere->Update();
+	//sphere->Update();
 	grid->Update();
 
 	if (particle != NULL)
@@ -97,7 +97,7 @@ void Editor::Render()
 
 	brick->Render();
 	sphere->Pass(7);
-	sphere->Render();
+	//sphere->Render();
 
 	if (particle != NULL)
 		particle->Render();

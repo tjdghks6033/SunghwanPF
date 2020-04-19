@@ -1,3 +1,5 @@
+
+
 struct VertexInput
 {
 	float4 Position : Position;
@@ -12,7 +14,6 @@ struct VertexOutput
 	float4 Position : Position;
 	float2 Scale : Scale;
 	float Random : Random;
-
 	uint VertexID : VertexID;
 };
 
@@ -60,7 +61,7 @@ struct GeometryOutput
 {
 	float4 Position : SV_Position;
 	float2 Uv : Uv;
-
+	
 	uint VertexID : VertexID;
 };
 
@@ -157,6 +158,8 @@ float4 PS_BillboardDepth(GeometryOutput input) : SV_Target
 float4 PS_Billboard(GeometryOutput input) : SV_Target
 {
 	float4 diffuse = Maps.Sample(LinearSampler, float3(input.Uv, input.VertexID % 6));
+	clip(diffuse.a - 0.5f);
+	float NdotL = dot(normalize(float3(0, 1, 0)), -GlobalLight.Direction);
 
-	return diffuse;
+	return float4(diffuse.rgb * NdotL, 1);
 }

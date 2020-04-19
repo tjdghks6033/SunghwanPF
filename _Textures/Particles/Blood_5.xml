@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Particle xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <BlendState>2</BlendState>
+    <TextureFile>Blood5.png</TextureFile>
+    <MaxParticles>541</MaxParticles>
+    <BlendSDurationtate>2.1370001</BlendSDurationtate>
+    <DurationRandomness>0</DurationRandomness>
+    <EmitterVelocitySensitivity>3.408</EmitterVelocitySensitivity>
+    <MinHorizontalVelocity>0.322</MinHorizontalVelocity>
+    <MaxHorizontalVelocity>0</MaxHorizontalVelocity>
+    <MinVerticalVelocity>0.322</MinVerticalVelocity>
+    <MaxVerticalVelocity>0.322</MaxVerticalVelocity>
+    <Gravity X="0" Y="-3.2969999" Z="0"/>
+    <EndVelocity>0</EndVelocity>
+    <MinColor R="1" G="0" B="0" A="1"/>
+    <MaxColor R="1" G="0" B="0" A="1"/>
+    <MinRotateSpeed>-0.354</MinRotateSpeed>
+    <MaxRotateSpeed>1.576</MaxRotateSpeed>
+    <MinStartSize>0</MinStartSize>
+    <MaxStartSize>0</MaxStartSize>
+    <MinEndSize>10</MinEndSize>
+    <MaxEndSize>10</MaxEndSize>
+</Particle>

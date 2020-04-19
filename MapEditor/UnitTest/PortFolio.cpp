@@ -123,7 +123,7 @@ void PortFolio::Initialize()
 
 	//Particle
 	{
-		particle = new ParticleSystem(L"Star");
+		particle = new ParticleSystem(L"Star2");
 		particle1 = new ParticleSystem(L"Firecylinder");
 		particle2 = new ParticleSystem(L"Firecylindersmoke");
 		particle3 = new ParticleSystem(L"Firecylinderstar");
@@ -132,7 +132,41 @@ void PortFolio::Initialize()
 
 		meteor_particle1 = new ParticleSystem(L"Meteor_1");
 		meteor_particle2 = new ParticleSystem(L"Meteor_2");
-		meteor_particle3 = new ParticleSystem(L"Meteor_3");		
+		meteor_particle3 = new ParticleSystem(L"Meteor_3");	
+
+		blood_particle = new ParticleSystem(L"Blood_4");
+		blood_particle1 = new ParticleSystem(L"Blood_4");
+		blood_particle2 = new ParticleSystem(L"Blood_4");
+		blood_particle3 = new ParticleSystem(L"Blood_4");
+		blood_particle4 = new ParticleSystem(L"Blood_4");
+		blood_particle5 = new ParticleSystem(L"Blood_4");
+		blood_particle6 = new ParticleSystem(L"Blood_4");
+		blood_particle7 = new ParticleSystem(L"Blood_4");
+		blood_particle8 = new ParticleSystem(L"Blood_4");
+		blood_particle9 = new ParticleSystem(L"Blood_4");
+		blood_particle10 = new ParticleSystem(L"Blood_4");
+
+		fire_particle1 = new ParticleSystem(L"Fire3");
+		fire_particle2 = new ParticleSystem(L"Fire3");
+		fire_particle3 = new ParticleSystem(L"Fire3");
+		fire_particle4 = new ParticleSystem(L"Fire3");
+		fire_particle5 = new ParticleSystem(L"Fire3");
+		fire_particle6 = new ParticleSystem(L"Fire3");
+		fire_particle7 = new ParticleSystem(L"Fire3");
+		fire_particle8 = new ParticleSystem(L"Fire3");
+		fire_particle9 = new ParticleSystem(L"Fire3");
+		fire_particle10 = new ParticleSystem(L"Fire3");
+
+		smoke_particle1 = new ParticleSystem(L"Smoke2");
+		smoke_particle2 = new ParticleSystem(L"Smoke2");
+		smoke_particle3 = new ParticleSystem(L"Smoke2");
+		smoke_particle4 = new ParticleSystem(L"Smoke2");
+		smoke_particle5 = new ParticleSystem(L"Smoke2");
+		smoke_particle6 = new ParticleSystem(L"Smoke2");
+		smoke_particle7 = new ParticleSystem(L"Smoke2");
+		smoke_particle8 = new ParticleSystem(L"Smoke2");
+		smoke_particle9 = new ParticleSystem(L"Smoke2");
+		smoke_particle10 = new ParticleSystem(L"Smoke2");
 	}
 	Mesh();
 	Weapon();
@@ -159,6 +193,8 @@ void PortFolio::Initialize()
 		is_mon_death[i] = false;
 		is_mon_running[i] = false;
 		is_mon_running_to_waypoint[i] = false;
+		is_mon_blood[i] = false;
+		is_mon_fire[i] = false;
 
 		is_collision_sword_mon[i] = false;
 		is_collision_arrow_mon[i] = false;
@@ -299,6 +335,12 @@ void PortFolio::Update()
 				Vector3 rotation;
 				dreyar->GetTransform(0)->Rotation(&rotation);
 
+				Matrix player_sword = dreyar->GetAttachTransform(0);
+				Vector3 position2;
+				Vector3 scale2;
+				Vector3 rotation2;
+				Math::MatrixDecompose(player_sword, scale2, rotation2, position2);
+
 				((Freedom *)Context::Get()->GetCamera())->SetTarget(position);
 				((Freedom *)Context::Get()->GetCamera())->SetOrbitCamera(true);
 
@@ -318,9 +360,9 @@ void PortFolio::Update()
 				Context::Get()->GetCamera()->Position(cameraposition);
 				Context::Get()->GetCamera()->RotationDegree(camerarotation);*/
 
-				if (particle != NULL)
+				if (particle != NULL && is_running)
 				{
-					particle->Add(position);
+					particle->Add(Vector3(position.x, position.y + 1.0f, position.z));
 					particle->Update();
 				}
 				
@@ -457,6 +499,12 @@ void PortFolio::Update()
 						if (dreyar->GetTime() == 13)
 							is_trail = true;
 
+						if (particle5 != NULL && is_trail)
+						{
+							particle5->Add(position2);
+							particle5->Update();
+						}
+
 						if (dreyar->GetTime() == 50)
 							is_trail = false;
 
@@ -486,6 +534,12 @@ void PortFolio::Update()
 
 						if (dreyar->GetTime() == 13)
 							is_trail = true;
+
+						if (particle5 != NULL && is_trail)
+						{
+							particle5->Add(position2);
+							particle5->Update();
+						}
 
 						if (dreyar->GetTime() == 70)
 							is_trail = false;
@@ -585,6 +639,12 @@ void PortFolio::Update()
 						if (dreyar->GetTime() == 13)
 							is_trail = true;
 						
+						if (particle5 != NULL && is_trail)
+						{
+							particle5->Add(position2);
+							particle5->Update();
+						}
+
 						if (dreyar->GetTime() == 30)
 							is_trail = false;
 					}
@@ -618,31 +678,23 @@ void PortFolio::Update()
 				}//Attacking
 				else if (is_heat)
 				{
-					if (weapon_num == 0)
+					if (playerClip != 7)
 					{
-						if (playerClip != 7)
-						{
-							playerClip = 7;
-							dreyar->PlayClip(0, playerClip, animspeed, taketime);
-						}
+						playerClip = 7;
+						dreyar->PlayClip(0, playerClip, animspeed, taketime);
 					}
-					else if (weapon_num == 1)
-					{
-						if (playerClip != 7)
-						{
-							playerClip = 7;
-							dreyar->PlayClip(0, playerClip, animspeed, taketime);
 
-						}
-					}
-					else if (weapon_num == 2)
+					if (dreyar->GetTime() == 0)
+						is_blood = true;
+				
+					if (is_blood)
 					{
-						if (playerClip != 7)
-						{
-							playerClip = 7;
-							dreyar->PlayClip(0, playerClip, animspeed, taketime);
-						}
-					}
+						blood_particle->Add(Vector3(position.x, position.y + 0.5f, position.z));
+						blood_particle->Update();
+					}							
+
+					if (dreyar->GetTime() == 5)
+						is_blood = false;					
 				}//Is_heat
 				else if (is_running)
 				{
@@ -760,6 +812,7 @@ void PortFolio::Update()
 							castleGuardSword->PlayClip(i, clip[i], monanimspeed, montaketime);
 						}
 
+						
 						is_mon_death[i] = true;
 					}
 					else if (is_mon_attack[i] && mon_hp[i] > 0.0f)
@@ -864,6 +917,67 @@ void PortFolio::Update()
 
 					if (is_mon_death[i])
 					{
+						if (is_mon_fire[i])
+						{
+							switch (i)
+							{
+							case 0:
+								smoke_particle1->Add(Vector3(mon_position[i].x, mon_position[i].y, mon_position[i].z));
+								smoke_particle1->Update();
+								fire_particle1->Add(Vector3(mon_position[i].x, mon_position[i].y, mon_position[i].z));
+								fire_particle1->Update(); break;
+							case 1:
+								smoke_particle2->Add(Vector3(mon_position[i].x, mon_position[i].y, mon_position[i].z));
+								smoke_particle2->Update();
+								fire_particle2->Add(Vector3(mon_position[i].x, mon_position[i].y, mon_position[i].z));
+								fire_particle2->Update();  break;
+							case 2:
+								smoke_particle3->Add(Vector3(mon_position[i].x, mon_position[i].y, mon_position[i].z));
+								smoke_particle3->Update();
+								fire_particle3->Add(Vector3(mon_position[i].x, mon_position[i].y, mon_position[i].z));
+								fire_particle3->Update(); break;
+							case 3:
+								smoke_particle4->Add(Vector3(mon_position[i].x, mon_position[i].y, mon_position[i].z));
+								smoke_particle4->Update();
+								fire_particle4->Add(Vector3(mon_position[i].x, mon_position[i].y, mon_position[i].z));
+								fire_particle4->Update(); break;
+							case 4:
+								smoke_particle5->Add(Vector3(mon_position[i].x, mon_position[i].y, mon_position[i].z));
+								smoke_particle5->Update();
+								fire_particle5->Add(Vector3(mon_position[i].x, mon_position[i].y, mon_position[i].z));
+								fire_particle5->Update();  break;
+							}
+						}
+						else if (!is_mon_fire[i])
+						{
+							if (castleGuardSword->GetTime(i) == 5)
+								is_mon_blood[i] = true;
+
+							if (is_mon_blood[i])
+							{
+								switch (i)
+								{
+								case 0:
+									blood_particle1->Add(Vector3(mon_position[i].x, mon_position[i].y + 1.0f, mon_position[i].z));
+									blood_particle1->Update();	break;
+								case 1:
+									blood_particle2->Add(Vector3(mon_position[i].x, mon_position[i].y + 1.0f, mon_position[i].z));
+									blood_particle2->Update();  break;
+								case 2:
+									blood_particle3->Add(Vector3(mon_position[i].x, mon_position[i].y + 1.0f, mon_position[i].z));
+									blood_particle3->Update(); break;
+								case 3:
+									blood_particle4->Add(Vector3(mon_position[i].x, mon_position[i].y + 1.0f, mon_position[i].z));
+									blood_particle4->Update(); break;
+								case 4:
+									blood_particle5->Add(Vector3(mon_position[i].x, mon_position[i].y + 1.0f, mon_position[i].z));
+									blood_particle5->Update();  break;
+								}
+							}
+
+							if (castleGuardSword->GetTime(i) == 15)
+								is_mon_blood[i] = false;
+						}
 						if (castleGuardSword->GetTime(i) == 55)
 							castleGuardSword->SetStopAnim(i, true);
 					}
@@ -1046,6 +1160,68 @@ void PortFolio::Update()
 
 					if (is_mon_death[i])
 					{
+						if (is_mon_fire[i])
+						{
+							switch (i)
+							{
+							case 5:
+								smoke_particle6->Add(Vector3(mon_position[i].x, mon_position[i].y, mon_position[i].z));
+								smoke_particle6->Update();
+								fire_particle6->Add(Vector3(mon_position[i].x, mon_position[i].y, mon_position[i].z));
+								fire_particle6->Update(); break;
+							case 6:
+								smoke_particle7->Add(Vector3(mon_position[i].x, mon_position[i].y, mon_position[i].z));
+								smoke_particle7->Update();
+								fire_particle7->Add(Vector3(mon_position[i].x, mon_position[i].y, mon_position[i].z));
+								fire_particle7->Update(); break;
+							case 7:
+								smoke_particle8->Add(Vector3(mon_position[i].x, mon_position[i].y, mon_position[i].z));
+								smoke_particle8->Update();
+								fire_particle8->Add(Vector3(mon_position[i].x, mon_position[i].y, mon_position[i].z));
+								fire_particle8->Update(); break;
+							case 8:
+								smoke_particle9->Add(Vector3(mon_position[i].x, mon_position[i].y, mon_position[i].z));
+								smoke_particle9->Update();
+								fire_particle9->Add(Vector3(mon_position[i].x, mon_position[i].y, mon_position[i].z));
+								fire_particle9->Update(); break;
+							case 9:
+								smoke_particle10->Add(Vector3(mon_position[i].x, mon_position[i].y, mon_position[i].z));
+								smoke_particle10->Update();
+								fire_particle10->Add(Vector3(mon_position[i].x, mon_position[i].y, mon_position[i].z));
+								fire_particle10->Update(); break;
+							}
+						}
+						else if (!is_mon_fire[i])
+						{
+							if (castleGuardBow->GetTime(i - 5) == 5)
+								is_mon_blood[i] = true;
+
+							if (is_mon_blood[i])
+							{
+								switch (i)
+								{
+								case 5:
+									blood_particle6->Add(Vector3(mon_position[i].x, mon_position[i].y + 1.0f, mon_position[i].z));
+									blood_particle6->Update();	break;
+								case 6:
+									blood_particle7->Add(Vector3(mon_position[i].x, mon_position[i].y + 1.0f, mon_position[i].z));
+									blood_particle7->Update(); break;
+								case 7:
+									blood_particle8->Add(Vector3(mon_position[i].x, mon_position[i].y + 1.0f, mon_position[i].z));
+									blood_particle8->Update(); break;
+								case 8:
+									blood_particle9->Add(Vector3(mon_position[i].x, mon_position[i].y + 1.0f, mon_position[i].z));
+									blood_particle9->Update(); break;
+								case 9:
+									blood_particle10->Add(Vector3(mon_position[i].x, mon_position[i].y + 1.0f, mon_position[i].z));
+									blood_particle10->Update(); break;
+								}
+							}							
+
+							if (castleGuardBow->GetTime(i - 5) == 15)
+								is_mon_blood[i] = false;
+						}
+
 						if (castleGuardBow->GetTime(i - 5) == 55)
 							castleGuardBow->SetStopAnim(i - 5, true);
 					}
@@ -1075,21 +1251,13 @@ void PortFolio::Update()
 
 				//Player Sword
 				{
-					Matrix player_sword = dreyar->GetAttachTransform(0);
+					
 					player_sword_colliders.Collider->GetTransform()->World(player_sword);
 					if (weapon_num == 1)
 						player_sword_colliders.Collider->Update();
 
-					Vector3 position2;
-					Vector3 scale2;
-					Vector3 rotation2;
-					Math::MatrixDecompose(player_sword, scale2, rotation2, position2);
 
-					if (particle5 != NULL && is_trail)
-					{
-						particle5->Add(position2);
-						particle5->Update();
-					}
+					
 				}
 
 				//Monster Body
@@ -1272,7 +1440,7 @@ void PortFolio::PreRender()
 		shadow->Set();
 
 		Pass(0, 1, 2);
-
+		
 		bb->Pass(22);
 		bb2->Pass(22);
 		bb3->Pass(22);
@@ -1763,9 +1931,12 @@ void PortFolio::Render()
 		castleGuardBow->Render3();
 		if (dreyar != NULL)
 		{
-			if (particle != NULL)
+			if (particle != NULL && is_running)
 				particle->Render();			
-
+			
+			if(is_blood)
+				blood_particle->Render();
+			
 			if (is_particle_attack_one)
 			{
 				particle1->Render();
@@ -1893,6 +2064,7 @@ void PortFolio::Render()
 				if (powf(mon_position[i].x - meshposition.x, 2) + powf(mon_position[i].z - meshposition.z, 2) < 10.0f)
 				{
 					is_mon_heat[i] = true;
+					is_mon_fire[i] = true;
 				}
 			}
 
@@ -1911,6 +2083,27 @@ void PortFolio::Render()
 			}
 		}
 
+		if (is_mon_blood[0]) blood_particle1->Render();
+		if (is_mon_blood[1]) blood_particle2->Render();
+		if (is_mon_blood[2]) blood_particle3->Render();
+		if (is_mon_blood[3]) blood_particle4->Render();
+		if (is_mon_blood[4]) blood_particle5->Render();
+		if (is_mon_blood[5]) blood_particle6->Render();
+		if (is_mon_blood[6]) blood_particle7->Render();
+		if (is_mon_blood[7]) blood_particle8->Render();
+		if (is_mon_blood[8]) blood_particle9->Render();
+		if (is_mon_blood[9]) blood_particle10->Render();
+
+		if (is_mon_fire[0]) { fire_particle1->Render();  smoke_particle1->Render(); }
+		if (is_mon_fire[1]) { fire_particle2->Render();	 smoke_particle2->Render(); }
+		if (is_mon_fire[2]) { fire_particle3->Render();	 smoke_particle3->Render(); }
+		if (is_mon_fire[3]) { fire_particle4->Render();	 smoke_particle4->Render(); }
+		if (is_mon_fire[4]) { fire_particle5->Render();	 smoke_particle5->Render(); }
+		if (is_mon_fire[5]) { fire_particle6->Render();	 smoke_particle6->Render(); }
+		if (is_mon_fire[6]) { fire_particle7->Render();	 smoke_particle7->Render(); }
+		if (is_mon_fire[7]) { fire_particle8->Render();	 smoke_particle8->Render(); }
+		if (is_mon_fire[8]) { fire_particle9->Render();	 smoke_particle8->Render(); }
+		if (is_mon_fire[9]) { fire_particle10->Render(); smoke_particle10->Render(); }
 
 		if (is_collision)
 		{
@@ -2335,7 +2528,7 @@ void PortFolio::ModelTowerTreeStones()
 
 		transform->Position(Vector3(125 + stoneposition.x, terrain->GetHeight(stoneposition), 125 + stoneposition.z));
 		transform->RotationDegree(0, Math::Random(-180.0f, 180.0f), 0);
-		transform->Scale(0.1f, 0.1f, 0.1f);
+		transform->Scale(0.01f, 0.01f, 0.01f);
 	}
 	stone3->UpdateTransforms();
 	models.push_back(stone3);
@@ -2353,7 +2546,7 @@ void PortFolio::ModelTowerTreeStones()
 
 		transform->Position(Vector3(125 + stoneposition.x, terrain->GetHeight(stoneposition), 125 + stoneposition.z));
 		transform->RotationDegree(0, Math::Random(-180.0f, 180.0f), 0);
-		transform->Scale(0.1f, 0.1f, 0.1f);
+		transform->Scale(0.01f, 0.01f, 0.01f);
 	}
 	stone4->UpdateTransforms();
 	models.push_back(stone4);
@@ -2371,7 +2564,7 @@ void PortFolio::ModelTowerTreeStones()
 
 		transform->Position(Vector3(125 + stoneposition.x, terrain->GetHeight(stoneposition), 125 + stoneposition.z));
 		transform->RotationDegree(0, Math::Random(-180.0f, 180.0f), 0);
-		transform->Scale(0.1f, 0.1f, 0.1f);
+		transform->Scale(0.01f, 0.01f, 0.01f);
 	}
 	stone5->UpdateTransforms();
 	models.push_back(stone5);

@@ -111,6 +111,6 @@ technique11 T0
 	P_RS_VTP(P21, FillMode_WireFrame, VS_TerrainLod, HS_TerrainLod, DS_TerrainLod, PS_TerrainLod)
 
 	//BillboardDepth
-    P_RS_VGP(P22, FrontCounterClockwise_True, VS_BillboardDepth, GS_BillboardDepth, PS_BillboardDepth)
+    P_BS_VGP(P22, AlphaBlend_AlphaToCoverage, VS_BillboardDepth, GS_BillboardDepth, PS_BillboardDepth)
 	
 }

@@ -125,6 +125,39 @@ private:
 	ParticleSystem* meteor_particle2 = NULL;
 	ParticleSystem* meteor_particle3 = NULL;
 
+	ParticleSystem* blood_particle = NULL;
+	ParticleSystem* blood_particle1 = NULL;
+	ParticleSystem* blood_particle2 = NULL;
+	ParticleSystem* blood_particle3 = NULL;
+	ParticleSystem* blood_particle4 = NULL;
+	ParticleSystem* blood_particle5 = NULL;
+	ParticleSystem* blood_particle6 = NULL;
+	ParticleSystem* blood_particle7 = NULL;
+	ParticleSystem* blood_particle8 = NULL;
+	ParticleSystem* blood_particle9 = NULL;
+	ParticleSystem* blood_particle10 = NULL;
+
+	ParticleSystem* fire_particle1 = NULL;
+	ParticleSystem* fire_particle2 = NULL;
+	ParticleSystem* fire_particle3 = NULL;
+	ParticleSystem* fire_particle4 = NULL;
+	ParticleSystem* fire_particle5 = NULL;
+	ParticleSystem* fire_particle6 = NULL;
+	ParticleSystem* fire_particle7 = NULL;
+	ParticleSystem* fire_particle8 = NULL;
+	ParticleSystem* fire_particle9 = NULL;
+	ParticleSystem* fire_particle10 = NULL;
+
+	ParticleSystem* smoke_particle1 = NULL;
+	ParticleSystem* smoke_particle2 = NULL;
+	ParticleSystem* smoke_particle3 = NULL;
+	ParticleSystem* smoke_particle4 = NULL;
+	ParticleSystem* smoke_particle5 = NULL;
+	ParticleSystem* smoke_particle6 = NULL;
+	ParticleSystem* smoke_particle7 = NULL;
+	ParticleSystem* smoke_particle8 = NULL;
+	ParticleSystem* smoke_particle9 = NULL;
+	ParticleSystem* smoke_particle10 = NULL;
 
 	Vector3 particleposition = Vector3(0, 0, 0);
 	
@@ -152,6 +185,7 @@ private:
 	bool is_trail = false;
 	bool is_heat = false;					//플레이어가 맞았는지 확인
 	bool is_death = false;					//플레이어가 죽었는지 확인
+	bool is_blood = false;
 	float animspeed = 1.3f;
 	float taketime = 0.2f;
 	float sword_jump_attack_range = 100.0f;
@@ -166,6 +200,8 @@ private:
 	bool is_mon_death[10];	 //몬스터가 죽었는지 확인
 	bool is_mon_running[10]; //몬스터가 뛰고있는지 확인
 	bool is_mon_running_to_waypoint[10]; //몬스터가 거점으로 뛰고 있는지 확인
+	bool is_mon_blood[10];
+	bool is_mon_fire[10];
 	float monanimspeed = 1.3f;
 	float montaketime = 0.2f;
 	float monattackrange = 3.0f;
