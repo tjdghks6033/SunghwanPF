@@ -341,7 +341,7 @@ void PortFolio::Update()
 				Vector3 rotation2;
 				Math::MatrixDecompose(player_sword, scale2, rotation2, position2);
 
-				((Freedom *)Context::Get()->GetCamera())->SetTarget(position);
+				((Freedom *)Context::Get()->GetCamera())->SetTarget(Vector3(position.x, position.y + 1.0f, position.z));
 				((Freedom *)Context::Get()->GetCamera())->SetOrbitCamera(true);
 
 				//Orbit Camera 
@@ -493,9 +493,6 @@ void PortFolio::Update()
 							playerClip = 11;
 							dreyar->PlayClip(0, playerClip, animspeed, taketime);
 						}
-						int aaaaaa = dreyar->GetTime();
-						ImGui::SliderInt("aa", &aaaaaa, 0, 200);
-
 						if (dreyar->GetTime() == 13)
 							is_trail = true;
 
@@ -506,8 +503,10 @@ void PortFolio::Update()
 						}
 
 						if (dreyar->GetTime() == 50)
+						{
 							is_trail = false;
-
+							particle5->Reset();
+						}
 					}
 				}
 				else if (is_attackcombo_two) //w
@@ -542,7 +541,10 @@ void PortFolio::Update()
 						}
 
 						if (dreyar->GetTime() == 70)
+						{
 							is_trail = false;
+							particle5->Reset();
+						}
 					}
 				}
 				else if (is_particle_attack_one && weapon_num == 0) //e
@@ -646,7 +648,10 @@ void PortFolio::Update()
 						}
 
 						if (dreyar->GetTime() == 30)
+						{
 							is_trail = false;
+							particle5->Reset();
+						}
 					}
 					else if (weapon_num == 2)
 					{
@@ -682,6 +687,7 @@ void PortFolio::Update()
 					{
 						playerClip = 7;
 						dreyar->PlayClip(0, playerClip, animspeed, taketime);
+						particle->Reset();
 					}
 
 					if (dreyar->GetTime() == 0)
@@ -694,7 +700,10 @@ void PortFolio::Update()
 					}							
 
 					if (dreyar->GetTime() == 5)
-						is_blood = false;					
+					{
+						is_blood = false;
+						blood_particle->Reset();
+					}
 				}//Is_heat
 				else if (is_running)
 				{
@@ -736,6 +745,7 @@ void PortFolio::Update()
 						{
 							playerClip  = 3;
 							dreyar->PlayClip(0, playerClip, animspeed, taketime);
+							particle->Reset();
 						}
 					}
 					else 
@@ -744,6 +754,7 @@ void PortFolio::Update()
 						{
 							playerClip  = 0;
 							dreyar->PlayClip(0, playerClip, animspeed, taketime);
+							particle->Reset();
 						}
 					}
 				}
@@ -764,8 +775,6 @@ void PortFolio::Update()
 					is_arrow_initialize = false;
 					is_arrow_moving = true;
 				}
-
-
 
 				dreyar->GetTransform(0)->Position(position);
 				dreyar->GetTransform(0)->Rotation(rotation);
@@ -976,7 +985,17 @@ void PortFolio::Update()
 							}
 
 							if (castleGuardSword->GetTime(i) == 15)
+							{
 								is_mon_blood[i] = false;
+								switch (i)
+								{
+								case 0:	blood_particle1->Reset();	break;
+								case 1:	blood_particle2->Reset();	break;
+								case 2:	blood_particle3->Reset();	break;
+								case 3:	blood_particle4->Reset();	break;
+								case 4:	blood_particle5->Reset();	break;
+								}
+							}
 						}
 						if (castleGuardSword->GetTime(i) == 55)
 							castleGuardSword->SetStopAnim(i, true);
@@ -1219,7 +1238,18 @@ void PortFolio::Update()
 							}							
 
 							if (castleGuardBow->GetTime(i - 5) == 15)
+							{
 								is_mon_blood[i] = false;
+
+								switch (i)
+								{
+								case 5:	blood_particle6->Reset();	break;
+								case 6:	blood_particle7->Reset();	break;
+								case 7:	blood_particle8->Reset();	break;
+								case 8:	blood_particle9->Reset();	break;
+								case 9:	blood_particle10->Reset();	break;
+								}
+							}
 						}
 
 						if (castleGuardBow->GetTime(i - 5) == 55)
@@ -2193,10 +2223,10 @@ void PortFolio::PostRender()
 {
 	//sky->PostRender();
 	
-	ImGui::Image(shadow->SRV(), ImVec2(200, 200));
+	//ImGui::Image(shadow->SRV(), ImVec2(200, 200));
 
-	if(is_ocean)
-		ocean->RenderFFT();
+	/*if(is_ocean)
+		ocean->RenderFFT();*/
 }
 
 void PortFolio::Mesh()
@@ -2444,26 +2474,26 @@ void PortFolio::CastleGuardBow()
 
 void PortFolio::ModelTowerTreeStones()
 {
-	int tower_num = 1;
+	int tower_num = 30;
 
-	int stone1_num = 1;
-	int stone2_num = 1;
-	int stone3_num = 1;
-	int stone4_num = 1;
-	int stone5_num = 1;
+	int stone1_num = 20;
+	int stone2_num = 20;
+	int stone3_num = 10;
+	int stone4_num = 20;
+	int stone5_num = 10;
 
-	int tree1_num = 1;
-	int tree2_num = 1;
-	int tree3_num = 1;
-	int tree4_num = 1;
-	int tree5_num = 1;
+	int tree1_num = 20;
+	int tree2_num = 20;
+	int tree3_num = 5;
+	int tree4_num = 5;
+	//int tree5_num = 10;
 
 	tower = new ModelRender(shader);
 	tower->ReadMaterial(L"Tower/Tower");
 	tower->ReadMesh(L"Tower/Tower");
 
 	std::mt19937 engine4((unsigned int)time(NULL));               // MT19937 난수 엔진
-	std::uniform_real_distribution<float> distribution4(0.0f, 20.0f);       // 생성 범위
+	std::uniform_real_distribution<float> distribution4(-50.0f, 50.0f);       // 생성 범위
 	auto generator4 = bind(distribution4, engine4);
 
 	for (int i = 0; i < tower_num; i++)
@@ -2471,8 +2501,9 @@ void PortFolio::ModelTowerTreeStones()
 		Transform* transform = tower->AddTransform();
 
 		Vector3 towerposition = Vector3(generator4(), 0.0f, generator4());
-
-		transform->Position(Vector3(125 + towerposition.x, terrain->GetHeight(towerposition), 125 + towerposition.z));
+		towerposition.x += 125;
+		towerposition.z += 125;
+		transform->Position(Vector3(towerposition.x, terrain->GetHeight(towerposition) - 2.0f,towerposition.z));
 		transform->RotationDegree(0, Math::Random(-180.0f, 180.0f), 0);
 		transform->Scale(0.01f, 0.01f, 0.01f);
 	}
@@ -2489,8 +2520,9 @@ void PortFolio::ModelTowerTreeStones()
 		Transform* transform = stone1->AddTransform();
 
 		Vector3 stoneposition = Vector3(generator4(), 0.0f, generator4());
-
-		transform->Position(Vector3(125 + stoneposition.x, terrain->GetHeight(stoneposition), 125 + stoneposition.z));
+		stoneposition.x += 125;
+		stoneposition.z += 125;
+		transform->Position(Vector3(stoneposition.x, terrain->GetHeight(stoneposition),stoneposition.z));
 		transform->RotationDegree(0, Math::Random(-180.0f, 180.0f), 0);
 		transform->Scale(0.1f, 0.1f, 0.1f);
 	}
@@ -2507,8 +2539,9 @@ void PortFolio::ModelTowerTreeStones()
 		Transform* transform = stone2->AddTransform();
 
 		Vector3 stoneposition = Vector3(generator4(), 0.0f, generator4());
-
-		transform->Position(Vector3(125 + stoneposition.x, terrain->GetHeight(stoneposition), 125 + stoneposition.z));
+		stoneposition.x += 125;
+		stoneposition.z += 125;
+		transform->Position(Vector3(stoneposition.x, terrain->GetHeight(stoneposition), stoneposition.z));
 		transform->RotationDegree(0, Math::Random(-180.0f, 180.0f), 0);
 		transform->Scale(0.1f, 0.1f, 0.1f);
 	}
@@ -2525,7 +2558,8 @@ void PortFolio::ModelTowerTreeStones()
 		Transform* transform = stone3->AddTransform();
 
 		Vector3 stoneposition = Vector3(generator4(), 0.0f, generator4());
-
+		stoneposition.x += 125;
+		stoneposition.z += 125;
 		transform->Position(Vector3(125 + stoneposition.x, terrain->GetHeight(stoneposition), 125 + stoneposition.z));
 		transform->RotationDegree(0, Math::Random(-180.0f, 180.0f), 0);
 		transform->Scale(0.01f, 0.01f, 0.01f);
@@ -2543,8 +2577,9 @@ void PortFolio::ModelTowerTreeStones()
 		Transform* transform = stone4->AddTransform();
 
 		Vector3 stoneposition = Vector3(generator4(), 0.0f, generator4());
-
-		transform->Position(Vector3(125 + stoneposition.x, terrain->GetHeight(stoneposition), 125 + stoneposition.z));
+		stoneposition.x += 125;
+		stoneposition.z += 125;
+		transform->Position(Vector3(stoneposition.x, terrain->GetHeight(stoneposition), stoneposition.z));
 		transform->RotationDegree(0, Math::Random(-180.0f, 180.0f), 0);
 		transform->Scale(0.01f, 0.01f, 0.01f);
 	}
@@ -2561,8 +2596,9 @@ void PortFolio::ModelTowerTreeStones()
 		Transform* transform = stone5->AddTransform();
 
 		Vector3 stoneposition = Vector3(generator4(), 0.0f, generator4());
-
-		transform->Position(Vector3(125 + stoneposition.x, terrain->GetHeight(stoneposition), 125 + stoneposition.z));
+		stoneposition.x += 125;
+		stoneposition.z += 125;
+		transform->Position(Vector3(stoneposition.x, terrain->GetHeight(stoneposition), stoneposition.z));
 		transform->RotationDegree(0, Math::Random(-180.0f, 180.0f), 0);
 		transform->Scale(0.01f, 0.01f, 0.01f);
 	}
@@ -2579,10 +2615,11 @@ void PortFolio::ModelTowerTreeStones()
 		Transform* transform = tree1->AddTransform();
 
 		Vector3 treeposition = Vector3(generator4(), 0.0f, generator4());
-
-		transform->Position(Vector3(125 + treeposition.x, terrain->GetHeight(treeposition), 125 + treeposition.z));
+		treeposition.x += 125;
+		treeposition.z += 125;
+		transform->Position(Vector3(treeposition.x, terrain->GetHeight(treeposition), treeposition.z));
 		transform->RotationDegree(0, Math::Random(-180.0f, 180.0f), 0);
-		transform->Scale(1.0f, 1.0f, 1.0f);
+		transform->Scale(2.0f, 2.0f, 2.0f);
 	}
 	tree1->UpdateTransforms();
 	models.push_back(tree1);
@@ -2597,10 +2634,11 @@ void PortFolio::ModelTowerTreeStones()
 		Transform* transform = tree2->AddTransform();
 
 		Vector3 treeposition = Vector3(generator4(), 0.0f, generator4());
-
+		treeposition.x += 125;
+		treeposition.z += 125;
 		transform->Position(Vector3(125 + treeposition.x, terrain->GetHeight(treeposition), 125 + treeposition.z));
 		transform->RotationDegree(0, Math::Random(-180.0f, 180.0f), 0);
-		transform->Scale(1.0f, 1.0f, 1.0f);
+		transform->Scale(2.0f, 2.0f, 2.0f);
 	}
 	tree2->UpdateTransforms();
 	models.push_back(tree2);
@@ -2615,10 +2653,11 @@ void PortFolio::ModelTowerTreeStones()
 		Transform* transform = tree3->AddTransform();
 
 		Vector3 treeposition = Vector3(generator4(), 0.0f, generator4());
-
-		transform->Position(Vector3(125 + treeposition.x, terrain->GetHeight(treeposition), 125 + treeposition.z));
+		treeposition.x += 125;
+		treeposition.z += 125;
+		transform->Position(Vector3(treeposition.x, terrain->GetHeight(treeposition), treeposition.z));
 		transform->RotationDegree(0, Math::Random(-180.0f, 180.0f), 0);
-		transform->Scale(0.1f, 0.1f, 0.1f);
+		transform->Scale(0.3f, 0.3f, 0.3f);
 	}
 	tree3->UpdateTransforms();
 	models.push_back(tree3);
@@ -2633,10 +2672,11 @@ void PortFolio::ModelTowerTreeStones()
 		Transform* transform = tree4->AddTransform();
 
 		Vector3 treeposition = Vector3(generator4(), 0.0f, generator4());
-
-		transform->Position(Vector3(125 + treeposition.x, terrain->GetHeight(treeposition), 125 + treeposition.z));
+		treeposition.x += 125;
+		treeposition.z += 125;
+		transform->Position(Vector3(treeposition.x, terrain->GetHeight(treeposition), treeposition.z));
 		transform->RotationDegree(0, Math::Random(-180.0f, 180.0f), 0);
-		transform->Scale(0.1f, 0.1f, 0.1f);
+		transform->Scale(0.3f, 0.3f, 0.3f);
 	}
 	tree4->UpdateTransforms();
 	models.push_back(tree4);

@@ -35,7 +35,7 @@ Sky::Sky(Shader * shader)
 	sPerlinCloudBuffer = shader->AsConstantBuffer("CB_SkyBuffer");
 	
 	perlinCloud->GetTransform()->Position(117.241f, -27.097f, 117.241f);
-	perlinCloud->GetTransform()->Rotation(-2.707f, 0.313f, 2.815f);
+	perlinCloud->GetTransform()->Rotation(-2.9f, 0.313f, 2.815f);
 	perlinCloud->GetTransform()->Scale(20.690f, 200.0f, 20.690f);
 
 	sRayleighMap = shader->AsSRV("RayleighMap");
@@ -157,7 +157,7 @@ void Sky::Render()
 		perlinCloud->GetTransform()->Rotation(rotation);
 		perlinCloud->GetTransform()->Scale(scale);*/
 
-		perlincloudDesc.translation += 0.0001f;
+		perlincloudDesc.translation += 0.00001f;
 
 		perlincloudBuffer->Apply();
 		sPerlinCloudBuffer->SetConstantBuffer(perlincloudBuffer->Buffer());
