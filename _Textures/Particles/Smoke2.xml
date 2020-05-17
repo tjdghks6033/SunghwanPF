@@ -17,7 +17,7 @@
     <MinRotateSpeed>0.032000002</MinRotateSpeed>
     <MaxRotateSpeed>-0.032000002</MaxRotateSpeed>
     <MinStartSize>2</MinStartSize>
-    <MaxStartSize>5</MaxStartSize>
-    <MinEndSize>10</MinEndSize>
-    <MaxEndSize>11</MaxEndSize>
+    <MaxStartSize>2</MaxStartSize>
+    <MinEndSize>5</MinEndSize>
+    <MaxEndSize>5</MaxEndSize>
 </Particle>
