@@ -355,7 +355,7 @@ void PortFolio::Update()
 				((Freedom *)Context::Get()->GetCamera())->SetTarget(Vector3(position.x, position.y + 1.0f, position.z));
 				((Freedom *)Context::Get()->GetCamera())->SetOrbitCamera(true);
 
-				ImGui::SliderFloat("animspeed", &animspeed, 0.0f, 3.0f);
+				ImGui::SliderFloat("animspeed", &animspeed, 0.0f, 10.0f);
 				ImGui::SliderFloat("taketime", &taketime, 0.0f, 3.0f);
 
 				static int aa = 0;
@@ -475,14 +475,14 @@ void PortFolio::Update()
 					weapon_num %= 3;
 				}
 
-				ImGui::SliderFloat("speed", &animspeed, 0, 2);
+				/*ImGui::SliderFloat("speed", &animspeed, 0, 2);
 				ImGui::SliderFloat("taketime", &taketime, 0, 1);
 				ImGui::SliderFloat("monattackrange", &monattackrange, 0, 1000);
 				ImGui::SliderFloat("monbowattackrange", &monbowattackrange, 0, 1000);
 				ImGui::SliderFloat("montracerange", &montracerange, 0, 1000);
 				ImGui::SliderFloat("monwaybackrange", &monwaybackrange, 0, 1000);
 				ImGui::SliderFloat("arrowposy", &arrowposy, 0, 10.0f);
-
+*/
 				if (is_attackcombo_one) //q
 				{
 					if (weapon_num == 0)
@@ -509,7 +509,7 @@ void PortFolio::Update()
 							particle5->Update();
 						}
 
-						if (dreyar->GetTime() == 50)
+						if (dreyar->GetTime() == 20)
 						{
 							is_trail = false;
 							particle5->Reset();
@@ -543,7 +543,7 @@ void PortFolio::Update()
 							particle5->Update();
 						}
 
-						if (dreyar->GetTime() == 70)
+						if (dreyar->GetTime() == 35)
 						{
 							is_trail = false;
 							particle5->Reset();
@@ -641,7 +641,7 @@ void PortFolio::Update()
 							dreyar->PlayClip(0, playerClip, animspeed, taketime);
 						}
 						
-						if (dreyar->GetTime() == 13)
+						if (dreyar->GetTime() == 5)
 							is_trail = true;
 						
 						if (particle5 != NULL && is_trail)
@@ -650,7 +650,7 @@ void PortFolio::Update()
 							particle5->Update();
 						}
 
-						if (dreyar->GetTime() == 30)
+						if (dreyar->GetTime() == 16)
 						{
 							is_trail = false;
 							particle5->Reset();
@@ -783,7 +783,7 @@ void PortFolio::Update()
 					//weaponArrow->UpdateTransforms();
 				}
 				
-				if (is_attacking && dreyar->GetTime() == 40)
+				if (is_attacking && dreyar->GetTime() == 18)
 				{
 					is_arrow_initialize = false;
 					is_arrow_moving = true;
@@ -843,8 +843,48 @@ void PortFolio::Update()
 					}
 					else if (is_mon_hitting[i])
 					{
+						if (castleGuardSword->GetTime(i) == 5)
+							is_mon_blood[i] = true;
+
+						if (is_mon_blood[i])
+						{
+							switch (i)
+							{
+							case 0:
+								blood_particle1->Add(Vector3(mon_position[i].x, mon_position[i].y + 1.0f, mon_position[i].z));
+								blood_particle1->Update();	break;
+							case 1:
+								blood_particle2->Add(Vector3(mon_position[i].x, mon_position[i].y + 1.0f, mon_position[i].z));
+								blood_particle2->Update();  break;
+							case 2:
+								blood_particle3->Add(Vector3(mon_position[i].x, mon_position[i].y + 1.0f, mon_position[i].z));
+								blood_particle3->Update(); break;
+							case 3:
+								blood_particle4->Add(Vector3(mon_position[i].x, mon_position[i].y + 1.0f, mon_position[i].z));
+								blood_particle4->Update(); break;
+							case 4:
+								blood_particle5->Add(Vector3(mon_position[i].x, mon_position[i].y + 1.0f, mon_position[i].z));
+								blood_particle5->Update();  break;
+							}
+						}
+
+						if (castleGuardSword->GetTime(i) == 15)
+						{
+							is_mon_blood[i] = false;
+							switch (i)
+							{
+							case 0:	blood_particle1->Reset();	break;
+							case 1:	blood_particle2->Reset();	break;
+							case 2:	blood_particle3->Reset();	break;
+							case 3:	blood_particle4->Reset();	break;
+							case 4:	blood_particle5->Reset();	break;
+							}
+						}
+
 						if (castleGuardSword->GetTime(i) == 15)
 							is_mon_hitting[i] = false;
+
+
 					}
 					else if (is_mon_attack[i] && mon_hp[i] > 0.0f)
 					{
@@ -987,43 +1027,7 @@ void PortFolio::Update()
 						}
 						else if (!is_mon_fire[i])
 						{
-							if (castleGuardSword->GetTime(i) == 5)
-								is_mon_blood[i] = true;
-
-							if (is_mon_blood[i])
-							{
-								switch (i)
-								{
-								case 0:
-									blood_particle1->Add(Vector3(mon_position[i].x, mon_position[i].y + 1.0f, mon_position[i].z));
-									blood_particle1->Update();	break;
-								case 1:
-									blood_particle2->Add(Vector3(mon_position[i].x, mon_position[i].y + 1.0f, mon_position[i].z));
-									blood_particle2->Update();  break;
-								case 2:
-									blood_particle3->Add(Vector3(mon_position[i].x, mon_position[i].y + 1.0f, mon_position[i].z));
-									blood_particle3->Update(); break;
-								case 3:
-									blood_particle4->Add(Vector3(mon_position[i].x, mon_position[i].y + 1.0f, mon_position[i].z));
-									blood_particle4->Update(); break;
-								case 4:
-									blood_particle5->Add(Vector3(mon_position[i].x, mon_position[i].y + 1.0f, mon_position[i].z));
-									blood_particle5->Update();  break;
-								}
-							}
-
-							if (castleGuardSword->GetTime(i) == 15)
-							{
-								is_mon_blood[i] = false;
-								switch (i)
-								{
-								case 0:	blood_particle1->Reset();	break;
-								case 1:	blood_particle2->Reset();	break;
-								case 2:	blood_particle3->Reset();	break;
-								case 3:	blood_particle4->Reset();	break;
-								case 4:	blood_particle5->Reset();	break;
-								}
-							}
+							
 						}
 						if (castleGuardSword->GetTime(i) == 55)
 							castleGuardSword->SetStopAnim(i, true);
@@ -1085,6 +1089,45 @@ void PortFolio::Update()
 					}
 					else if (is_mon_hitting[i])
 					{
+						if (castleGuardBow->GetTime(i - 5) == 5)
+							is_mon_blood[i] = true;
+
+						if (is_mon_blood[i])
+						{
+							switch (i)
+							{
+							case 5:
+								blood_particle6->Add(Vector3(mon_position[i].x, mon_position[i].y + 1.0f, mon_position[i].z));
+								blood_particle6->Update();	break;
+							case 6:
+								blood_particle7->Add(Vector3(mon_position[i].x, mon_position[i].y + 1.0f, mon_position[i].z));
+								blood_particle7->Update(); break;
+							case 7:
+								blood_particle8->Add(Vector3(mon_position[i].x, mon_position[i].y + 1.0f, mon_position[i].z));
+								blood_particle8->Update(); break;
+							case 8:
+								blood_particle9->Add(Vector3(mon_position[i].x, mon_position[i].y + 1.0f, mon_position[i].z));
+								blood_particle9->Update(); break;
+							case 9:
+								blood_particle10->Add(Vector3(mon_position[i].x, mon_position[i].y + 1.0f, mon_position[i].z));
+								blood_particle10->Update(); break;
+							}
+						}
+
+						if (castleGuardBow->GetTime(i - 5) == 15)
+						{
+							is_mon_blood[i] = false;
+
+							switch (i)
+							{
+							case 5:	blood_particle6->Reset();	break;
+							case 6:	blood_particle7->Reset();	break;
+							case 7:	blood_particle8->Reset();	break;
+							case 8:	blood_particle9->Reset();	break;
+							case 9:	blood_particle10->Reset();	break;
+							}
+						}
+
 						if (castleGuardBow->GetTime(i - 5) == 15)
 							is_mon_hitting[i] = false;
 					}
@@ -1253,44 +1296,7 @@ void PortFolio::Update()
 						}
 						else if (!is_mon_fire[i])
 						{
-							if (castleGuardBow->GetTime(i - 5) == 5)
-								is_mon_blood[i] = true;
-
-							if (is_mon_blood[i])
-							{
-								switch (i)
-								{
-								case 5:
-									blood_particle6->Add(Vector3(mon_position[i].x, mon_position[i].y + 1.0f, mon_position[i].z));
-									blood_particle6->Update();	break;
-								case 6:
-									blood_particle7->Add(Vector3(mon_position[i].x, mon_position[i].y + 1.0f, mon_position[i].z));
-									blood_particle7->Update(); break;
-								case 7:
-									blood_particle8->Add(Vector3(mon_position[i].x, mon_position[i].y + 1.0f, mon_position[i].z));
-									blood_particle8->Update(); break;
-								case 8:
-									blood_particle9->Add(Vector3(mon_position[i].x, mon_position[i].y + 1.0f, mon_position[i].z));
-									blood_particle9->Update(); break;
-								case 9:
-									blood_particle10->Add(Vector3(mon_position[i].x, mon_position[i].y + 1.0f, mon_position[i].z));
-									blood_particle10->Update(); break;
-								}
-							}							
-
-							if (castleGuardBow->GetTime(i - 5) == 15)
-							{
-								is_mon_blood[i] = false;
-
-								switch (i)
-								{
-								case 5:	blood_particle6->Reset();	break;
-								case 6:	blood_particle7->Reset();	break;
-								case 7:	blood_particle8->Reset();	break;
-								case 8:	blood_particle9->Reset();	break;
-								case 9:	blood_particle10->Reset();	break;
-								}
-							}
+							
 						}
 
 						if (castleGuardBow->GetTime(i - 5) == 55)
@@ -2155,7 +2161,7 @@ void PortFolio::Render()
 		//Playersword - Monbody
 		for (int i = 0; i < 10; i++)
 		{
-			if ((weapon_num == 1 && is_attacking) || (weapon_num == 1 && is_attackcombo_two))
+			if ((weapon_num == 1 && is_attacking) || (weapon_num == 1 && is_attackcombo_two) || (weapon_num == 1 && is_attackcombo_one))
 			{
 				is_collision_sword_mon[i] = monster_colliders[i].Collider->IsIntersect(player_sword_colliders.Collider);
 				if (is_collision_sword_mon[i] == true)
@@ -2564,15 +2570,15 @@ void PortFolio::CastleGuardBow()
 
 void PortFolio::ModelTowerTreeStones()
 {
-	int tower_num = 10;
+	int tower_num = 50;
 
-	int stone1_num = 10;
-	int stone2_num = 10;
-	int stone3_num = 10;
-	int stone4_num = 10;
-	int stone5_num = 10;
+	int stone1_num = 20;
+	int stone2_num = 20;
+	int stone3_num = 20;
+	int stone4_num = 20;
+	int stone5_num = 20;
 
-	int tree1_num = 40;
+	int tree1_num = 50;
 	int tree2_num = 1;
 	int tree3_num = 1;
 	int tree4_num = 1;

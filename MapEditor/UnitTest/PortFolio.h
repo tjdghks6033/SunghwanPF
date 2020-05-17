@@ -45,7 +45,7 @@ private:
 	Vector3 camerarotation = Vector3(0, 0, 0);
 	
 
-	UINT terrain_num = 0;
+	UINT terrain_num = 1;
 	bool is_billboard = false;
 	bool is_wireframe = false;
 	bool is_mesh = false;
@@ -53,11 +53,11 @@ private:
 	bool is_tree = false;
 	bool is_stones = false;
 	bool is_tower = false;
-	bool is_weather = false;
+	bool is_weather = true;
 	bool is_light = false;
-	bool is_water = false;
+	bool is_water = true;
 	bool is_ocean = false;
-	bool is_sky = false;
+	bool is_sky = true;
 
 	class Billboard* bb;
 	class Billboard* bb2;

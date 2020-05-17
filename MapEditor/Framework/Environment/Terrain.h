@@ -39,7 +39,7 @@ private:
 		Color Color = D3DXCOLOR(0, 1, 0, 1);
 		Vector3 Location;
 		UINT Type = 2;
-		UINT Range = 7;
+		UINT Range = 0;
 		float Padding[3];
 	} brushDesc;
 
