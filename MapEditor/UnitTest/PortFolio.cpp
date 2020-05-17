@@ -358,6 +358,10 @@ void PortFolio::Update()
 				ImGui::SliderFloat("animspeed", &animspeed, 0.0f, 3.0f);
 				ImGui::SliderFloat("taketime", &taketime, 0.0f, 3.0f);
 
+				static int aa = 0;
+				aa = dreyar->GetTime();
+				ImGui::SliderInt("aa",&aa, 0, 50);
+
 				if (particle != NULL && is_running)
 				{
 					particle->Add(Vector3(position.x, position.y + 1.0f, position.z));
@@ -688,7 +692,7 @@ void PortFolio::Update()
 					if (playerClip != 7)
 					{
 						playerClip = 7;
-						dreyar->PlayClip(0, playerClip, animspeed, taketime);
+						dreyar->PlayClip(0, playerClip, 1.3f, 0.2f);
 						particle->Reset();
 					}
 				}//Is_hit
@@ -2567,18 +2571,18 @@ void PortFolio::CastleGuardBow()
 
 void PortFolio::ModelTowerTreeStones()
 {
-	int tower_num = 30;
+	int tower_num = 10;
 
-	int stone1_num = 20;
-	int stone2_num = 20;
+	int stone1_num = 10;
+	int stone2_num = 10;
 	int stone3_num = 10;
-	int stone4_num = 20;
+	int stone4_num = 10;
 	int stone5_num = 10;
 
-	int tree1_num = 20;
-	int tree2_num = 20;
-	int tree3_num = 5;
-	int tree4_num = 5;
+	int tree1_num = 40;
+	int tree2_num = 1;
+	int tree3_num = 1;
+	int tree4_num = 1;
 	//int tree5_num = 10;
 
 	tower = new ModelRender(shader);
