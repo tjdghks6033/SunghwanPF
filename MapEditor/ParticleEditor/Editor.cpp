@@ -15,6 +15,13 @@ void Editor::Initialize()
 
 	sky = new CubeSky(L"Environment/GrassCube1024.dds", shader);
 
+	hp = new Texture(L"Red.png");
+	//hpcase = new Texture(L"HpCase.png");
+	
+	render2D = new Render2D();
+	render2D->GetTransform()->Scale(879 * 0.1f, 95 * 0.1f, 1);
+	render2D->SRV(hp->SRV());	
+
 	Mesh();
 
 	UpdateParticleList();
@@ -29,7 +36,6 @@ void Editor::Destroy()
 void Editor::Update()
 {
 	OnGUI();
-
 
 	Vector3 position;
 	sphere->GetTransform(0)->Position(&position);
@@ -68,6 +74,22 @@ void Editor::Update()
 		particle->Add(position);
 		particle->Update();
 	}
+
+	Vector3 temp;
+	Matrix W;
+	D3DXMatrixIdentity(&W);
+
+	Matrix V = Context::Get()->View();
+	Matrix P = Context::Get()->Projection();
+
+	Vector3 tempPos = position;
+	tempPos.y += 6;
+
+	Context::Get()->GetViewport()->Project(&temp, tempPos, W, V, P);
+
+	
+	render2D->GetTransform()->Position(temp.x, -temp.y + D3D::Height(), 0);
+	render2D->Update();
 }
 
 void Editor::PreRender()
@@ -99,6 +121,10 @@ void Editor::Render()
 	sphere->Pass(7);
 	//sphere->Render();
 
+	render2D->Render();
+	render2D->Render();
+	
+	
 	if (particle != NULL)
 		particle->Render();
 }

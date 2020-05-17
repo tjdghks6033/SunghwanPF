@@ -45,7 +45,7 @@ private:
 	Vector3 camerarotation = Vector3(0, 0, 0);
 	
 
-	UINT terrain_num = 1;
+	UINT terrain_num = 0;
 	bool is_billboard = false;
 	bool is_wireframe = false;
 	bool is_mesh = false;
@@ -53,11 +53,11 @@ private:
 	bool is_tree = false;
 	bool is_stones = false;
 	bool is_tower = false;
-	bool is_weather = true;
+	bool is_weather = false;
 	bool is_light = false;
-	bool is_water = true;
+	bool is_water = false;
 	bool is_ocean = false;
-	bool is_sky = true;
+	bool is_sky = false;
 
 	class Billboard* bb;
 	class Billboard* bb2;
@@ -79,6 +79,8 @@ private:
 	Texture* tex7;
 	Texture* tex8;
 
+	Texture* hp;
+	Render2D* render2D[11];
 
 	Sky* sky;
 	Snow* snow;
@@ -161,6 +163,8 @@ private:
 
 	Vector3 particleposition = Vector3(0, 0, 0);
 	
+	
+
 
 	bool is_unarmed = false;
 	bool is_sword_spine = false;
@@ -183,12 +187,14 @@ private:
 	bool is_particle_attack_twice = false;
 	bool is_particle_attack_two = false;
 	bool is_trail = false;
-	bool is_heat = false;					//플레이어가 맞았는지 확인
+	bool is_hit = false;					//플레이어가 맞았는지 확인
+	bool is_hitting = false;				//플레이어가 맞고있는지 확인
 	bool is_death = false;					//플레이어가 죽었는지 확인
 	bool is_blood = false;
-	float animspeed = 1.3f;
+	float animspeed = 3.0f;
 	float taketime = 0.2f;
 	float sword_jump_attack_range = 100.0f;
+
 
 	//Monster
 	int clip[10]; //몬스터 애니매이션 변수
@@ -196,7 +202,8 @@ private:
 
 	bool is_mon_attack[10];  //몬스터가 공격하는지 확인
 	bool is_mon_patrol[10];  //몬스터가 패트롤중인지 확인
-	bool is_mon_heat[10];	 //몬스터가 맞는중인지 확인
+	bool is_mon_hit[10];	 //몬스터가 맞았는지 확인
+	bool is_mon_hitting[10]{ false }; //몬스터가 맞는중인지 확인
 	bool is_mon_death[10];	 //몬스터가 죽었는지 확인
 	bool is_mon_running[10]; //몬스터가 뛰고있는지 확인
 	bool is_mon_running_to_waypoint[10]; //몬스터가 거점으로 뛰고 있는지 확인
@@ -217,6 +224,7 @@ private:
 	Vector3 mon_rotation[10];  //몬스터 방향
 
 	float mon_hp[10];
+	float damage = 5.0f;
 
 	int mon_direction[10];	   //몬스터 방향 4가지
 	

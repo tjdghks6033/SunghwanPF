@@ -44,4 +44,10 @@ private:
 
 	MeshRender* grid;
 	MeshRender* sphere;
+
+	Render2D* render2D;
+	Texture* hp;
+	//Texture* hpcase;
+	//ID3DX11EffectShaderResourceVariable* sHp;
+
 };

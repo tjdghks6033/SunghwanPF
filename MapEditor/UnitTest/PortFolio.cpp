@@ -168,6 +168,17 @@ void PortFolio::Initialize()
 		smoke_particle9 = new ParticleSystem(L"Smoke2");
 		smoke_particle10 = new ParticleSystem(L"Smoke2");
 	}
+
+	hp = new Texture(L"Red.png");
+	//hpcase = new Texture(L"HpCase.png");
+
+	for (int i = 0; i < 11; i++)
+	{
+		render2D[i] = new Render2D();
+		render2D[i]->GetTransform()->Scale(87.9f, 9.5f, 1);
+		render2D[i]->SRV(hp->SRV());
+	}
+
 	Mesh();
 	Weapon();
 	Dreyar();
@@ -187,7 +198,7 @@ void PortFolio::Initialize()
 	{
 		clip[i] = 2;
 
-		is_mon_heat[i] = false;
+		is_mon_hit[i] = false;
 		is_mon_attack[i] = false;
 		is_mon_patrol[i] = true;
 		is_mon_death[i] = false;
@@ -344,21 +355,8 @@ void PortFolio::Update()
 				((Freedom *)Context::Get()->GetCamera())->SetTarget(position);
 				((Freedom *)Context::Get()->GetCamera())->SetOrbitCamera(true);
 
-				//Orbit Camera 
-				//Setting.
-				/*ImGui::SliderFloat("cameraLatitude", &cameraLatitude, -10, 10);
-				ImGui::SliderFloat("cameraLongitude", &cameraLongitude, -2.0f, -1.6f);
-				ImGui::SliderFloat("orbitDistance", &orbitDistance, 10, 35);
-
-				camerarotation.x = -sinf(cameraLatitude) * cosf(cameraLongitude);
-				camerarotation.z = -sinf(cameraLongitude);
-				camerarotation.y = cosf(cameraLatitude) * cosf(cameraLongitude);
-				cameraposition.x = position.x - camerarotation.x * orbitDistance;
-				cameraposition.y = position.y - camerarotation.y * orbitDistance;
-				cameraposition.z = position.z - camerarotation.z * orbitDistance;
-
-				Context::Get()->GetCamera()->Position(cameraposition);
-				Context::Get()->GetCamera()->RotationDegree(camerarotation);*/
+				ImGui::SliderFloat("animspeed", &animspeed, 0.0f, 3.0f);
+				ImGui::SliderFloat("taketime", &taketime, 0.0f, 3.0f);
 
 				if (particle != NULL && is_running)
 				{
@@ -378,7 +376,8 @@ void PortFolio::Update()
 					is_attackcombo_one = false;
 					is_attackcombo_two = false;
 					is_attacking = false;
-					is_heat = false;
+					is_hit = false;
+					is_hitting = false;
 					is_death = false;
 				}
 
@@ -394,7 +393,8 @@ void PortFolio::Update()
 					is_attackcombo_one = false;
 					is_attackcombo_two = false;
 					is_running = false;
-					is_heat = false;
+					is_hit = false;
+					is_hitting = false;
 					is_death = false;
 				}
 
@@ -408,7 +408,8 @@ void PortFolio::Update()
 					is_attackcombo_two = false;
 					is_attacking = false;
 					is_running = false;
-					is_heat = false;
+					is_hit = false;
+					is_hitting = false;
 					is_death = false;
 				}
 
@@ -422,7 +423,8 @@ void PortFolio::Update()
 					is_attackcombo_one = false;
 					is_attacking = false;
 					is_running = false;
-					is_heat = false;
+					is_hit = false;
+					is_hitting = false;
 					is_death = false;
 				}
 
@@ -436,7 +438,8 @@ void PortFolio::Update()
 					is_attackcombo_one = false;
 					is_attacking = false;
 					is_running = false;
-					is_heat = false;
+					is_hit = false;
+					is_hitting = false;
 					is_death = false;
 				}
 
@@ -445,7 +448,6 @@ void PortFolio::Update()
 				{
 					is_particle_attack_twice = true;
 				}
-
 				if (is_particle_attack_twice && Keyboard::Get()->Up(0x52))
 				{
 					is_particle_attack_twice = false;
@@ -458,7 +460,8 @@ void PortFolio::Update()
 					is_attackcombo_one = false;
 					is_attacking = false;
 					is_running = false;
-					is_heat = false;
+					is_hit = false;
+					is_hitting = false;
 					is_death = false;
 				}
 
@@ -493,8 +496,6 @@ void PortFolio::Update()
 							playerClip = 11;
 							dreyar->PlayClip(0, playerClip, animspeed, taketime);
 						}
-						int aaaaaa = dreyar->GetTime();
-						ImGui::SliderInt("aa", &aaaaaa, 0, 200);
 
 						if (dreyar->GetTime() == 13)
 							is_trail = true;
@@ -527,10 +528,6 @@ void PortFolio::Update()
 							playerClip = 12;
 							dreyar->PlayClip(0, playerClip, animspeed, taketime);
 						}
-
-						int aaaaaa = dreyar->GetTime();
-						ImGui::SliderInt("aa", &aaaaaa, 0, 200);
-
 
 						if (dreyar->GetTime() == 13)
 							is_trail = true;
@@ -676,26 +673,39 @@ void PortFolio::Update()
 						}
 					}
 				}//Attacking
-				else if (is_heat)
+				else if (is_hit)
 				{
+					is_hitting = true;
+					is_hit = false;
+
 					if (playerClip != 7)
 					{
 						playerClip = 7;
 						dreyar->PlayClip(0, playerClip, animspeed, taketime);
 					}
+				}//Is_hit
+				else if	(is_hitting)
+				{						
 
-					if (dreyar->GetTime() == 0)
+					if (dreyar->GetTime() == 3)
 						is_blood = true;
-				
+
 					if (is_blood)
 					{
 						blood_particle->Add(Vector3(position.x, position.y + 0.5f, position.z));
-						blood_particle->Update();
-					}							
+					}
 
-					if (dreyar->GetTime() == 5)
-						is_blood = false;					
-				}//Is_heat
+					if (dreyar->GetTime() == 10)
+					{
+						is_blood = false;
+						blood_particle->Reset();
+					}
+					if (dreyar->GetTime() == 15)
+					{
+						is_hitting = false;
+						is_hit = false;
+					}
+				}
 				else if (is_running)
 				{
 					if (playerClip  != 1)
@@ -765,7 +775,7 @@ void PortFolio::Update()
 					is_arrow_moving = true;
 				}
 
-
+				blood_particle->Update();
 
 				dreyar->GetTransform(0)->Position(position);
 				dreyar->GetTransform(0)->Rotation(rotation);
@@ -773,7 +783,7 @@ void PortFolio::Update()
 				//castleGuardSword
 				for (int i = 0; i < 5; i++)
 				{
-					if (is_mon_heat[i])
+					if (is_mon_hit[i])
 					{
 						is_mon_attack[i] = false;
 						is_mon_patrol[i] = false;
@@ -781,14 +791,14 @@ void PortFolio::Update()
 					/*else if (is_attackcombo_two && powf(mon_position[i].x - position.x, 2) + powf(mon_position[i].z - position.z, 2) < sword_jump_attack_range &&
 						dreyar->GetTime() > 45)
 					{
-						is_mon_heat[i] = true;
+						is_mon_hit[i] = true;
 					}*/
 					else if (powf(mon_position[i].x - position.x, 2) + powf(mon_position[i].z - position.z, 2) < montracerange &&
 						powf(mon_position[i].x - position.x, 2) + powf(mon_position[i].z - position.z, 2) > monattackrange)
 					{
 						is_mon_running[i] = true;
 					}
-					else if (powf(mon_position[i].x - position.x, 2) + powf(mon_position[i].z - position.z, 2) <= monattackrange)
+					else if (powf(mon_position[i].x - position.x, 2) + powf(mon_position[i].z - position.z, 2) <= monattackrange )
 					{
 						is_mon_running[i] = false;
 						is_mon_attack[i] = true;
@@ -800,20 +810,27 @@ void PortFolio::Update()
 						is_mon_patrol[i] = true;
 					}
 
-					if (is_mon_heat[i])
+					if (is_mon_hit[i])
 					{
 						is_mon_patrol[i] = false;
 						is_mon_attack[i] = false;
-						mon_hp[i] = 0.0f;
+						is_mon_hitting[i] = true;
 
-						if (clip[i] != 5)
+						mon_hp[i] -= damage;
+
+						if (clip[i] != 3)
 						{
-							clip[i] = 5;
+							clip[i] = 3;
 							castleGuardSword->PlayClip(i, clip[i], monanimspeed, montaketime);
-						}
-
+						}						
 						
-						is_mon_death[i] = true;
+						if(mon_hp[i] < 0.0f)
+							is_mon_death[i] = true;
+					}
+					else if (is_mon_hitting[i])
+					{
+						if (castleGuardSword->GetTime(i) == 15)
+							is_mon_hitting[i] = false;
 					}
 					else if (is_mon_attack[i] && mon_hp[i] > 0.0f)
 					{
@@ -917,6 +934,12 @@ void PortFolio::Update()
 
 					if (is_mon_death[i])
 					{
+						if (clip[i] != 5)
+						{
+							clip[i] = 5;
+							castleGuardSword->PlayClip(i, clip[i], monanimspeed, montaketime);
+						}
+
 						if (is_mon_fire[i])
 						{
 							switch (i)
@@ -989,7 +1012,7 @@ void PortFolio::Update()
 				//castleGuardBow
 				for (int i = 5; i < 10; i++)
 				{
-					if (is_mon_heat[i])
+					if (is_mon_hit[i])
 					{
 						is_mon_attack[i] = false;
 						is_mon_patrol[i] = false;
@@ -997,7 +1020,7 @@ void PortFolio::Update()
 					/*else if (is_attackcombo_two && powf(mon_position[i].x - position.x, 2) + powf(mon_position[i].z - position.z, 2) < sword_jump_attack_range &&
 						dreyar->GetTime() > 45)
 					{
-						is_mon_heat[i] = true;
+						is_mon_hit[i] = true;
 					}*/
 					else if (powf(mon_position[i].x - position.x, 2) + powf(mon_position[i].z - position.z, 2) <= monbowattackrange)
 					{
@@ -1019,20 +1042,27 @@ void PortFolio::Update()
 						is_mon_patrol[i] = true;
 					}
 
-					if (is_mon_heat[i])
+					if (is_mon_hit[i])
 					{
 						is_mon_patrol[i] = false;
 						is_mon_attack[i] = false;
+						is_mon_hitting[i] = true;
 
-						mon_hp[i] = 0.0f;
+						mon_hp[i] -= damage;
 
-						if (clip[i] != 5)
+						if (clip[i] != 3)
 						{
-							clip[i] = 5;
+							clip[i] = 3;
 							castleGuardBow->PlayClip(i - 5, clip[i], monanimspeed, montaketime);
 						}
 
-						is_mon_death[i] = true;
+						if (mon_hp[i] < 0.0f)
+							is_mon_death[i] = true;
+					}
+					else if (is_mon_hitting[i])
+					{
+						if (castleGuardBow->GetTime(i - 5) == 15)
+							is_mon_hitting[i] = false;
 					}
 					else if (is_mon_running[i] && mon_hp[i] > 0.0f && !is_mon_running_to_waypoint[i])
 					{
@@ -1160,6 +1190,12 @@ void PortFolio::Update()
 
 					if (is_mon_death[i])
 					{
+						if (clip[i] != 5)
+						{
+							clip[i] = 5;
+							castleGuardBow->PlayClip(i - 5, clip[i], monanimspeed, montaketime);
+						}
+
 						if (is_mon_fire[i])
 						{
 							switch (i)
@@ -1229,6 +1265,50 @@ void PortFolio::Update()
 					castleGuardBow->GetTransform(i - 5)->Position(mon_position[i]);
 
 				}//bow
+
+				Vector3 temp;
+				Matrix W;
+				D3DXMatrixIdentity(&W);
+
+				Matrix V = Context::Get()->View();
+				Matrix P = Context::Get()->Projection();
+
+				Vector3 tempPos;
+				
+				for (int i = 0; i < 11; i++)
+				{
+					Vector3 tempPos;
+					if (i < 5)
+					{
+						tempPos = mon_position[i];
+						tempPos.y += 2;
+					}
+					else if (i >= 5 && i < 10)
+					{
+						tempPos = mon_position[i];
+						tempPos.y += 2;
+					}
+					else
+					{
+						tempPos = position;
+						tempPos.y += 2;
+					}					
+
+					Context::Get()->GetViewport()->Project(&temp, tempPos, W, V, P);
+
+					render2D[i]->GetTransform()->Position(temp.x, -temp.y + D3D::Height(), 0);
+					
+					if (i == 10)
+					{
+
+					}
+					else
+					{
+						render2D[i]->GetTransform()->Scale(Vector3(89.7f * (mon_hp[i] / 100.0f), 9.5f, 1));
+					}
+
+					render2D[i]->Update();
+				}
 
 				sphere->UpdateTransforms();
 				weaponArrow->UpdateTransforms();
@@ -1929,6 +2009,10 @@ void PortFolio::Render()
 		weaponArrow->Render();
 		castleGuardSword->Render2();
 		castleGuardBow->Render3();
+		for (int i = 0; i < 11; i++)
+		{
+			render2D[i]->Render();
+		}
 		if (dreyar != NULL)
 		{
 			if (particle != NULL && is_running)
@@ -2040,18 +2124,18 @@ void PortFolio::Render()
 			{
 				is_collision_sword_mon[i] = monster_colliders[i].Collider->IsIntersect(player_sword_colliders.Collider);
 				if (is_collision_sword_mon[i] == true)
-					is_mon_heat[i] = true;
+					is_mon_hit[i] = true;
 			}
 			//Playerarrow - Monbody	
 			if (weapon_num == 2 && is_arrow_moving)
 			{
 				is_collision_arrow_mon[i] = monster_colliders[i].Collider->IsIntersect(arrow_colliders[0].Collider);
 				if (is_collision_arrow_mon[i] == true)
-					is_mon_heat[i] = true;
+					is_mon_hit[i] = true;
 			}
 
 			if (is_collision_sword_mon[i] == false && is_collision_arrow_mon[i] == false)
-				is_mon_heat[i] = false;
+				is_mon_hit[i] = false;
 		}
 
 		for (int i = 0; i < 10; i++)
@@ -2063,7 +2147,7 @@ void PortFolio::Render()
 
 				if (powf(mon_position[i].x - meshposition.x, 2) + powf(mon_position[i].z - meshposition.z, 2) < 10.0f)
 				{
-					is_mon_heat[i] = true;
+					is_mon_hit[i] = true;
 					is_mon_fire[i] = true;
 				}
 			}
@@ -2077,7 +2161,7 @@ void PortFolio::Render()
 				{
 					if (powf(mon_position[i].x - meshposition.x, 2) + powf(mon_position[i].z - meshposition.z, 2) < 10.0f)
 					{
-						is_mon_heat[i] = true;
+						is_mon_hit[i] = true;
 					}
 				}
 			}
@@ -2107,7 +2191,7 @@ void PortFolio::Render()
 
 		if (is_collision)
 		{
-			is_heat = true;
+			is_hit = true;
 		}
 
 		//arrow
@@ -2132,7 +2216,7 @@ void PortFolio::Render()
 			for (int i = 0; i < 10; i++)
 			{
 				if (is_mon_death[i] == false)
-					monster_colliders[i].Collider->Render(is_mon_heat[i] ? Color(1, 0, 0, 1) : Color(0, 1, 0, 1));
+					monster_colliders[i].Collider->Render(is_mon_hit[i] ? Color(1, 0, 0, 1) : Color(0, 1, 0, 1));
 			}
 
 			//mon sword
@@ -2186,7 +2270,7 @@ void PortFolio::Render()
 	bb5->Render();
 	bb6->Render();
 	bb7->Render();
-	bb8->Render();	
+	bb8->Render();
 }
 
 void PortFolio::PostRender()
