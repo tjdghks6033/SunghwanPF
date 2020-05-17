@@ -496,10 +496,6 @@ void PortFolio::Update()
 							playerClip = 11;
 							dreyar->PlayClip(0, playerClip, animspeed, taketime);
 						}
-<<<<<<< HEAD
-
-=======
->>>>>>> e4b9f26c836f043c90938bc20381c459e3ee1a02
 						if (dreyar->GetTime() == 13)
 							is_trail = true;
 
@@ -707,25 +703,22 @@ void PortFolio::Update()
 						blood_particle->Add(Vector3(position.x, position.y + 0.5f, position.z));
 					}
 
-<<<<<<< HEAD
+
 					if (dreyar->GetTime() == 10)
-=======
+
 					if (dreyar->GetTime() == 5)
->>>>>>> e4b9f26c836f043c90938bc20381c459e3ee1a02
+
 					{
 						is_blood = false;
 						blood_particle->Reset();
 					}
-<<<<<<< HEAD
+
 					if (dreyar->GetTime() == 15)
 					{
 						is_hitting = false;
 						is_hit = false;
 					}
 				}
-=======
-				}//Is_heat
->>>>>>> e4b9f26c836f043c90938bc20381c459e3ee1a02
 				else if (is_running)
 				{
 					if (playerClip  != 1)
@@ -797,11 +790,11 @@ void PortFolio::Update()
 					is_arrow_moving = true;
 				}
 
-<<<<<<< HEAD
+
 				blood_particle->Update();
 
-=======
->>>>>>> e4b9f26c836f043c90938bc20381c459e3ee1a02
+
+
 				dreyar->GetTransform(0)->Position(position);
 				dreyar->GetTransform(0)->Rotation(rotation);
 				
