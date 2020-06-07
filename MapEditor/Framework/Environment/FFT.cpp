@@ -112,17 +112,6 @@ void FFT::CreateCBuffers_512x512(UINT slices)
 	UINT istride = ostride;
 	double phase_base = -TWO_PI / (512.0 * 512.0);
 
-	/*for (int i=0; i< 6;i++, istride /= 8, phase_base *= 8.0)
-	{
-		if(i == 3)
-			ostride /= 512;
-		CB_Descs[i] = { thread_count, ostride, istride, 512, (float)phase_base };
-		if (i >= 3)
-			CB_Descs[i].pstride = 1;
-		RadixCBuffers[i] = new ConstantBuffer(&CB_Descs[i], sizeof(CB_Structure));
-		Check((RadixCBuffers[i]->Buffer()));
-	}*/
-
 	D3D11_BUFFER_DESC cb_desc;
 	cb_desc.Usage = D3D11_USAGE_IMMUTABLE;
 	cb_desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
